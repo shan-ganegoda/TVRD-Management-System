@@ -1,0 +1,109 @@
+<div class="py-6 px-5 rounded-md max-w-md">
+  @if(!isLoading){
+    <form [formGroup]="userForm" class="animate-fade">
+      <div class="flex items-center">
+        <span class="block text-lg font-semibold">User Account</span>
+
+        <button class="rounded-full p-1 hover:bg-gray-200 ml-auto" mat-dialog-close>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <input
+        type="text"
+        placeholder="Email"
+        class="input input-bordered w-full mt-4 bg-white"
+        formControlName="email"
+      />
+
+      <input
+        type="password"
+        placeholder="Password"
+        class="input input-bordered w-full mt-3 bg-white"
+        formControlName="password"
+      />
+
+      <div class="w-full flex mt-3 items-center">
+        <select class="select select-bordered bg-white w-full mr-3" formControlName="usertype">
+          <option disabled value="default">UserType</option>
+
+          @for (type of usertypes; track usertypes) {
+            <option value="{{type.id}}">{{type.name}}</option>
+          }
+        </select>
+
+        <select class="select select-bordered bg-white w-full" formControlName="userstatus">
+          <option disabled value="default">UserStatus</option>
+
+          @for (status of userstatuses; track userstatuses) {
+            <option value="{{status.id}}">{{status.name}}</option>
+          }
+        </select>
+      </div>
+
+      <select class="select select-bordered bg-white w-full mt-3" formControlName="employee">
+        <option disabled value="default">Employee</option>
+
+        @for (employee of employees; track employees) {
+          <option value="{{employee.id}}">{{employee.callingname + " ("+employee.number+")"}}</option>
+        }
+      </select>
+
+      <span class="block text-lg font-semibold mt-5">Authorities</span>
+
+      <form [formGroup]="roleForm" class="flex mt-3 mb-2 items-center">
+        <select class="select select-bordered w-full mr-2" formControlName="role">
+          <option disabled value="default">Role</option>
+
+          @for (role of roles; track roles) {
+            <option value="{{role.id}}">{{role.name}}</option>
+          }
+        </select>
+
+        <button class="btn" (click)="addRoleToList()">Add</button>
+      </form>
+
+      <div>
+        @for (role of userRoleList; track userRoleList) {
+          <div class="badge badge-outline mr-1 py-3 pr-0 text-success">
+            {{role.name.charAt(0) + role.name.slice(1).toLowerCase()}}
+
+            <button class="rounded-full p-0.5 bg-success bg-opacity-10 ml-1.5" (click)="removeFromRoleList(role.id)">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-3.5 h-3.5"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+        }
+      </div>
+      <div class="flex flex-row mt-3 max-w-[99%]">
+
+        @if(isAddOperation){
+          <button class="btn text-white mr-1 w-1/2" data-theme="dark" (click)="add()">Add</button>
+        }
+        @if(isUpdateOperation){
+          <button class="btn text-white mr-1 w-1/2" (click)="update(user)">Update</button>
+        }
+        <button class="btn text-white w-1/2" (click)="clearForm()">Clear Form</button>
+      </div>
+
+    </form>
+  }
+</div>

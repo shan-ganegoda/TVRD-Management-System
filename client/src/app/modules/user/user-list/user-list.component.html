@@ -1,0 +1,242 @@
+<div class="px-4 py-3 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
+  <div class=" absolute mt-3 ml-3 mr-4 text-[1.7em] font-semibold pointer-events-none">User</div>
+  <button
+    class="btn mt-2 ml-[5rem] pr-2.5 pl-1.5 btn-sm -mb-1 border-white opacity-90 bg-success text-white hover:text-black hover:bg-success absolute"
+    (click)="openFormDialog()">
+
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="w-5 h-5 -mr-1.5"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+    </svg>
+    Add
+  </button>
+
+  <form [formGroup]="userSearchForm" class="flex flex-row animate animate-fade">
+    <div class="join ml-auto  scale-95">
+      <input
+        type="text"
+        placeholder="Employee Name"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+        formControlName="ssfullname"
+      />
+
+      <input
+        type="text"
+        placeholder="UserEmail"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+        formControlName="ssemail"
+      />
+
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+              formControlName="ssrole"
+              data-tip="Role"
+      >
+        <option disabled value="default">Role</option>
+
+        @for(role of roles; track roles){
+          <option value="{{role.id}}">{{role.name}}</option>
+        }
+      </select>
+
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+              formControlName="ssuserstatus"
+              data-tip="UserStatus"
+      >
+        <option disabled value="default">UserStatus</option>
+
+        @for(userstatus of userstatuses; track userstatuses){
+          <option value="{{userstatus.id}}">{{userstatus.name}}</option>
+        }
+      </select>
+
+      <button class="btn join-item border-black" (click)="handleSearch()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-5 h-5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+          />
+        </svg>
+      </button>
+    </div>
+    <button class="btn border-gray-300" (click)="clearSearch()">
+      Clear
+    </button>
+  </form>
+</div>
+
+<div class="overflow-visible p-4 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
+  @if(!isFailed && !isLoading && users.length !== 0){
+    <table class="text-left p-4 table" >
+      <thead>
+      <tr class="text-black bold">
+        <th>User</th>
+        <th>Email</th>
+        <th>Created Date and Time</th>
+        <th>Role</th>
+        <th>User Status</th>
+        <th>User Type</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+
+      <tbody>
+        @for(user of users; track users){
+          <tr>
+            <td>
+              <div class="flex items-center gap-3 text-left">
+                <div>
+                  <div class="mask mask-circle w-12 h-12">
+                    <img
+                      src="{{user.employee.photo ? 'data:image/jpeg;base64,'+ user.employee.photo :'assets/tabledefault.png'}}"  alt="profile"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div class="font-bold">{{user.employee.fullname}}</div>
+                  <div class="text-sm opacity-50">UserID - {{user.id}}</div>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <div class="flex items-center">
+                {{user.email}}
+              </div>
+            </td>
+
+            <td>
+              <span class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4 mr-1.5 text-gray-500"
+                >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"
+                />
+              </svg>
+                {{user.docreated}}
+              </span>
+
+              <span class="flex items-center mt-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4 mr-1.5 text-gray-500"
+                >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+                </svg>
+                {{user.tocreated}}
+              </span>
+            </td>
+
+            <td>
+            <span class="flex items-center">
+              @for(role of user.roles; track role){
+                <span class="badge p-2 mr-1">
+                  {{role.name.charAt(0) + role.name.slice(1).toLowerCase()}}
+                </span>
+              }
+            </span>
+            </td>
+
+            <td>
+              <div class="flex items-center">
+                <div class="badge badge-xs mr-1.5 {{user.userstatus.name === 'Active '? 'bg-success border-white' : 'bg-error border-white'}}"></div>
+                {{user.userstatus.name}}
+              </div>
+            </td>
+
+            <td>
+              <div class="flex items-center">
+                {{user.usertype.name}}
+              </div>
+            </td>
+
+            <th>
+              <div class="join">
+                <button
+                  class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                  (click) = "showFormDialog(user)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    data-slot="icon"
+                    class="w-5 h-5 mr-3"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                    />
+                  </svg>
+                </button>
+
+                <button
+                  class="join-item text-error {{hasDeleteAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                  (click)="deleteUser(user)"
+                  [disabled]="!hasDeleteAuthority"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    data-slot="icon"
+                    class="w-5 h-5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </th>
+
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  @if (isLoading){
+    <app-page-loading/>
+  }
+
+  @if (isFailed){
+    <app-page-error/>
+  }
+</div>

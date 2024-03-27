@@ -1,0 +1,206 @@
+<div class="p-5 rounded-md min-w-fit">
+  @if(!isLoading){
+    <form [formGroup]="employeeForm" class="flex flex-row animate animate-fade">
+      <div class="max-w-md">
+        <span class="block text-lg font-semibold mb-5">Personal Info</span>
+
+        <div class="flex flex-row items-center">
+          <div class="rounded-full ring ring-offset-base-100 ring-offset-2 mr-5">
+            <div class="mask mask-circle w-32 h-32">
+              <img
+                src="{{employeeImage ? employeeImage : 'assets/tabledefault.png'}}"
+                alt="profile"
+                />
+            </div>
+          </div>
+
+          <input
+            type="file"
+            accept="image/*"
+            class="file-input file-input-bordered w-full max-w-xs"
+            (change)="setEmployeeImageView($event)"
+          />
+        </div>
+
+        <div class="flex flex-row mt-5">
+          <div class="tooltip tooltip-bottom w-full mr-2" data-tip="Full Name">
+            <input
+              type="text"
+              placeholder="Full Name"
+              class="input input-bordered w-full max-w-xs {{isValid.fullname ? 'bg-white border-success' : 'text-error bg-error bg-opacity-5'}}"
+              formControlName="fullname"
+            />
+          </div>
+
+          <div class="tooltip tooltip-bottom w-full mr-2" data-tip="Calling Name">
+            <input
+              type="text"
+              placeholder="Calling Name"
+              class="input input-bordered w-full max-w-xs {{isValid.callingname ? 'bg-white border-success' : 'text-error bg-error bg-opacity-5'}}"
+              formControlName="callingname"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-row mt-3">
+          <input
+            type="text"
+            placeholder="NIC"
+            class="input input-bordered w-full mt-3 {{isValid.nic ? 'bg-white border-success' :'text-error bg-error bg-opacity-5'}}"
+            formControlName="nic"
+          />
+        </div>
+
+        <div class="flex flex-row mt-3">
+          <div class="tooltip tooltip-bottom mr-2 w-full" data-tip="Birth Date">
+            <input
+              type="text"
+              placeholder="Birth Date"
+              class="input input-bordered w-full {{isValid.dobirth ? 'bg-white border-success' : 'text-error bg-error bg-opacity-5'}}"
+              formControlName="dobirth"
+              onfocus="(this.type='date')"
+            />
+          </div>
+
+          <select class="select select-bordered w-fit {{isValid.gender ? 'bg-white border-success' : 'text-error bg-error bg-opacity-5'}}"
+            formControlName="gender"
+          >
+            <option disabled value="default">Gender</option>
+
+            @for(gender of genders; track genders){
+              <option value='{{gender.id}}'>{{gender.name}}</option>
+            }
+          </select>
+
+        </div>
+
+        <div class="tooltip tooltip-bottom w-full" data-tip="Address">
+          <textarea
+            class="textarea textarea-bordered w-full h-32 mt-3 {{isValid.address ? 'bg-white border-success' : 'text-error bg-error bg-opacity-5' }}"
+            placeholder="Address"
+            formControlName="address"
+          ></textarea>
+        </div>
+
+        <div class="flex flex-row mt-3 max-w-[99%]">
+
+          <button class="btn text-white mr-1 w-1/3" data-theme="dark" (click)="addEmployee()">Add</button>
+
+          <button class="btn text-white mr-1 w-1/3" (click)="updateEmployee(currentEmployee)">Update</button>
+
+          <button class="btn text-white w-1/3" (click)="clearForm()">Clear Form</button>
+        </div>
+      </div>
+
+      <div class="divider divider-horizontal mx-5 opacity-50 py5"></div>
+
+      <div class="max-w-md">
+        <div class="flex items-center">
+          <span class="block text-lg font-semibold">Contact Info</span>
+
+          <button class="rounded-full p-1 hover:bg-gray-200 ml-auto" mat-dialog-close>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="flex flex-row">
+          <div class="w-full tooltip tooltip-bottom mr-2" data-tip="Mobile">
+            <input
+              type="text"
+              placeholder="Mobile"
+              class="input input-bordered w-full mt-4 {{isValid.mobile ? 'bg-white border-success' : 'text-error bg-error bg-opacity-5'}}"
+              formControlName="mobile"
+            />
+          </div>
+
+          <div class="w-full tooltip tooltip-bottom mr-2" data-tip="Land">
+            <input
+              type="text"
+              placeholder="Land"
+              class="input input-bordered w-full mt-4 {{isValid.land ? 'bg-white border-success' : 'text-error bg-error bg-opacity-5'}}"
+              formControlName="land"
+            />
+          </div>
+        </div>
+
+          <span class="block text-lg font-semibold mt-5">Employee Info</span>
+
+        <div class="flex flex-row items-center mt-3">
+          <div class="tooltip tooltip-bottom mr-2  w-full" data-tip="Number">
+            <input
+              type="text"
+              placeholder="Number"
+              class="input input-bordered w-full {{isValid.number ? 'bg-white border-success' : 'text-error bg-error bg-opacity-5'}}"
+              formControlName="number"
+            />
+          </div>
+
+          <button class="btn" (click)="generateRandomNumber()">Generate Number</button>
+        </div>
+
+        <div class="flex flex-row mt-3">
+          <div class="w-fit tooltip tooltip-bottom mr-2" data-tip="Employee Type">
+            <select
+              class="select select-bordered w-fit {{isValid.emptype ? 'bg-white border-success' : 'text-error bg-error bg-opacity-5'}}"
+              formControlName="emptype"
+            >
+              <option disabled value="default">EmpType</option>
+
+              @for (emptype of emptypes; track emptypes) {
+                <option value="{{emptype.id}}">{{emptype.name}}</option>
+              }
+            </select>
+          </div>
+
+          <div class="w-fit tooltip tooltip-bottom mr-2" data-tip="Designation">
+            <select
+              class="select select-bordered w-fit {{isValid.designation ? 'bg-white border-success' : 'text-error bg-error bg-opacity-5'}}"
+              formControlName="designation"
+            >
+              <option disabled value="default">Designation</option>
+
+              @for (designation of designations; track designations) {
+                <option value="{{designation.id}}">{{designation.name}}</option>
+              }
+            </select>
+          </div>
+
+          <div class="tooltip tooltip-bottom w-fit" data-tip="Employee Status">
+            <select
+              class="select select-bordered w-fit {{isValid.employeestatus ? 'bg-white border-success' : 'text-error bg-error bg-opacity-5'}}"
+              formControlName="employeestatus"
+            >
+              <option disabled value="default">Status</option>
+
+              @for (employeeStatus of employeestatuses; track employeestatuses) {
+                <option value="{{employeeStatus.id}}">{{employeeStatus.name}}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <span class="block text-lg font-semibold mt-5">Description</span>
+        <textarea
+          class="textarea textarea-bordered w-full h-36 mt-3 {{isValid.description ? 'bg-white border-success' : 'text-error bg-error bg-opacity-5'}}"
+          placeholder="Description"
+          formControlName="description"
+        ></textarea>
+      </div>
+    </form>
+
+  } @else {
+    <div class="flex items-center">
+      <span class="loading loading-spinner loading-md text-gray-400 mr-3"></span>
+      <span>Loading</span>
+    </div>
+  }
+</div>

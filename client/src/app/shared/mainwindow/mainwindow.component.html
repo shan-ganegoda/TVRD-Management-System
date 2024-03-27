@@ -1,0 +1,195 @@
+<mat-drawer-container class="matdrawer">
+  <mat-drawer class="sidenav" [(opened)]="opened" #drawer mode="side">
+   <div>
+    <span class="text-white flex mt-16 ml-5">MENU</span>
+    <ul class="mt-4">
+
+      <li class="mb-1 group active ml-7">
+        <a routerLink="home" class="flex items-center py-2 px-4 text-white ">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            class="w-6 h-6 relative bottom-0.5">
+            <path
+              fill-rule="evenodd"
+              d="M9.293 2.293a1 1 0 0 1 1.414 0l7 7A1 1 0 0 1 17 11h-1v6a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6H3a1 1 0 0 1-.707-1.707l7-7Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span class="text-sm ml-7">Home</span>
+        </a>
+      </li>
+
+      <li class="mb-1 group active ml-7">
+        <a routerLink="dashboard" class="flex items-center py-2 px-4 text-white ">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
+            <path fill-rule="evenodd" d="M2.5 3A1.5 1.5 0 0 0 1 4.5v4A1.5 1.5 0 0 0 2.5 10h6A1.5 1.5 0 0 0 10 8.5v-4A1.5 1.5 0 0 0 8.5 3h-6Zm11 2A1.5 1.5 0 0 0 12 6.5v7a1.5 1.5 0 0 0 1.5 1.5h4a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 17.5 5h-4Zm-10 7A1.5 1.5 0 0 0 2 13.5v2A1.5 1.5 0 0 0 3.5 17h6a1.5 1.5 0 0 0 1.5-1.5v-2A1.5 1.5 0 0 0 9.5 12h-6Z" clip-rule="evenodd" />
+          </svg>
+
+          <span class="text-sm ml-7">Dashboard</span>
+        </a>
+      </li>
+
+    </ul>
+   </div>
+   <div>
+
+    <span class="text-white flex mt-5 ml-5">ADMIN</span>
+    <ul class="mt-4">
+
+    <li class="mb-1 group active ml-7">
+        <a routerLink="employee" class="flex items-center py-2 px-4 text-white ">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
+            <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clip-rule="evenodd" />
+            <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
+          </svg>
+
+          <span class="text-sm ml-7">Employee</span>
+        </a>
+      </li>
+
+      <li class="mb-1 group active ml-7">
+        <a routerLink="user" class="flex items-center py-2 px-4 text-white ">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
+            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+          </svg>
+
+
+          <span class="text-sm ml-7">User</span>
+        </a>
+      </li>
+
+      <li class="mb-1 group active ml-7">
+        <a routerLink="privilages" class="flex items-center py-2 px-4 text-white ">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
+            <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+          </svg>
+
+
+          <span class="text-sm ml-7">Privilage</span>
+        </a>
+      </li>
+
+      <li class="mb-1 group active ml-7">
+        <a href="#" class="flex items-center py-2 px-4 text-white ">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
+            <path fill-rule="evenodd" d="M2.5 3A1.5 1.5 0 0 0 1 4.5v4A1.5 1.5 0 0 0 2.5 10h6A1.5 1.5 0 0 0 10 8.5v-4A1.5 1.5 0 0 0 8.5 3h-6Zm11 2A1.5 1.5 0 0 0 12 6.5v7a1.5 1.5 0 0 0 1.5 1.5h4a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 17.5 5h-4Zm-10 7A1.5 1.5 0 0 0 2 13.5v2A1.5 1.5 0 0 0 3.5 17h6a1.5 1.5 0 0 0 1.5-1.5v-2A1.5 1.5 0 0 0 9.5 12h-6Z" clip-rule="evenodd" />
+          </svg>
+
+          <span class="text-sm ml-7">Operations</span>
+        </a>
+      </li>
+
+    </ul>
+   </div>
+
+    <div>
+      <span class="text-white flex mt-5 ml-5">REGISTRATION</span>
+      <ul class="mt-4">
+
+        <li class="mb-1 group active ml-7">
+          <a href="#" class="flex items-center py-2 px-4 text-white ">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
+              <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clip-rule="evenodd" />
+              <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
+            </svg>
+
+            <span class="text-sm ml-7">Employee</span>
+          </a>
+        </li>
+
+        <li class="mb-1 group active ml-7">
+          <a href="#" class="flex items-center py-2 px-4 text-white ">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
+              <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+            </svg>
+
+
+            <span class="text-sm ml-7">User</span>
+          </a>
+        </li>
+
+        <li class="mb-1 group active ml-7">
+          <a href="#" class="flex items-center py-2 px-4 text-white ">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
+              <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+            </svg>
+
+
+            <span class="text-sm ml-7">Privilage</span>
+          </a>
+        </li>
+
+        <li class="mb-1 group active ml-7">
+          <a href="#" class="flex items-center py-2 px-4 text-white ">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
+              <path fill-rule="evenodd" d="M2.5 3A1.5 1.5 0 0 0 1 4.5v4A1.5 1.5 0 0 0 2.5 10h6A1.5 1.5 0 0 0 10 8.5v-4A1.5 1.5 0 0 0 8.5 3h-6Zm11 2A1.5 1.5 0 0 0 12 6.5v7a1.5 1.5 0 0 0 1.5 1.5h4a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 17.5 5h-4Zm-10 7A1.5 1.5 0 0 0 2 13.5v2A1.5 1.5 0 0 0 3.5 17h6a1.5 1.5 0 0 0 1.5-1.5v-2A1.5 1.5 0 0 0 9.5 12h-6Z" clip-rule="evenodd" />
+            </svg>
+
+            <span class="text-sm ml-7">Operations</span>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+
+  </mat-drawer>
+  <mat-drawer-content>
+
+    <mat-toolbar class="NavBar">
+      <button (click)="opened=!opened">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none" viewBox="0 0 24 24"
+          stroke-width="1.5" stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
+          />
+        </svg>
+
+      </button>
+      <div class="flex flex-row w-12 h-12 absolute right-[10rem] rounded-full" >
+        <img class="w-12 h-12 mr-4 rounded-full" src="data:image/jpeg;base64,{{user.employee.photo}}" alt="user-profile-img" />
+        <div class="mt-1" [matMenuTriggerFor]="menu">
+          <div class="font-bold text-sm">{{user.employee.callingname}}</div>
+          <div class="text-sm opacity-50">{{user.email}}</div>
+        </div>
+
+      </div>
+      <mat-menu #menu="matMenu" class="menuu" >
+
+        <mat-card>
+          <img class="menuimg" src="./assets/default.png">
+
+          <button class="menubtn" id="profile" routerLink="profile">
+            <i class='bx bx-user-circle'></i>
+            <span>Profile</span>
+          </button>
+
+          <button class="menubtn" id="settings">
+            <i class='bx bx-cog'></i>
+            <span>Settings</span>
+          </button>
+
+          <button class="menubtn" id="logout" (click)="logout()">
+            <i class='bx bx-exit' ></i>
+            <span>Logout</span>
+          </button>
+        </mat-card>
+
+      </mat-menu>
+
+    </mat-toolbar>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+<!--    <div class="fixed top-0 bg-white h-12 w-[calc(100%-256px)] ml-64 right-0 drop-shadow-2xl">-->
+<!--          <button (click)="opened=!opened">Open</button>-->
+<!--    </div>-->
+  </mat-drawer-content>
+</mat-drawer-container>
