@@ -1,0 +1,303 @@
+<div class="px-4 py-3 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
+  <div class=" absolute mt-0 ml-3 mr-4 text-[1.7em] font-semibold pointer-events-none">User</div>
+  <div class="text-sm breadcrumbs absolute mt-5 ml-3">
+    <ul>
+      <li class="text-gray-500"><a routerLink="../home">Home</a></li>
+      <li>User</li>
+    </ul>
+  </div>
+
+  <form [formGroup]="userSearchForm" class="flex flex-row animate animate-fade ">
+    <div class="join ml-auto  scale-95">
+      <input
+        type="text"
+        placeholder="Employee Name"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+        formControlName="ssfullname"
+      />
+
+      <input
+        type="text"
+        placeholder="UserEmail"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+        formControlName="ssemail"
+      />
+
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+              formControlName="ssrole"
+              data-tip="Role"
+      >
+        <option disabled value="default">Role</option>
+
+        @for(role of roles; track roles){
+          <option value="{{role.id}}">{{role.name}}</option>
+        }
+      </select>
+
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+              formControlName="ssuserstatus"
+              data-tip="UserStatus"
+      >
+        <option disabled value="default">UserStatus</option>
+
+        @for(userstatus of userstatuses; track userstatuses){
+          <option value="{{userstatus.id}}">{{userstatus.name}}</option>
+        }
+      </select>
+
+      <button class="btn join-item border-black bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="handleSearch()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-5 h-5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+          />
+        </svg>
+      </button>
+    </div>
+    <button class="btn border-gray-300 bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="clearSearch()">
+      Clear
+    </button>
+  </form>
+</div>
+
+<mat-grid-list [cols]="12" rowHeight="4rem">
+
+  <mat-grid-tile [colspan]="4" [rowspan]="10">
+    <div class="w-full h-full bg-white mt-4 ml-2 rounded-md shadow-md border-2 border-[[#1e4263]] overflow-auto">
+
+      <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">
+        <span class="ml-5 text-white text-lg ">Data Form</span>
+      </div>
+
+      <form class="mt-5" [formGroup]="userForm" autocomplete="off">
+
+        <div class="relative w-full px-2 mb-3">
+          <input
+            type="text"
+            placeholder="Email"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="email"
+          />
+          <label class="floating-label">Email</label>
+        </div>
+
+        <div class="relative w-full px-2 mb-3">
+          <input
+            type="password"
+            placeholder="Password"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="password"
+          />
+          <label class="floating-label">Password</label>
+        </div>
+
+        <div class="flex flex-row items-center mb-3">
+          <select class=" select select-bordered w-full mx-2 focus:outline-none"
+                  formControlName="usertype"
+          >
+            <option disabled [ngValue]="null">UserType</option>
+
+            @for (type of usertypes; track usertypes) {
+              <option value="{{type.id}}">{{type.name}}</option>
+            }
+          </select>
+
+          <select class=" select select-bordered w-full mx-2 focus:outline-none"
+                  formControlName="userstatus"
+          >
+            <option disabled [ngValue]="null">UserStatus</option>
+
+            @for (status of userstatuses; track userstatuses) {
+              <option value="{{status.id}}">{{status.name}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="px-2">
+                  <select
+                    class="select select-bordered w-full mb-3 px-2 focus:outline-none"
+                    formControlName="employee"
+                  >
+                    <option disabled [ngValue]="null">Employee</option>
+                    @for (employee of employees; track employees) {
+                      <option value="{{employee.id}}">{{employee.callingname + " ("+employee.number+")"}}</option>
+                    }
+                  </select>
+                  </div>
+
+
+        <div class="flex mb-3 px-2 justify-center items-center">
+          <div class="flex">
+            <select class="select select-bordered mr-2 focus:outline-none" formControlName="role">
+              <option disabled [ngValue]="null">Role</option>
+
+              @for (role of roles; track roles) {
+                <option value="{{role.id}}">{{role.name}}</option>
+              }
+            </select>
+            <button class="btn bg-gray-950 text-white hover:bg-gray-900" (click)="addRoleToList()">Add</button>
+          </div>
+          <div class="border-2 rounded-md h-48 w-44 mt-3 overflow-auto mx-2 {{ userRoleList.length == 0 ? 'border-error' : 'border-gray-300'}}" >
+            <mat-selection-list  formControlName="userroles" #selectedlist>
+              @for(role of userRoleList;track userRoleList){
+                <div class=" flex justify-center bg-gray-200 mx-1 my-1 py-3 pr-0 text-black">
+                  {{role.name.charAt(0) + role.name.slice(1).toLowerCase()}}
+
+                  <button class="rounded-full p-0.5 bg-red-500 ml-1.5" (click)="removeFromRoleList(role.id)">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-3.5 h-3.5 text-white"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              }
+            </mat-selection-list>
+          </div>
+        </div>
+
+
+
+        <div class="relative w-full mb-3 px-2">
+            <textarea
+              class="peer textarea textarea-bordered w-full h-36 focus:outline-none"
+              placeholder="Description"
+              formControlName="description"
+            ></textarea>
+          <label class="floating-label">Description</label>
+        </div>
+
+        <div class="flex flex-row mt-3 max-w-[99%] px-2 pb-5">
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" [disabled]="!enaadd" (click)="add()">Add</button>
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" [disabled]="!enaupd" (click)="update(user)">Update</button>
+          <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="deleteUser(user)"
+                  [disabled]="!hasDeleteAuthority || !enadel" >Delete</button>
+          <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="clearForm()">Clear</button>
+        </div>
+
+      </form>
+
+    </div>
+
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="8" [rowspan]="10">
+    <div class="w-full h-full bg-white mt-4 ml-2 mr-2 rounded-md shadow-md">
+      <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">
+        <span class="ml-5 text-white text-lg ">Data List</span>
+      </div>
+    <div class="overflow-visible p-4 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
+      @if(!isFailed && !isLoading && users.length !== 0){
+        <table class="text-left p-4 table" >
+          <thead>
+          <tr class="text-black bold">
+            <th>Profile</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>User Status</th>
+            <th>User Type</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+
+          <tbody>
+            @for(user of data | async; track users){
+              <tr>
+                <td>
+                   <div class="mask mask-circle w-12 h-12">
+                        <img
+                          src="{{user.employee.photo ? 'data:image/jpeg;base64,'+ user.employee.photo :'assets/tabledefault.png'}}"  alt="profile"
+                        />
+                   </div>
+
+                </td>
+
+                <td>
+                  <div class="font-bold">{{user.employee.fullname}}</div>
+                </td>
+
+                <td>
+                  <div class="flex items-center">{{user.email}}</div>
+                </td>
+
+                <td>
+            <span class="flex flex-col items-center">
+              @for(role of user.roles; track role){
+                <span class="badge p-2 mr-1 w-28 justify-start">
+                  {{role.name.charAt(0) + role.name.slice(1).toLowerCase()}}
+                </span>
+              }
+            </span>
+                </td>
+
+                <td>
+                  <div class="flex items-center">
+                    <div class="badge badge-xs mr-1.5 {{user.userstatus.name === 'Active'? 'bg-success border-white' : 'bg-error border-white'}}"></div>
+                    {{user.userstatus.name}}
+                  </div>
+                </td>
+
+                <td>
+                  <div class="flex items-center">
+                    {{user.usertype.name}}
+                  </div>
+                </td>
+
+                <th>
+                  <div class="join">
+                    <button
+                      class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                      (click) = "fillForm(user)"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        data-slot="icon"
+                        class="w-5 h-5 mr-3"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </th>
+
+              </tr>
+            }
+          </tbody>
+        </table>
+        <mat-paginator [length]="20" [pageSize]="5" [pageSizeOptions]="[3,5,10,20]"></mat-paginator>
+      }
+
+      @if (isLoading){
+        <app-page-loading/>
+      }
+
+      @if (isFailed){
+        <app-page-error/>
+      }
+    </div>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>
+
+

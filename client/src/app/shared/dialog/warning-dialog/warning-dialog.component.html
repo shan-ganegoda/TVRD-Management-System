@@ -1,0 +1,11 @@
+<div class="p-6 w-96 rounded-md">
+  <h3 class="font-black text-lg">{{data.heading}}</h3>
+  @for(line of lines;track lines){
+    <p class="">{{line}}</p>
+  }
+  <div class="modal-action">
+    <button class="btn bg-gray-950 text-white mr-2" [mat-dialog-close]="true" >OK</button>
+<!--    <button class="btn bg-gray-950 text-white" mat-dialog-close>No</button>-->
+  </div>
+</div>
+

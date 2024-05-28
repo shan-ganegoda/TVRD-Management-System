@@ -1,0 +1,338 @@
+<div class="px-4 py-3 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
+  <div class=" absolute mt-0 ml-3 mr-4 text-[1.7em] font-semibold pointer-events-none">MOH Details</div>
+  <div class="text-sm breadcrumbs absolute mt-5 ml-3">
+    <ul>
+      <li class="text-gray-500"><a routerLink="../home">Home</a></li>
+      <li>Moh Details</li>
+    </ul>
+  </div>
+
+  <form [formGroup]="mohSearchForm" class="flex flex-row animate animate-fade">
+    <div class="join ml-auto  scale-95">
+      <input
+        type="text"
+        placeholder="Moh Name"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+        formControlName="ssname"
+      />
+
+      <input
+        type="text"
+        placeholder="Email"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+        formControlName="ssemail"
+      />
+
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+              formControlName="ssdistrict"
+              data-tip="Rdh"
+      >
+        <option disabled value="">RDH</option>
+
+        @for(district of districts; track districts){
+          <option value="{{district.id}}">{{district.name}}</option>
+        }
+      </select>
+
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+              formControlName="ssmohstatus"
+              data-tip="MohStatus"
+      >
+        <option disabled value="">MohStatus</option>
+
+        @for(mohstatus of mohstatuses; track mohstatuses){
+          <option value="{{mohstatus.id}}">{{mohstatus.name}}</option>
+        }
+      </select>
+
+      <button class="btn join-item border-black bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="handleSearch()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-5 h-5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+          />
+        </svg>
+      </button>
+    </div>
+    <button class="btn border-gray-300 bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="clearSearch()">
+      Clear
+    </button>
+  </form>
+</div>
+
+<mat-grid-list [cols]="12" rowHeight="4rem">
+
+  <mat-grid-tile [colspan]="4" [rowspan]="10">
+
+      <div class="w-full h-full bg-white mt-4 ml-2 rounded-md shadow-md border-2 border-[[#1e4263]] overflow-auto">
+
+        <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">
+          <span class="ml-5 text-white text-lg ">Data Form</span>
+        </div>
+
+        <form [formGroup]="mohForm" class="mt-5 animate animate-fade">
+
+          <div class="relative w-full mb-3 px-2">
+            <input
+              type="text"
+              placeholder="MOH Name"
+              class="peer input input-bordered w-full focus:outline-none"
+              formControlName="name"
+            />
+            <label class="floating-label">MOH Name</label>
+          </div>
+
+          <div class="flex flex-row mb-3 px-2">
+            <div class="relative w-full mr-2">
+              <input
+                type="text"
+                placeholder="Telephone No"
+                class="peer input input-bordered w-full max-w-xs focus:outline-none"
+                formControlName="tele"
+              />
+              <label class="floating-label">Telephone No</label>
+
+            </div>
+
+            <div class="relative w-full">
+              <input
+                type="text"
+                placeholder="Fax No"
+                class="peer input input-bordered w-full max-w-xs focus:outline-none"
+                formControlName="faxno"
+              />
+              <label class="floating-label">Fax No</label>
+            </div>
+          </div>
+
+          <div class="relative w-full mb-3 px-2">
+            <input
+              type="text"
+              placeholder="Email"
+              class="peer input input-bordered w-full focus:outline-none"
+              formControlName="email"
+            />
+            <label class="floating-label">Email</label>
+          </div>
+
+          <div class="relative w-full mb-3 px-2">
+            <input
+              type="text"
+              placeholder="Address"
+              class="peer input input-bordered w-full focus:outline-none"
+              formControlName="address"
+            />
+            <label class="floating-label">Address</label>
+          </div>
+
+          <div class="relative w-full px-2 mb-3">
+            <input
+              type="text"
+              placeholder="Date of Established"
+              class="peer input input-bordered w-full focus:outline-none"
+              formControlName="doestablished"
+              onfocus="(this.type='date')"
+            />
+            <label class="floating-label">Date of Established</label>
+          </div>
+
+          <div class="mb-3 px-2">
+          <select
+            class="select select-bordered w-full bg-white focus:outline-none"
+            formControlName="employee"
+          >
+            <option disabled [ngValue]="null">MOH Officer</option>
+
+            @for (employee of employees; track employees) {
+              <option [ngValue]="employee.id">{{employee.fullname  + " (" + employee.number + ")"}}</option>
+            }
+          </select>
+          </div>
+
+          <div class="mb-3 px-2">
+            <div class="flex flex-row">
+              <select
+                class="select select-bordered w-full bg-white focus:outline-none mr-2"
+                formControlName="rdh"
+              >
+                <option disabled [ngValue]="null">RDH</option>
+
+                @for (district of districts; track districts) {
+                  <option value="{{district.id}}">{{district.name}}</option>
+                }
+              </select>
+
+              <select
+                class="select select-bordered w-full bg-white focus:outline-none"
+                formControlName="mohstatus"
+              >
+                <option disabled [ngValue]="null">MohStatus</option>
+
+                @for (mohstatus of mohstatuses; track mohstatuses) {
+                  <option [ngValue]="mohstatus.id">{{mohstatus.name}}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-row mt-3 max-w-[97%] px-2 pb-5">
+            <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="add()" [disabled]="!enaadd">Add</button>
+            <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(currentMoh)" [disabled]="!enaupd">Update</button>
+            <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900" (click)="deleteUser(currentMoh)"
+                    [disabled]="!hasDeleteAuthority || !enadel " >Delete</button>
+            <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="clearForm()">Clear</button>
+          </div>
+
+        </form>
+      </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile [colspan]="8" [rowspan]="10">
+
+    <div class="w-full h-full bg-white mt-4 ml-2 mr-2 rounded-md shadow-md overflow-auto">
+      <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">
+        <span class="ml-5 text-white text-lg ">Data List</span>
+      </div>
+
+    <div class="overflow-auto p-4 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
+      @if(!isFailed && !isLoading && mohs.length !== 0){
+        <table class="text-left p-4 table">
+          <thead>
+          <tr class="text-black bold">
+            <th>MOH Name</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>MohStatus</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+
+          <tbody>
+            @for(moh of data | async ; track mohs){
+              <tr>
+                <td>
+                  <div>
+                    <div class="font-semibold">{{moh.name}}</div>
+                    <div class="text-sm badge badge-neutral">{{moh.rdh.name}}</div>
+                  </div>
+                </td>
+
+                <td>
+                  <div class="flex items-center">
+                    {{moh.email}}
+                  </div>
+                </td>
+
+                <td>
+                  <div class="flex items-center">
+                    {{moh.address}}
+                  </div>
+                </td>
+
+                <td>
+                  <div class="flex items-center">
+                    <div class="badge badge-xs mr-1.5 {{moh.mohstatus.name === 'Available'? 'bg-success border-white' : 'bg-error border-white'}}"></div>
+                    {{moh.mohstatus.name}}
+                  </div>
+                </td>
+
+                <th>
+                  <div class="join">
+                    <button
+                      class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                      (click) = "fillForm(moh)"
+                      [disabled]="!hasUpdateAuthority"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        data-slot="icon"
+                        class="w-5 h-5 mr-3"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                        />
+                      </svg>
+                    </button>
+
+                  </div>
+                </th>
+
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <!--    <mat-table [dataSource]="data">-->
+
+          <!--&lt;!&ndash;      <ng-container *ngFor="let column of columns;let i = index;" [matColumnDef]="column">&ndash;&gt;-->
+          <!--&lt;!&ndash;        <mat-header-cell *matHeaderCellDef> {{headers[i]}} </mat-header-cell>&ndash;&gt;-->
+          <!--&lt;!&ndash;        <mat-cell *matCellDef="let element">{{ uiassist.getProperty(element, binders[i]) }} </mat-cell>&ndash;&gt;-->
+          <!--&lt;!&ndash;      </ng-container>&ndash;&gt;-->
+
+          <!--    &lt;!&ndash; Position Column &ndash;&gt;-->
+          <!--    <ng-container matColumnDef="MOH">-->
+          <!--      <th mat-header-cell class="mr-8" *matHeaderCellDef> MOH </th>-->
+          <!--      <td mat-cell *matCellDef="let element">-->
+          <!--        <div class="py-2 w-24">-->
+          <!--         <div class="font-semibold">{{element.name}}</div>-->
+          <!--         <div class="text-sm badge badge-neutral">{{element.rdh.name}}</div>-->
+          <!--        </div>-->
+          <!--      </td>-->
+          <!--    </ng-container>-->
+
+          <!--    <ng-container matColumnDef="Email">-->
+          <!--      <th mat-header-cell *matHeaderCellDef> Email </th>-->
+          <!--      <td mat-cell *matCellDef="let element">-->
+          <!--        <div class="flex items-center py-5">-->
+          <!--          {{element.email}}-->
+          <!--        </div>-->
+          <!--      </td>-->
+          <!--    </ng-container>-->
+
+          <!--    <ng-container matColumnDef="Telephone No">-->
+          <!--      <th mat-header-cell *matHeaderCellDef> Telephone No </th>-->
+          <!--      <td mat-cell *matCellDef="let element">-->
+          <!--        <div class="flex items-center">-->
+          <!--          {{element.tele}}-->
+          <!--        </div>-->
+          <!--      </td>-->
+          <!--    </ng-container>-->
+
+          <!--      <mat-header-row *matHeaderRowDef="headers"></mat-header-row>-->
+          <!--      <mat-row *matRowDef="let row; columns: headers;" ></mat-row>-->
+
+          <!--  </mat-table>-->
+
+        <mat-paginator [length]="20" [pageSize]="5" [pageSizeOptions]="[3,5,10,20]"></mat-paginator>
+      }
+
+      @if (isLoading){
+        <app-page-loading/>
+      }
+
+      @if (isFailed){
+        <app-page-error/>
+      }
+    </div>
+    </div>
+
+  </mat-grid-tile>
+
+</mat-grid-list>
+
+
+
+

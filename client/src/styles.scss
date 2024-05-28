@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+
+html, body { height: 100%; }
+body {font-family: lexend, "lexend", sans-serif; }
+
+.floating-label{
+  @apply absolute bg-white px-1 py-0 h-fit left-3 -top-2.5 text-gray-400 text-sm transition-all
+  peer-placeholder-shown:text-base
+  peer-placeholder-shown:text-gray-400
+  peer-placeholder-shown:top-2 peer-placeholder-shown:hidden
+  peer-focus:-top-2.5
+}
+
+
+
+.success-snackbar.mat-mdc-snack-bar-container {
+  //width: 8rem !important;
+  //max-width: 10rem !important;
+
+  .mdc-snackbar__surface {
+    background: green;
+    padding: 1rem !important;
+
+    .mat-mdc-button {
+      color: white !important;
+    }
+  }
+
+  .mat-mdc-snack-bar-label.mdc-snackbar__label {
+    color: white;
+    font-weight: 500;
+    white-space: pre-wrap
+  }
+}
+
+.failure-snackbar.mat-mdc-snack-bar-container {
+  .mdc-snackbar__surface {
+    background: #910202;
+    padding: 1rem !important;
+    width: 2rem !important;
+
+
+    .mat-mdc-button {
+      color: white !important;
+    }
+  }
+
+  .mat-mdc-snack-bar-label.mdc-snackbar__label {
+    color: white;
+    font-weight: 500;
+    white-space: pre-wrap
+  }
+}
+
+
+//Invalid Styles For Input Fields
+input.ng-invalid{
+  @apply border-red-600
+  placeholder-error
+  focus:border-red-600
+}
+
+//Invalid Styles For TextArea
+textarea.ng-invalid{
+  @apply border-red-600
+  placeholder-error
+  focus:border-red-600
+}
+
+//Invalid Styles For ComboBoxes
+select.ng-invalid{
+  @apply border-red-600
+  placeholder-error
+  text-error
+}
+
+//Invalid Styles For List
+#list .ng-invalid{
+  @apply border-red-600
+  text-error
+}

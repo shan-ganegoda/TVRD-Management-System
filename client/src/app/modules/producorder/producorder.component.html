@@ -1,0 +1,332 @@
+<div class="px-4 py-3 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
+  <div class=" absolute mt-0 ml-3 mr-4 text-[1.7em] font-semibold pointer-events-none">Product Order</div>
+  <div class="text-sm breadcrumbs absolute mt-5 ml-3">
+    <ul>
+      <li class="text-gray-500"><a routerLink="../home">Home</a></li>
+      <li>ProcuctOrder</li>
+    </ul>
+  </div>
+
+  <form [formGroup]="poSearchForm" class="flex flex-row animate animate-fade">
+    <div class="join ml-auto  scale-95">
+      <input
+        type="text"
+        placeholder="Moh Name"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+
+      />
+
+      <input
+        type="text"
+        placeholder="Email"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+
+      />
+
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+
+              data-tip="Rdh"
+      >
+        <option disabled value="">RDH</option>
+
+<!--        @for(district of districts; track districts){-->
+<!--          <option value="{{district.id}}">{{district.name}}</option>-->
+<!--        }-->
+      </select>
+
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+
+              data-tip="MohStatus"
+      >
+        <option disabled value="">MohStatus</option>
+
+<!--        @for(mohstatus of mohstatuses; track mohstatuses){-->
+<!--          <option value="{{mohstatus.id}}">{{mohstatus.name}}</option>-->
+<!--        }-->
+      </select>
+
+      <button class="btn join-item border-black bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="handleSearch()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-5 h-5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+          />
+        </svg>
+      </button>
+    </div>
+    <button class="btn border-gray-300 bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="clearSearch()">
+      Clear
+    </button>
+  </form>
+</div>
+
+<mat-grid-list [cols]="12" rowHeight="4rem">
+
+  <mat-grid-tile [colspan]="5" [rowspan]="10">
+
+    <div class="w-full h-full bg-white mt-4 ml-2 rounded-md shadow-md border-2 border-[[#1e4263]] overflow-auto">
+
+      <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">
+        <span class="ml-5 text-white text-lg ">Data Form</span>
+      </div>
+
+      <form [formGroup]="porderForm" class="mt-5 animate animate-fade">
+
+        <div class="mb-3 px-2">
+          <select
+            class="select select-bordered w-full bg-white focus:outline-none"
+            formControlName="moh"
+          >
+            <option disabled [ngValue]="null">MOH</option>
+
+            @for (moh of mohs; track mohs) {
+              <option [value]="moh.id">{{moh.name}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3 px-2">
+          <select
+            class="select select-bordered w-full bg-white focus:outline-none"
+            formControlName="employee"
+          >
+            <option disabled [ngValue]="null">Employee</option>
+
+            @for (employee of employees; track employees) {
+              <option value="{{employee.id}}">{{employee.fullname  + " (" + employee.number + ")"}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="relative w-full px-2 mb-3">
+          <input
+            type="text"
+            placeholder="Date Reqested"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="dorequested"
+            onfocus="(this.type='date')"
+          />
+          <label class="floating-label">Date Reqested</label>
+        </div>
+
+        <div class="relative w-full px-2 mb-3">
+          <input
+            type="text"
+            placeholder="Date Required"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="dorequired"
+            onfocus="(this.type='date')"
+          />
+          <label class="floating-label">Date Required</label>
+        </div>
+
+        <div>
+
+          <form [formGroup]="innerForm">
+
+            <div class="mb-3 px-2">
+              <select
+                class="select select-bordered w-full bg-white focus:outline-none"
+                formControlName="product"
+              >
+                <option disabled [ngValue]="null">Product</option>
+
+                @for (product of products; track products) {
+                  <option [value]="product.id">{{product.name}}</option>
+                }
+              </select>
+
+            </div>
+
+            <div class="flex px-2 mb-3">
+            <div class="relative mr-2">
+              <input
+                type="number"
+                placeholder="Quentity"
+                class="peer input input-bordered w-full focus:outline-none"
+                formControlName="quentity"
+              />
+              <label class="floating-label">Quentity</label>
+            </div>
+
+              <div>
+                <button class="btn bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="addToTable()">Add</button>
+              </div>
+            </div>
+
+            <div>
+              <table class="text-left p-4 table mb-4">
+                <thead>
+                <tr class="text-black bold">
+                  <th>Product</th>
+                  <th>Quentity</th>
+                  <th>UnitPrice</th>
+                  <th>LineTotal</th>
+                  <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                  @for(indata of innerdata;track innerdata){
+                    <tr>
+                      <td>{{indata.product.name}}</td>
+                      <td>{{indata.quentity}}</td>
+                      <td>{{indata.product.cost}}</td>
+                      <td>{{indata.linetotal}}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+          </form>
+        </div>
+
+        @if(innerdata.length !== 0){
+          <div class="flex justify-end mr-2 mb-3">
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Grand Total"
+                class="peer input input-bordered w-full focus:outline-none"
+                formControlName="grandtotal"
+              />
+              <label class="floating-label">Grand Total</label>
+            </div>
+          </div>
+        }
+
+        <div class="mb-3 px-2">
+          <select
+            class="select select-bordered w-full bg-white focus:outline-none"
+            formControlName="productorderstatus"
+          >
+            <option disabled [ngValue]="null">POrder Status</option>
+
+            @for (postatus of postatuses; track postatuses) {
+              <option [value]="postatus">{{postatus.name}}</option>
+            }
+          </select>
+
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+            <textarea
+              class="peer textarea textarea-bordered w-full h-36 focus:outline-none"
+              placeholder="Description"
+              formControlName="description"
+            ></textarea>
+          <label class="floating-label">Description</label>
+        </div>
+
+        <div class="flex flex-row mt-3 max-w-[98%] px-2 pb-5">
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="add()" [disabled]="!enaadd">Add</button>
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(productOrder)" [disabled]="!enaupd">Update</button>
+          <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900" (click)="delete(productOrder)"
+                  [disabled]="!hasDeleteAuthority || !enadel " >Delete</button>
+          <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="clearForm()">Clear</button>
+        </div>
+
+      </form>
+
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="7" [rowspan]="10">
+
+    <div class="w-full h-full bg-white mt-4 ml-2 mr-2 rounded-md shadow-md overflow-auto">
+      <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">
+        <span class="ml-5 text-white text-lg ">Data List</span>
+      </div>
+
+      <div class="overflow-auto p-4 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
+        @if(!isFailed && !isLoading && porders.length !== 0){
+          <table class="text-left p-4 table">
+            <thead>
+            <tr class="text-black bold">
+              <th>MOH</th>
+              <th>Date Required</th>
+              <th>Date Reqested</th>
+              <th>Officer</th>
+              <th>Order Status</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for(porder of data | async ; track porders){
+                <tr>
+                  <td>
+                    {{porder.moh.name}}
+                  </td>
+
+                  <td>
+                    {{porder.dorequired}}
+                  </td>
+
+                  <td>
+                    {{porder.dorequested}}
+                  </td>
+
+                  <td>
+                    {{porder.employee.callingname}}
+                  </td>
+
+                  <td>
+                    <div class="flex items-center">
+                      <div class="badge badge-xs mr-1.5 {{porder.productorderstatus.name === 'Pending'? 'bg-warning border-white' : porder.productorderstatus.name === 'Relesed' ? 'bg-success border-white' :'bg-error border-white'}}"></div>
+                      {{porder.productorderstatus.name}}
+                    </div>
+                  </td>
+
+                  <th>
+                    <div>
+                      <button
+                        class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                        (click) = "fillForm(porder)"
+                        [disabled]="!hasUpdateAuthority"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          data-slot="icon"
+                          class="w-5 h-5 mr-3"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                          />
+                        </svg>
+                      </button>
+
+                    </div>
+                  </th>
+
+                </tr>
+              }
+            </tbody>
+          </table>
+          <mat-paginator [length]="20" [pageSize]="5" [pageSizeOptions]="[3,5,10,20]"></mat-paginator>
+        }
+
+        @if (isLoading){
+          <app-page-loading/>
+        }
+
+        @if (isFailed){
+          <app-page-error/>
+        }
+      </div>
+    </div>
+
+  </mat-grid-tile>
+
+</mat-grid-list>
