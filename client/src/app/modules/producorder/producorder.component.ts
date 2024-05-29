@@ -21,6 +21,11 @@ import {ProductOrderStatusService} from "../../core/service/productorder/product
 import {ProductService} from "../../core/service/productorder/product.service";
 import {ProductOrderProducts} from "../../core/entity/productorderproducts";
 import {RegexService} from "../../core/service/regexes/regex.service";
+import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
+import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatDialog} from "@angular/material/dialog";
+import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 
 @Component({
   selector: 'app-producorder',
@@ -50,13 +55,15 @@ export class ProducorderComponent implements OnInit{
   postatuses: ProductOrderStatus[] = [];
   innerdata: ProductOrderProducts[] = [];
 
-  inndata!: ProductOrderProducts;
-  oldInndata!: ProductOrderProducts;
+  inndata!: any;
+  oldInndata!: any;
 
-  product: any;
+  product!: Product;
 
   productOrder!:ProductOrder;
   oldProductOrder!:ProductOrder;
+
+  currentOperation = '';
 
   dataSource!: MatTableDataSource<ProductOrder>;
   data!: Observable<any>
@@ -83,7 +90,9 @@ export class ProducorderComponent implements OnInit{
     private fb: FormBuilder,
     private poss: ProductOrderStatusService,
     private ps:ProductService,
-    private rs:RegexService
+    private rs:RegexService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
               ) {
     this.porderForm = this.fb.group({
       "dorequired": new FormControl('',[Validators.required]),
@@ -96,8 +105,8 @@ export class ProducorderComponent implements OnInit{
     },{updateOn:'change'});
 
     this.innerForm = this.fb.group({
-      "quentity": new FormControl('',[Validators.required]),
-      "product": new FormControl(null,[Validators.required]),
+      "quentity": new FormControl(''),
+      "product": new FormControl(null),
     },{updateOn:'change'});
   }
 
@@ -238,48 +247,161 @@ export class ProducorderComponent implements OnInit{
 
   id = 0;
   linetotal = 0;
+  grandtotal = 0;
 
   addToTable(){
 
-    const productid = this.innerForm.controls['product'].value;
-    const quentity = this.innerForm.controls['quentity'].value;
+    this.inndata = this.innerForm.getRawValue();
 
-    this.ps.getProduct(productid).subscribe({
-      next: data => this.product = data
-    });
+    if(this.inndata != null){
 
-    console.log(this.product);
+      this.calculateLineTotal(this.inndata.product.cost,this.inndata.quentity)
 
-    const unitprice = this.product?.cost;
+      let orderp = new ProductOrderProducts(this.id,this.inndata.product,this.inndata.quentity,this.linetotal);
 
-    if(unitprice != null){
-      this.linetotal = this.calculateLineTotal(unitprice,quentity);
+      let tem: ProductOrderProducts[] = [];
+        if(this.innerdata != null) this.innerdata.forEach((i) => tem.push(i));
+
+        this.innerdata = [];
+        tem.forEach((t) => this.innerdata.push(t));
+
+        this.innerdata.push(orderp);
+
+        this.id++;
+
+        this.calculateGrandTotal();
+        this.innerForm.reset();
+
+      for (const controlName in this.innerForm.controls) {
+        this.innerForm.controls[controlName].clearValidators();
+        this.innerForm.controls[controlName].updateValueAndValidity();
+      }
     }
 
-
-    if(this.product){
-
-      let op = new ProductOrderProducts(this.id,this.product,quentity,this.linetotal);
-
-      this.innerdata.push(op);
-
-      this.id++;
-
-      //this.calculateGrandTotal();
-      this.innerForm.reset();
-    }
   }
 
   calculateLineTotal(unitprice:number,qty:number){
-     return  qty * unitprice;
+     this.linetotal =  qty * unitprice;
     }
 
-  add(){}
+    calculateGrandTotal(){
+      this.grandtotal = 0;
+
+      this.innerdata.forEach((e) => {
+        this.grandtotal = this.grandtotal + e.linetotal;
+      });
+
+      this.porderForm.controls['grandtotal'].setValue(this.grandtotal);
+    }
+
+    deleteRow(x:any){
+
+    let datasources = this.innerdata;
+
+    const index = datasources.findIndex(item => item.id === x.id);
+
+    if(index > -1){
+      datasources.splice(index,1);
+    }
+
+    this.innerdata = datasources;
+    this.calculateGrandTotal();
+
+    }
+
+  getUpdates():string {
+    let updates: string = "";
+    for (const controlName in this.porderForm.controls) {
+      const control = this.porderForm.controls[controlName];
+      if (control.dirty) {
+        updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1)+" Changed";
+      }
+    }
+    return updates;
+  }
+
+  getErrors(){
+
+    let errors:string = "";
+
+    for(const controlName in this.porderForm.controls){
+      const control = this.porderForm.controls[controlName];
+      if(control.errors){
+        if(this.regexes[controlName] != undefined){
+          errors = errors + "<br>" + this.regexes[controlName]['message'];
+        }else{
+          errors = errors + "<br>Invalid " + controlName;
+        }
+      }
+    }
+    return errors;
+  }
+
+  add(){
+    let errors = this.getErrors();
+
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - ProductOrder Add ",message: "You Have Following Errors " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+    }else{
+
+      if(this.porderForm.valid){
+
+            const porder = this.porderForm.getRawValue();
+
+            this.currentOperation = "Add Product Order To" + porder.moh.name;
+
+            this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+              .afterClosed().subscribe(res => {
+              if(res) {
+                this.ms.saveMoh(porder).subscribe({
+                  next:() => {
+                    this.handleResult('success');
+                    this.loadTable("");
+                    this.clearForm();
+                  },
+                  error:(err:any) => {
+                    this.handleResult('failed');
+                  }
+                });
+              }
+            })
+          }
+
+      }
+    }
+
   update(porder:ProductOrder){}
   delete(porder:ProductOrder){}
   clearForm(){}
 
   handleSearch(){}
   clearSearch(){}
+
+  handleResult(status:string){
+
+    if(status === "success"){
+      this.snackBar.openFromComponent(NotificationComponent,{
+        data:{ message: status,icon: "done_all" },
+        horizontalPosition: "end",
+        verticalPosition: "top",
+        duration: 5000,
+        panelClass: ['success-snackbar'],
+      });
+    }else{
+      this.snackBar.openFromComponent(NotificationComponent,{
+        data:{ message: status,icon: "report" },
+        horizontalPosition: "end",
+        verticalPosition: "top",
+        duration: 5000,
+        panelClass: ['failure-snackbar'],
+      });
+    }
+  }
 
 }
