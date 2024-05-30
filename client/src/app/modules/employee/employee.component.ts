@@ -395,7 +395,7 @@ export class EmployeeComponent implements OnInit{
 
       if(updates != ""){
         this.dialog.open(WarningDialogComponent,{
-          data:{heading:"Updates - Employee Update ",message: "You Have Following Updates \n " + updates}
+          data:{heading:"Updates - Employee Update ",message: "You Have Following Updates <br> " + updates}
         }).afterClosed().subscribe(res => {
           if(!res){
             return;
@@ -421,6 +421,7 @@ export class EmployeeComponent implements OnInit{
               emptype: {id: parseInt(this.employeeForm.controls['emptype'].value)},
 
             }
+            this.currentOperation = "Employee Update ";
 
             this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
               .afterClosed().subscribe(res => {

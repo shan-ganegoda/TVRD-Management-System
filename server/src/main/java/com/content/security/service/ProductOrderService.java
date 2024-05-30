@@ -9,4 +9,6 @@ public interface ProductOrderService {
     List<ProductOrderDTO> getProductOrders();
 
     ProductOrderDTO saveProductOrder(ProductOrderDTO productOrderDTO);
+
+    ProductOrderDTO updateProductOrder(ProductOrderDTO productOrderDTO);
 }

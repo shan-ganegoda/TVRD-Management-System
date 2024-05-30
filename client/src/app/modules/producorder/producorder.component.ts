@@ -396,7 +396,77 @@ export class ProducorderComponent implements OnInit {
     }
   }
 
-  update(porder: ProductOrder) {
+  update(prorder: ProductOrder) {
+
+    let errors = this.getErrors();
+
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Product Order Update ",message: "You Have Following Errors <br> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+
+    }else{
+
+      let updates:string = this.getUpdates();
+
+      if(updates != ""){
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Product Order Update ",message: "You Have Following Updates <br> " + updates}
+        }).afterClosed().subscribe(res => {
+          if(!res){
+            return;
+          }else{
+
+            // @ts-ignore
+            this.innerdata.forEach((i)=> delete i.id);
+
+            const porder:ProductOrder = {
+              id: prorder.id,
+              dorequired: this.porderForm.controls['dorequired'].value,
+              dorequested: this.porderForm.controls['dorequested'].value,
+              grandtotal: this.porderForm.controls['grandtotal'].value,
+              description: this.porderForm.controls['description'].value,
+              productorderproducts: this.innerdata,
+
+              productorderstatus: {id: parseInt(this.porderForm.controls['productorderstatus'].value)},
+              moh: {id: parseInt(this.porderForm.controls['moh'].value)},
+              employee: {id: parseInt(this.porderForm.controls['employee'].value)},
+            }
+
+            this.currentOperation = "Product Order Update ";
+
+            this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+              .afterClosed().subscribe(res => {
+              if(res) {
+                this.pos.updatePorder(porder).subscribe({
+                  next:() => {
+                    this.handleResult('success');
+                    this.loadTable("");
+                    this.clearForm();
+                  },
+                  error:(err:any) => {
+                    this.handleResult('failed');
+                    //console.log(err);
+                  }
+                });
+              }
+            })
+
+          }
+        });
+
+      }else{
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - ProductOrder Update ",message: "No Fields Updated "}
+        }).afterClosed().subscribe(res =>{
+          if(res){return;}
+        })
+      }
+    }
   }
 
   delete(porder: ProductOrder) {

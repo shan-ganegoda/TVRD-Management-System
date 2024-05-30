@@ -24,5 +24,10 @@ public class ProductOrderController {
         return productOrderService.saveProductOrder(productOrderDTO);
     }
 
+    @PutMapping
+    public ProductOrderDTO update(@RequestBody ProductOrderDTO productOrderDTO){
+        return productOrderService.updateProductOrder(productOrderDTO);
+    }
+
 
 }

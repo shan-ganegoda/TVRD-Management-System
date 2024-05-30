@@ -47,4 +47,23 @@ public class ProductOrderServiceIMPL implements ProductOrderService{
             throw new ResourceNotFountException("Product Order Not Found");
         }
     }
+
+    @Override
+    public ProductOrderDTO updateProductOrder(ProductOrderDTO productOrderDTO) {
+
+        if(productOrderRepository.existsById(productOrderDTO.getId())){
+            try{
+                Productorder porder = objectMapper.productOrderDtoToProductOrder(productOrderDTO);
+                porder.getProductorderproducts().forEach(poproducts -> poproducts.setProductorder(porder));
+                productOrderRepository.save(porder);
+
+            }catch(Exception e){
+                System.out.println(e);
+            }
+
+            return productOrderDTO;
+        }else{
+            throw new ResourceNotFountException("Product Order Not Found");
+        }
+    }
 }

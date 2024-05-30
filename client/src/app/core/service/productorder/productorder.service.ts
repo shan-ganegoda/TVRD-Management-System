@@ -20,4 +20,9 @@ export class ProductorderService {
   savePorder(porder:ProductOrder){
     return this.http.post<ProductOrder>(API_URL,porder);
   }
+
+  updatePorder(porder:ProductOrder){
+    return this.http.put<ProductOrder>(API_URL,porder);
+  }
+
 }
