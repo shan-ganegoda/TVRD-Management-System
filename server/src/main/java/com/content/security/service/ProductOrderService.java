@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ProductOrderService {
     List<ProductOrderDTO> getProductOrders();
+
+    ProductOrderDTO saveProductOrder(ProductOrderDTO productOrderDTO);
 }

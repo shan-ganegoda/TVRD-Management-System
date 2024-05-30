@@ -8,18 +8,18 @@ import {MohStatus} from "./mohstatus";
 export interface Moh {
 
   id?: number;
-  name: string;
-  tele: string;
-  faxno: string;
-  email: string;
-  employee: Employee;
+  name?: string;
+  tele?: string;
+  faxno?: string;
+  email?: string;
+  employee?: Employee;
   location?: string;
-  address: string;
-  rdh: Rdh;
+  address?: string;
+  rdh?: Rdh;
   toopen?: string;
   toclose?: string;
-  doestablished:string;
-  mohstatus: MohStatus;
+  doestablished?:string;
+  mohstatus?: MohStatus;
 
 }
 

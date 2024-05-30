@@ -3,9 +3,7 @@ package com.content.security.controller;
 import com.content.security.dto.ProductOrderDTO;
 import com.content.security.service.ProductOrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,6 +17,11 @@ public class ProductOrderController {
     @GetMapping
     public List<ProductOrderDTO> getProductOrders(){
         return productOrderService.getProductOrders();
+    }
+
+    @PostMapping
+    public ProductOrderDTO save(@RequestBody ProductOrderDTO productOrderDTO){
+        return productOrderService.saveProductOrder(productOrderDTO);
     }
 
 

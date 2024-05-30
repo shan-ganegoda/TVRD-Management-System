@@ -43,7 +43,7 @@ import {NotificationComponent} from "../../shared/dialog/notification/notificati
   templateUrl: './producorder.component.html',
   styleUrl: './producorder.component.scss'
 })
-export class ProducorderComponent implements OnInit{
+export class ProducorderComponent implements OnInit {
 
   isLoading = false;
   isFailed = false;
@@ -54,14 +54,15 @@ export class ProducorderComponent implements OnInit{
   products: Product[] = [];
   postatuses: ProductOrderStatus[] = [];
   innerdata: ProductOrderProducts[] = [];
+  //productorderproducts: ProductOrderProducts[] = [];
 
   inndata!: any;
   oldInndata!: any;
 
   product!: Product;
 
-  productOrder!:ProductOrder;
-  oldProductOrder!:ProductOrder;
+  productOrder!: ProductOrder;
+  oldProductOrder!: ProductOrder;
 
   currentOperation = '';
 
@@ -72,42 +73,42 @@ export class ProducorderComponent implements OnInit{
   hasUpdateAuthority = true;
   hasDeleteAuthority = true;
 
-  poSearchForm!:FormGroup;
-  porderForm!:FormGroup;
-  innerForm!:FormGroup;
+  poSearchForm!: FormGroup;
+  porderForm!: FormGroup;
+  innerForm!: FormGroup;
 
-  enaadd:boolean = false;
-  enaupd:boolean = false;
-  enadel:boolean = false;
+  enaadd: boolean = false;
+  enaupd: boolean = false;
+  enadel: boolean = false;
 
-  regexes:any;
+  regexes: any;
 
   constructor(
-    private pos:ProductorderService,
-    private cdr:ChangeDetectorRef,
+    private pos: ProductorderService,
+    private cdr: ChangeDetectorRef,
     private ms: MohService,
     private es: EmployeeService,
     private fb: FormBuilder,
     private poss: ProductOrderStatusService,
-    private ps:ProductService,
-    private rs:RegexService,
+    private ps: ProductService,
+    private rs: RegexService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
-              ) {
+  ) {
     this.porderForm = this.fb.group({
-      "dorequired": new FormControl('',[Validators.required]),
-      "dorequested": new FormControl('',[Validators.required]),
-      "description": new FormControl('',[Validators.required]),
-      "grandtotal": new FormControl('',[Validators.required]),
-      "moh": new FormControl(null,[Validators.required]),
-      "employee": new FormControl(null,[Validators.required]),
-      "productorderstatus": new FormControl(null,[Validators.required]),
-    },{updateOn:'change'});
+      "dorequired": new FormControl('', [Validators.required]),
+      "dorequested": new FormControl('', [Validators.required]),
+      "description": new FormControl('', [Validators.required]),
+      "grandtotal": new FormControl('', [Validators.required]),
+      "moh": new FormControl(null, [Validators.required]),
+      "employee": new FormControl(null, [Validators.required]),
+      "productorderstatus": new FormControl(null, [Validators.required]),
+    }, {updateOn: 'change'});
 
     this.innerForm = this.fb.group({
       "quentity": new FormControl(''),
       "product": new FormControl(null),
-    },{updateOn:'change'});
+    }, {updateOn: 'change'});
   }
 
 
@@ -116,7 +117,7 @@ export class ProducorderComponent implements OnInit{
 
   }
 
-  initialize(){
+  initialize() {
 
     this.loadTable("");
 
@@ -137,7 +138,7 @@ export class ProducorderComponent implements OnInit{
     });
 
     this.rs.getRegexes('productorder').subscribe({
-      next:data => {
+      next: data => {
         this.regexes = data;
         this.createForm();
       },
@@ -145,9 +146,9 @@ export class ProducorderComponent implements OnInit{
     });
   }
 
-  loadTable(query:string){
+  loadTable(query: string) {
     this.pos.getAllProductOrders().subscribe({
-      next:data =>{
+      next: data => {
         this.porders = data
         this.dataSource = new MatTableDataSource(this.porders);
         this.cdr.detectChanges();
@@ -157,7 +158,7 @@ export class ProducorderComponent implements OnInit{
     });
   }
 
-  createForm(){
+  createForm() {
     this.porderForm.controls['dorequired'].setValidators([Validators.required]);
     this.porderForm.controls['dorequested'].setValidators([Validators.required]);
     this.porderForm.controls['description'].setValidators([Validators.required]);
@@ -168,8 +169,12 @@ export class ProducorderComponent implements OnInit{
     this.innerForm.controls['quentity'].setValidators([Validators.required]);
     this.innerForm.controls['product'].setValidators([Validators.required]);
 
-    Object.values(this.porderForm.controls).forEach( control => { control.markAsTouched(); } );
-    Object.values(this.innerForm.controls).forEach( control => { control.markAsTouched(); } );
+    Object.values(this.porderForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
+    Object.values(this.innerForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
 
     for (const controlName in this.porderForm.controls) {
       const control = this.porderForm.controls[controlName];
@@ -207,34 +212,35 @@ export class ProducorderComponent implements OnInit{
 
     }
 
-    this.enableButtons(true,false,false);
+    this.enableButtons(true, false, false);
   }
 
-  enableButtons(add:boolean, upd:boolean, del:boolean){
-    this.enaadd=add;
-    this.enaupd=upd;
-    this.enadel=del;
+  enableButtons(add: boolean, upd: boolean, del: boolean) {
+    this.enaadd = add;
+    this.enaupd = upd;
+    this.enadel = del;
   }
 
-  fillForm(porder:ProductOrder){
-    this.enableButtons(false,true,true);
+  fillForm(porder: ProductOrder) {
+    this.enableButtons(false, true, true);
 
     this.productOrder = porder;
     this.oldProductOrder = this.productOrder;
 
     this.innerdata = this.productOrder.productorderproducts;
 
-    console.log(porder)
 
-    this.porderForm.setValue({
+    this.porderForm.patchValue({
       employee: this.productOrder.employee.id,
       moh: this.productOrder.moh.id,
       dorequested: this.productOrder.dorequested,
       dorequired: this.productOrder.dorequired,
-      productorderstatus: this.productOrder.productorderstatus,
+      productorderstatus: this.productOrder.productorderstatus.id,
       description: this.productOrder.description,
       grandtotal: this.productOrder.grandtotal,
     })
+
+    //this.porderForm.patchValue(this.productOrder);
 
     this.porderForm.markAsPristine();
 
@@ -249,28 +255,28 @@ export class ProducorderComponent implements OnInit{
   linetotal = 0;
   grandtotal = 0;
 
-  addToTable(){
+  addToTable() {
 
     this.inndata = this.innerForm.getRawValue();
 
-    if(this.inndata != null){
+    if (this.inndata != null) {
 
-      this.calculateLineTotal(this.inndata.product.cost,this.inndata.quentity)
+      this.calculateLineTotal(this.inndata.product.cost, this.inndata.quentity)
 
-      let orderp = new ProductOrderProducts(this.id,this.inndata.product,this.inndata.quentity,this.linetotal);
+      let orderp = new ProductOrderProducts(this.id, this.inndata.product, this.inndata.quentity, this.linetotal);
 
       let tem: ProductOrderProducts[] = [];
-        if(this.innerdata != null) this.innerdata.forEach((i) => tem.push(i));
+      if (this.innerdata != null) this.innerdata.forEach((i) => tem.push(i));
 
-        this.innerdata = [];
-        tem.forEach((t) => this.innerdata.push(t));
+      this.innerdata = [];
+      tem.forEach((t) => this.innerdata.push(t));
 
-        this.innerdata.push(orderp);
+      this.innerdata.push(orderp);
 
-        this.id++;
+      this.id++;
 
-        this.calculateGrandTotal();
-        this.innerForm.reset();
+      this.calculateGrandTotal();
+      this.innerForm.reset();
 
       for (const controlName in this.innerForm.controls) {
         this.innerForm.controls[controlName].clearValidators();
@@ -280,56 +286,56 @@ export class ProducorderComponent implements OnInit{
 
   }
 
-  calculateLineTotal(unitprice:number,qty:number){
-     this.linetotal =  qty * unitprice;
-    }
+  calculateLineTotal(unitprice: number, qty: number) {
+    this.linetotal = qty * unitprice;
+  }
 
-    calculateGrandTotal(){
-      this.grandtotal = 0;
+  calculateGrandTotal() {
+    this.grandtotal = 0;
 
-      this.innerdata.forEach((e) => {
-        this.grandtotal = this.grandtotal + e.linetotal;
-      });
+    this.innerdata.forEach((e) => {
+      this.grandtotal = this.grandtotal + e.linetotal;
+    });
 
-      this.porderForm.controls['grandtotal'].setValue(this.grandtotal);
-    }
+    this.porderForm.controls['grandtotal'].setValue(this.grandtotal);
+  }
 
-    deleteRow(x:any){
+  deleteRow(x: any) {
 
     let datasources = this.innerdata;
 
     const index = datasources.findIndex(item => item.id === x.id);
 
-    if(index > -1){
-      datasources.splice(index,1);
+    if (index > -1) {
+      datasources.splice(index, 1);
     }
 
     this.innerdata = datasources;
     this.calculateGrandTotal();
 
-    }
+  }
 
-  getUpdates():string {
+  getUpdates(): string {
     let updates: string = "";
     for (const controlName in this.porderForm.controls) {
       const control = this.porderForm.controls[controlName];
       if (control.dirty) {
-        updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1)+" Changed";
+        updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1) + " Changed";
       }
     }
     return updates;
   }
 
-  getErrors(){
+  getErrors() {
 
-    let errors:string = "";
+    let errors: string = "";
 
-    for(const controlName in this.porderForm.controls){
+    for (const controlName in this.porderForm.controls) {
       const control = this.porderForm.controls[controlName];
-      if(control.errors){
-        if(this.regexes[controlName] != undefined){
+      if (control.errors) {
+        if (this.regexes[controlName] != undefined) {
           errors = errors + "<br>" + this.regexes[controlName]['message'];
-        }else{
+        } else {
           errors = errors + "<br>Invalid " + controlName;
         }
       }
@@ -337,65 +343,95 @@ export class ProducorderComponent implements OnInit{
     return errors;
   }
 
-  add(){
+  add() {
     let errors = this.getErrors();
 
-    if(errors != ""){
-      this.dialog.open(WarningDialogComponent,{
-        data:{heading:"Errors - ProductOrder Add ",message: "You Have Following Errors " + errors}
+    if (errors != "") {
+      this.dialog.open(WarningDialogComponent, {
+        data: {heading: "Errors - ProductOrder Add ", message: "You Have Following Errors " + errors}
       }).afterClosed().subscribe(res => {
-        if(!res){
+        if (!res) {
           return;
         }
       });
-    }else{
+    } else {
 
-      if(this.porderForm.valid){
+      if (this.porderForm.valid) {
 
-            const porder = this.porderForm.getRawValue();
+        // @ts-ignore
+        this.innerdata.forEach((i)=> delete i.id);
 
-            this.currentOperation = "Add Product Order To" + porder.moh.name;
+        const porder:ProductOrder = {
+          dorequired: this.porderForm.controls['dorequired'].value,
+          dorequested: this.porderForm.controls['dorequested'].value,
+          grandtotal: this.porderForm.controls['grandtotal'].value,
+          description: this.porderForm.controls['description'].value,
+          productorderproducts: this.innerdata,
 
-            this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
-              .afterClosed().subscribe(res => {
-              if(res) {
-                this.ms.saveMoh(porder).subscribe({
-                  next:() => {
-                    this.handleResult('success');
-                    this.loadTable("");
-                    this.clearForm();
-                  },
-                  error:(err:any) => {
-                    this.handleResult('failed');
-                  }
-                });
+          productorderstatus: {id: parseInt(this.porderForm.controls['productorderstatus'].value)},
+          moh: {id: parseInt(this.porderForm.controls['moh'].value)},
+          employee: {id: parseInt(this.porderForm.controls['employee'].value)},
+        }
+
+        //console.log(porder);
+        this.currentOperation = "Add Product Order To" + porder.moh.name;
+
+        this.dialog.open(ConfirmDialogComponent, {data: this.currentOperation})
+          .afterClosed().subscribe(res => {
+          if (res) {
+            this.pos.savePorder(porder).subscribe({
+              next: () => {
+                this.handleResult('success');
+                this.loadTable("");
+                this.clearForm();
+              },
+              error: (err: any) => {
+                this.handleResult('failed');
               }
-            })
+            });
           }
-
+        })
       }
+
     }
+  }
 
-  update(porder:ProductOrder){}
-  delete(porder:ProductOrder){}
-  clearForm(){}
+  update(porder: ProductOrder) {
+  }
 
-  handleSearch(){}
-  clearSearch(){}
+  delete(porder: ProductOrder) {
+  }
 
-  handleResult(status:string){
+  clearForm() {
+    this.porderForm.reset();
+    this.porderForm.controls['moh'].setValue(null);
+    this.porderForm.controls['employee'].setValue(null);
+    this.porderForm.controls['productorderstatus'].setValue(null);
+    this.innerdata = [];
 
-    if(status === "success"){
-      this.snackBar.openFromComponent(NotificationComponent,{
-        data:{ message: status,icon: "done_all" },
+    this.enableButtons(true,false,false);
+
+  }
+
+  handleSearch() {
+  }
+
+  clearSearch() {
+  }
+
+  handleResult(status: string) {
+
+    if (status === "success") {
+      this.snackBar.openFromComponent(NotificationComponent, {
+        data: {message: status, icon: "done_all"},
         horizontalPosition: "end",
         verticalPosition: "top",
         duration: 5000,
         panelClass: ['success-snackbar'],
       });
-    }else{
-      this.snackBar.openFromComponent(NotificationComponent,{
-        data:{ message: status,icon: "report" },
+    } else {
+      this.snackBar.openFromComponent(NotificationComponent, {
+        data: {message: status, icon: "report"},
         horizontalPosition: "end",
         verticalPosition: "top",
         duration: 5000,

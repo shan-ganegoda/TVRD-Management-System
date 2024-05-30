@@ -4,10 +4,7 @@ import com.content.security.dto.ProductDTO;
 import com.content.security.dto.ProductOrderDTO;
 import com.content.security.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +24,7 @@ public class ProductController {
     public ProductDTO getProductById(@PathVariable int id){
         return productService.getProductById(id);
     }
+
 
 
 }

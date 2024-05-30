@@ -2,6 +2,7 @@ package com.content.security.service;
 
 import com.content.security.dto.ProductOrderDTO;
 import com.content.security.entity.Productorder;
+import com.content.security.entity.Productorderproduct;
 import com.content.security.exception.ResourceNotFountException;
 import com.content.security.repository.ProductOrderRepository;
 import com.content.security.util.mapper.ObjectMapper;
@@ -29,5 +30,21 @@ public class ProductOrderServiceIMPL implements ProductOrderService{
             throw new ResourceNotFountException("Product Orders Not Found");
         }
         
+    }
+
+    @Override
+    public ProductOrderDTO saveProductOrder(ProductOrderDTO productOrderDTO) {
+        if(productOrderDTO != null){
+            Productorder porder = objectMapper.productOrderDtoToProductOrder(productOrderDTO);
+
+            for(Productorderproduct i : porder.getProductorderproducts()){
+                i.setProductorder(porder);
+            }
+
+            productOrderRepository.save(porder);
+            return productOrderDTO;
+        }else{
+            throw new ResourceNotFountException("Product Order Not Found");
+        }
     }
 }

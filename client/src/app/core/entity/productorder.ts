@@ -5,7 +5,7 @@ import {ProductOrderProducts} from "./productorderproducts";
 
 export interface ProductOrder{
 
-  id:number
+  id?:number
   dorequired:string
   grandtotal:number
   dorequested:string

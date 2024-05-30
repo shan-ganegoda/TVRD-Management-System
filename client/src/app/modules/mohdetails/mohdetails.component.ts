@@ -210,9 +210,9 @@ export class MohdetailsComponent implements OnInit{
       doestablished: this.currentMoh.doestablished,
       // toclose: this.currentMoh.toclose,
 
-      rdh: this.currentMoh.rdh.id,
-      mohstatus: this.currentMoh.mohstatus.id,
-      employee: this.currentMoh.employee.id
+      rdh: this.currentMoh.rdh?.id,
+      mohstatus: this.currentMoh.mohstatus?.id,
+      employee: this.currentMoh.employee?.id
     });
 
     this.mohForm.markAsPristine();

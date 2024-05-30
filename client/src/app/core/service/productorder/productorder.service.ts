@@ -16,4 +16,8 @@ export class ProductorderService {
   getAllProductOrders(){
     return this.http.get<ProductOrder[]>(API_URL);
   }
+
+  savePorder(porder:ProductOrder){
+    return this.http.post<ProductOrder>(API_URL,porder);
+  }
 }

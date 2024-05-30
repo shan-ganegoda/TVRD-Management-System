@@ -48,7 +48,7 @@ public class Productorder {
     @JoinColumn(name = "moh_id", nullable = false)
     private Moh moh;
 
-    @OneToMany(mappedBy = "productorder")
+    @OneToMany(mappedBy = "productorder", cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Productorderproduct> productorderproducts = new LinkedHashSet<>();
 
 }

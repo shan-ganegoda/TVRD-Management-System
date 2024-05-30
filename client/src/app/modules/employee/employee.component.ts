@@ -278,10 +278,10 @@ export class EmployeeComponent implements OnInit{
       mobile: this.employee.mobile,
       land: this.employee.land,
       number: this.employee.number,
-      gender: this.employee.gender.id,
-      designation: this.employee.designation.id,
-      employeestatus: this.employee.employeestatus.id,
-      emptype: this.employee.emptype.id,
+      gender: this.employee.gender?.id,
+      designation: this.employee.designation?.id,
+      employeestatus: this.employee.employeestatus?.id,
+      emptype: this.employee.emptype?.id,
       dobirth: this.employee.dobirth,
       description: this.employee.description,
       photo: "",
@@ -460,7 +460,7 @@ export class EmployeeComponent implements OnInit{
 
     this.dialog.open(ConfirmDialogComponent,{data:operation})
       .afterClosed().subscribe((res:boolean) => {
-      if(res){
+      if(res && employee.number){
         this.es.deleteEmployeeByNumber(employee.number).subscribe({
           next: () => {
             this.loadTable("");

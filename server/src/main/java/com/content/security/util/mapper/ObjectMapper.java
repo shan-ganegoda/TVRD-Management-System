@@ -68,4 +68,6 @@ public interface ObjectMapper {
     List<ProductOrderStatusDTO> productOrderStatusDTOListToDtoList(List<Productorderstatus> productOrderStatuses);
 
     ProductDTO ProductToDto(Product product);
+
+    Productorder productOrderDtoToProductOrder(ProductOrderDTO productOrderDTO);
 }
