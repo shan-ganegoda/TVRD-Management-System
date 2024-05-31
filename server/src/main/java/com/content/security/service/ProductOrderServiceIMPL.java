@@ -66,4 +66,20 @@ public class ProductOrderServiceIMPL implements ProductOrderService{
             throw new ResourceNotFountException("Product Order Not Found");
         }
     }
+
+    @Override
+    public void deleteProductOrder(Integer id) {
+
+        if(productOrderRepository.existsById(id)){
+
+            Productorder porder = productOrderRepository.findById(id).orElseThrow(null);
+
+            if(porder != null){
+                productOrderRepository.delete(porder);
+            }
+
+        }else{
+            throw new ResourceNotFountException("Product Order Not Found");
+        }
+    }
 }

@@ -11,4 +11,6 @@ public interface ProductOrderService {
     ProductOrderDTO saveProductOrder(ProductOrderDTO productOrderDTO);
 
     ProductOrderDTO updateProductOrder(ProductOrderDTO productOrderDTO);
+
+    void deleteProductOrder(Integer id);
 }

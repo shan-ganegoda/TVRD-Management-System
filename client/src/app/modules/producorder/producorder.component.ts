@@ -109,6 +109,13 @@ export class ProducorderComponent implements OnInit {
       "quentity": new FormControl(''),
       "product": new FormControl(null),
     }, {updateOn: 'change'});
+
+    this.poSearchForm = this.fb.group({
+      "ssporderstatus": new FormControl(''),
+      "ssdorequired": new FormControl(''),
+      "ssdorequested": new FormControl(''),
+      "ssmoh": new FormControl(''),
+    }, {updateOn: 'change'});
   }
 
 
@@ -470,6 +477,25 @@ export class ProducorderComponent implements OnInit {
   }
 
   delete(porder: ProductOrder) {
+    const operation = "Delete Product Order " + porder.moh.name;
+    //console.log(operation);
+
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe((res:boolean) => {
+      if(res && porder.id){
+        this.pos.deletePorder(porder.id).subscribe({
+          next: () => {
+            this.loadTable("");
+            this.handleResult("success");
+            this.clearForm();
+          },
+
+          error: () => {
+            this.handleResult("failed");
+          }
+        });
+      }
+    });
   }
 
   clearForm() {
@@ -487,6 +513,19 @@ export class ProducorderComponent implements OnInit {
   }
 
   clearSearch() {
+    const operation = "Clear Search";
+
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.poSearchForm.reset();
+        this.poSearchForm.controls['ssmoh'].setValue('');
+        this.poSearchForm.controls['ssporderstatus'].setValue('');
+        this.loadTable("");
+      }
+    });
   }
 
   handleResult(status: string) {

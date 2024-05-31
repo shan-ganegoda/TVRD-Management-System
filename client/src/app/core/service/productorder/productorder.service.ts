@@ -25,4 +25,8 @@ export class ProductorderService {
     return this.http.put<ProductOrder>(API_URL,porder);
   }
 
+  deletePorder(id:number){
+    return this.http.delete(API_URL + "/" + id);
+  }
+
 }

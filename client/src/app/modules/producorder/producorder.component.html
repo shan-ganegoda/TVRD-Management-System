@@ -9,40 +9,38 @@
 
   <form [formGroup]="poSearchForm" class="flex flex-row animate animate-fade">
     <div class="join ml-auto  scale-95">
-      <input
-        type="text"
-        placeholder="Moh Name"
-        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
-
-      />
-
-      <input
-        type="text"
-        placeholder="Email"
-        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
-
-      />
-
       <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
-
-              data-tip="Rdh"
+              formControlName="ssmoh"
       >
-        <option disabled value="">RDH</option>
-
-        <!--        @for(district of districts; track districts){-->
-        <!--          <option value="{{district.id}}">{{district.name}}</option>-->
-        <!--        }-->
+        <option disabled value="">MOH</option>
+        @for(moh of mohs; track mohs){
+          <option value="{{moh.id}}">{{moh.name}}</option>
+        }
       </select>
 
+      <input
+        type="text"
+        placeholder="Date Requested"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+        formControlName="ssdorequested"
+        onfocus="(this.type='date')"
+      />
+
+      <input
+        type="text"
+        placeholder="Date Required"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+        formControlName="ssdorequired"
+        onfocus="(this.type='date')"
+      />
+
       <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
-
-              data-tip="MohStatus"
+              formControlName="ssporderstatus"
       >
-        <option disabled value="">MohStatus</option>
-
-        <!--        @for(mohstatus of mohstatuses; track mohstatuses){-->
-        <!--          <option value="{{mohstatus.id}}">{{mohstatus.name}}</option>-->
-        <!--        }-->
+        <option disabled value="">Order Status</option>
+                @for(porderstatus of postatuses; track postatuses){
+                  <option value="{{porderstatus.id}}">{{porderstatus.name}}</option>
+                }
       </select>
 
       <button class="btn join-item border-black bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="handleSearch()">
