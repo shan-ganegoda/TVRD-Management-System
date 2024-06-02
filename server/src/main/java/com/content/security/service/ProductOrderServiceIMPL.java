@@ -1,5 +1,6 @@
 package com.content.security.service;
 
+import com.content.security.dto.EmployeeDTO;
 import com.content.security.dto.ProductOrderDTO;
 import com.content.security.entity.Productorder;
 import com.content.security.entity.Productorderproduct;
@@ -9,7 +10,11 @@ import com.content.security.util.mapper.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -19,13 +24,30 @@ public class ProductOrderServiceIMPL implements ProductOrderService{
     private final ObjectMapper objectMapper;
 
     @Override
-    public List<ProductOrderDTO> getProductOrders() {
+    public List<ProductOrderDTO> getProductOrders(HashMap<String,String> params) {
 
         List<Productorder> productOrders = productOrderRepository.findAll();
 
         if(!productOrders.isEmpty()){
             List<ProductOrderDTO> productOrderDTOList = objectMapper.productOrderToDtoList(productOrders);
-            return productOrderDTOList;
+            if(params.isEmpty()){
+                return productOrderDTOList;
+            }else{
+                String dorequired = params.get("dorequired");
+                String dorequested = params.get("dorequested");
+                String mohid = params.get("mohid");
+                String postatusid = params.get("postatusid");
+
+                Stream<ProductOrderDTO> postream = productOrderDTOList.stream();
+
+                if(mohid!=null) postream = postream.filter(e-> e.getMoh().getId()==Integer.parseInt(mohid));
+                if(postatusid!=null) postream = postream.filter(e-> e.getProductorderstatus().getId()==Integer.parseInt(postatusid));
+                if(dorequired!=null) postream = postream.filter(e-> e.getDorequired().equals(LocalDate.parse(dorequired)));
+                if(dorequested!=null) postream = postream.filter(e-> e.getDorequested().equals(LocalDate.parse(dorequested)));
+
+
+                return postream.collect(Collectors.toList());
+            }
         }else{
             throw new ResourceNotFountException("Product Orders Not Found");
         }

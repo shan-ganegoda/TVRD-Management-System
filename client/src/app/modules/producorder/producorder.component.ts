@@ -154,13 +154,14 @@ export class ProducorderComponent implements OnInit {
   }
 
   loadTable(query: string) {
-    this.pos.getAllProductOrders().subscribe({
+    this.pos.getAllProductOrders(query).subscribe({
       next: data => {
         this.porders = data
         this.dataSource = new MatTableDataSource(this.porders);
         this.cdr.detectChanges();
         this.dataSource.paginator = this.paginator;
         this.data = this.dataSource.connect();
+        // console.log(query);
       }
     });
   }
@@ -510,6 +511,20 @@ export class ProducorderComponent implements OnInit {
   }
 
   handleSearch() {
+    const ssmoh  = this.poSearchForm.controls['ssmoh'].value;
+    const ssporderstatus  = this.poSearchForm.controls['ssporderstatus'].value;
+    const ssdorequired  = this.poSearchForm.controls['ssdorequired'].value;
+    const ssdorequested  = this.poSearchForm.controls['ssdorequested'].value;
+
+    let query = ""
+
+    if(ssdorequired != null && ssdorequired.trim() !="") query = query + "&dorequired=" + ssdorequired;
+    if(ssdorequested != null && ssdorequested.trim() !="") query = query + "&dorequested=" + ssdorequested;
+    if(ssmoh != '') query = query + "&mohid=" + parseInt(ssmoh);
+    if(ssporderstatus != '') query = query + "&postatusid=" + parseInt(ssporderstatus);
+
+    if(query != "") query = query.replace(/^./, "?")
+    this.loadTable(query);
   }
 
   clearSearch() {

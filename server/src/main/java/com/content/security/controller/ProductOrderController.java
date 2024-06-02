@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -18,8 +19,8 @@ public class ProductOrderController {
     private final ProductOrderService productOrderService;
 
     @GetMapping
-    public List<ProductOrderDTO> getProductOrders(){
-        return productOrderService.getProductOrders();
+    public List<ProductOrderDTO> getProductOrders(@RequestParam HashMap<String,String> params){
+        return productOrderService.getProductOrders(params);
     }
 
     @PostMapping

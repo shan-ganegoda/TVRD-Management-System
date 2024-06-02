@@ -13,8 +13,8 @@ export class ProductorderService {
 
   constructor(private http:HttpClient) { }
 
-  getAllProductOrders(){
-    return this.http.get<ProductOrder[]>(API_URL);
+  getAllProductOrders(query:string){
+    return this.http.get<ProductOrder[]>(API_URL+query);
   }
 
   savePorder(porder:ProductOrder){
