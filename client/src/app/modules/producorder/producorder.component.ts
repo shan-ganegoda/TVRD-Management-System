@@ -97,6 +97,7 @@ export class ProducorderComponent implements OnInit {
   ) {
     this.porderForm = this.fb.group({
       "dorequired": new FormControl('', [Validators.required]),
+      "code": new FormControl('', [Validators.required]),
       "dorequested": new FormControl('', [Validators.required]),
       "description": new FormControl('', [Validators.required]),
       "grandtotal": new FormControl('', [Validators.required]),
@@ -168,6 +169,7 @@ export class ProducorderComponent implements OnInit {
 
   createForm() {
     this.porderForm.controls['dorequired'].setValidators([Validators.required]);
+    this.porderForm.controls['code'].setValidators([Validators.required]);
     this.porderForm.controls['dorequested'].setValidators([Validators.required]);
     this.porderForm.controls['description'].setValidators([Validators.required]);
     this.porderForm.controls['moh'].setValidators([Validators.required]);
@@ -240,6 +242,7 @@ export class ProducorderComponent implements OnInit {
 
     this.porderForm.patchValue({
       employee: this.productOrder.employee.id,
+      code: this.productOrder.code,
       moh: this.productOrder.moh.id,
       dorequested: this.productOrder.dorequested,
       dorequired: this.productOrder.dorequired,
@@ -371,6 +374,7 @@ export class ProducorderComponent implements OnInit {
 
         const porder:ProductOrder = {
           dorequired: this.porderForm.controls['dorequired'].value,
+          code: this.porderForm.controls['code'].value,
           dorequested: this.porderForm.controls['dorequested'].value,
           grandtotal: this.porderForm.controls['grandtotal'].value,
           description: this.porderForm.controls['description'].value,
@@ -382,7 +386,7 @@ export class ProducorderComponent implements OnInit {
         }
 
         //console.log(porder);
-        this.currentOperation = "Add Product Order To" + porder.moh.name;
+        this.currentOperation = "Add Product Order";
 
         this.dialog.open(ConfirmDialogComponent, {data: this.currentOperation})
           .afterClosed().subscribe(res => {
@@ -434,6 +438,7 @@ export class ProducorderComponent implements OnInit {
 
             const porder:ProductOrder = {
               id: prorder.id,
+              code: this.porderForm.controls['code'].value,
               dorequired: this.porderForm.controls['dorequired'].value,
               dorequested: this.porderForm.controls['dorequested'].value,
               grandtotal: this.porderForm.controls['grandtotal'].value,

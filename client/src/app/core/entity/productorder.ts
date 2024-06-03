@@ -6,6 +6,7 @@ import {ProductOrderProducts} from "./productorderproducts";
 export interface ProductOrder{
 
   id?:number
+  code:string,
   dorequired:string
   grandtotal:number
   dorequested:string

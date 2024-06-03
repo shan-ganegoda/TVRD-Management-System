@@ -106,6 +106,16 @@
         <div class="relative w-full px-2 mb-3">
           <input
             type="text"
+            placeholder="Code"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="code"
+          />
+          <label class="floating-label">Code</label>
+        </div>
+
+        <div class="relative w-full px-2 mb-3">
+          <input
+            type="text"
             placeholder="Date Reqested"
             class="peer input input-bordered w-full focus:outline-none"
             formControlName="dorequested"
@@ -271,7 +281,9 @@
             </tr>
             </thead>
             <tbody>
+
               @for (porder of data | async; track porders) {
+
                 <tr>
                   <td>
                     {{ porder.moh.name }}

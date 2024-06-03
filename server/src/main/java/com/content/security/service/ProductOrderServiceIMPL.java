@@ -4,6 +4,7 @@ import com.content.security.dto.EmployeeDTO;
 import com.content.security.dto.ProductOrderDTO;
 import com.content.security.entity.Productorder;
 import com.content.security.entity.Productorderproduct;
+import com.content.security.exception.ResourceAlreadyExistException;
 import com.content.security.exception.ResourceNotFountException;
 import com.content.security.repository.ProductOrderRepository;
 import com.content.security.util.mapper.ObjectMapper;
@@ -59,12 +60,16 @@ public class ProductOrderServiceIMPL implements ProductOrderService{
         if(productOrderDTO != null){
             Productorder porder = objectMapper.productOrderDtoToProductOrder(productOrderDTO);
 
-            for(Productorderproduct i : porder.getProductorderproducts()){
-                i.setProductorder(porder);
-            }
+            if(!productOrderRepository.existsByCode(porder.getCode())){
+                for(Productorderproduct i : porder.getProductorderproducts()){
+                    i.setProductorder(porder);
+                }
 
-            productOrderRepository.save(porder);
-            return productOrderDTO;
+                productOrderRepository.save(porder);
+                return productOrderDTO;
+            }else{
+                throw new ResourceAlreadyExistException("Product Order Already Exist!");
+            }
         }else{
             throw new ResourceNotFountException("Product Order Not Found");
         }

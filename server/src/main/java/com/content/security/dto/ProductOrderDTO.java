@@ -23,6 +23,7 @@ import java.util.Set;
 public class ProductOrderDTO {
 
         private Integer id;
+        private String code;
         private LocalDate dorequired;
         private BigDecimal grandtotal;
         private LocalDate dorequested;

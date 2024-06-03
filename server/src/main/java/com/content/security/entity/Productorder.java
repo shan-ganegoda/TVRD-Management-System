@@ -20,6 +20,9 @@ public class Productorder {
     @Column(name = "id", nullable = false)
     private Integer id;
 
+    @Column(name ="code")
+    private String code;
+
     @Column(name = "dorequired")
     private LocalDate dorequired;
 
