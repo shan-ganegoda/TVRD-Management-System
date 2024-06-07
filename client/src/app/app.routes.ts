@@ -12,6 +12,7 @@ import {AuthComponent} from "./core/auth/auth.component";
 import {MohdetailsComponent} from "./modules/mohdetails/mohdetails.component";
 import {ProducorderComponent} from "./modules/producorder/producorder.component";
 import {CountbymohComponent} from "./core/report/view/countbymoh/countbymoh.component";
+import {CountbyporderComponent} from "./core/report/view/countbyporder/countbyporder.component";
 
 export const routes: Routes = [
   { path: "login", component: AuthComponent },
@@ -28,6 +29,7 @@ export const routes: Routes = [
       {path: "mohdetail", component: MohdetailsComponent},
       {path: "productorder", component: ProducorderComponent},
       {path: "mohreport", component: CountbymohComponent},
+      {path: "porderreport", component: CountbyporderComponent},
       {path:"**", component:NotfoundpageComponent}
 
     ]
