@@ -130,7 +130,13 @@ export class ProducorderComponent implements OnInit {
     this.loadTable("");
 
     this.ms.getAllMohs("").subscribe({
-      next: data => this.mohs = data
+      next: data => {
+        this.mohs = data;
+        if(this.mohs){
+          // @ts-ignore
+          this.mohs.sort((a,b) => a.name.localeCompare(b.name))
+        }
+      }
     });
 
     this.es.getAllEmployeesList("").subscribe({

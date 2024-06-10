@@ -13,6 +13,7 @@ import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {NgForOf} from "@angular/common";
 import {CountByPOrders} from "../../entity/countByPOrders";
 import {ReportService} from "../../service/report.service";
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 declare var google: any;
@@ -37,7 +38,8 @@ declare var google: any;
     MatTable,
     NgForOf,
     MatColumnDef,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    ReactiveFormsModule
   ],
   templateUrl: './countbyporder.component.html',
   styleUrl: './countbyporder.component.scss'
@@ -104,7 +106,7 @@ export class CountbyporderComponent {
     const barOptions = {
       title: 'Order Count (Bar Chart)',
       subtitle: 'Count of Orders By Date',
-      bars: 'horizontal',
+      bars: 'vertical',
       height: 400,
       width: 600
     };

@@ -1,5 +1,6 @@
 package com.content.security.report.controller;
 
+import com.content.security.report.dto.CountByProductOrderDTO;
 import com.content.security.report.entity.CountByPdh;
 import com.content.security.report.entity.CountByProductOrder;
 import com.content.security.report.repository.CountByPdhRepository;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,7 +40,7 @@ public class ReportController {
     }
 
     @GetMapping(path = "/countbyproductorderdate")
-    public List<CountByProductOrder> getCountByProductOrderDate(@RequestParam HashMap<String,String> params) throws Exception {
+    public List<CountByProductOrderDTO> getCountByProductOrderDate(@RequestParam HashMap<String,String> params) throws Exception {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -51,6 +54,14 @@ public class ReportController {
         endDate = LocalDate.parse(endDateStr);
 
         List<CountByProductOrder> countByProductOrders = countByRdhProductOrderRepository.findCountByProductOrderBetween(startDate,endDate);
-        return countByProductOrders;
+
+        List<CountByProductOrderDTO> dtoList = new ArrayList<>();
+
+        for (CountByProductOrder countByProductOrder : countByProductOrders) {
+            CountByProductOrderDTO dto = new CountByProductOrderDTO(YearMonth.from(countByProductOrder.getRequestedDate()),countByProductOrder.getCount());
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
 }
