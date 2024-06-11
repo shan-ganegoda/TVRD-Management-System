@@ -1,5 +1,6 @@
 package com.content.security.report.controller;
 
+import com.content.security.dto.ProductOrderDTO;
 import com.content.security.report.dto.CountByProductOrderDTO;
 import com.content.security.report.entity.CountByPdh;
 import com.content.security.report.entity.CountByProductOrder;
@@ -17,6 +18,9 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,11 +61,29 @@ public class ReportController {
 
         List<CountByProductOrderDTO> dtoList = new ArrayList<>();
 
+        /**
+         * This split date into YYYY-MM format and put all these result into dto list
+         */
         for (CountByProductOrder countByProductOrder : countByProductOrders) {
             CountByProductOrderDTO dto = new CountByProductOrderDTO(YearMonth.from(countByProductOrder.getRequestedDate()),countByProductOrder.getCount());
             dtoList.add(dto);
         }
+        /**
+         * This combine the duplicate month entries and return a Map with result
+         */
+         Map<YearMonth,Long> combinedMap = dtoList.stream().collect(Collectors.groupingBy(
+                 CountByProductOrderDTO::getRequestedDate,
+                 Collectors.summingLong(list -> Math.toIntExact(list.getCount()))
+         ));
 
-        return dtoList;
+        /**
+         * This is the place where the map convert into a list of CountByProductOrderDTO
+         */
+        List<CountByProductOrderDTO> list = combinedMap.entrySet().stream()
+                .map(entry -> new CountByProductOrderDTO(entry.getKey(),entry.getValue()))
+                .toList();
+
+
+        return list;
     }
 }

@@ -19,6 +19,6 @@ export class ReportService {
   }
 
   countByPorder(){
-    return this.http.get<CountByPOrders[]>(API_URL + "/countbyproductorder");
+    return this.http.get<CountByPOrders[]>(API_URL + "/countbyproductorderdate");
   }
 }

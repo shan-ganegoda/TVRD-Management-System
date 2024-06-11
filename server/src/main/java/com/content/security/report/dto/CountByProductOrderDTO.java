@@ -22,4 +22,5 @@ public class CountByProductOrderDTO {
         this.requestedDate = requestedDate;
         this.count = count;
     }
+
 }
