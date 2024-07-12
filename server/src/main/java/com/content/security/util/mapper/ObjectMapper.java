@@ -70,4 +70,8 @@ public interface ObjectMapper {
     ProductDTO ProductToDto(Product product);
 
     Productorder productOrderDtoToProductOrder(ProductOrderDTO productOrderDTO);
+
+    List<VehicleDTO> vehicleListToDtoList(List<Vehicle> vehicles);
+
+    Vehicle vehicleDtoToVehicle(VehicleDTO vehicleDTO);
 }

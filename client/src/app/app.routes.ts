@@ -22,14 +22,14 @@ export const routes: Routes = [
     component: MainwindowComponent,
     canActivate:[authenticationGuard],
     children: [
-      {path: "home", component: HomeComponent},
-      {path: "dashboard", component: DashboardComponent},
-      {path: "employee", component: EmployeeComponent},
-      {path: "user", component: UserComponent},
-      {path: "mohdetail", component: MohdetailsComponent},
-      {path: "productorder", component: ProducorderComponent},
-      {path: "mohreport", component: CountbymohComponent},
-      {path: "porderreport", component: CountbyporderComponent},
+      {path: "home", component: HomeComponent,title: "Home"},
+      {path: "dashboard", component: DashboardComponent,title: "Dashboard"},
+      {path: "employee", component: EmployeeComponent,title: "Employee"},
+      {path: "user", component: UserComponent,title: "User"},
+      {path: "mohdetail", component: MohdetailsComponent,title: "MOH Details"},
+      {path: "productorder", component: ProducorderComponent,title: "Product Order"},
+      {path: "mohreport", component: CountbymohComponent,title: "MOH Report"},
+      {path: "porderreport", component: CountbyporderComponent,title: "POrder Report"},
       {path:"**", component:NotfoundpageComponent}
 
     ]
