@@ -5,7 +5,7 @@ import {Moh} from "./moh";
 
 export interface Vehicle{
 
-  id: number;
+  id?: number;
   number?:string;
   doattached?:string;
   yom?:number;

@@ -21,6 +21,9 @@ import {VehiclestatusService} from "../../core/service/vehicle/vehiclestatus.ser
 import {VehicletypeService} from "../../core/service/vehicle/vehicletype.service";
 import {VehiclemodelService} from "../../core/service/vehicle/vehiclemodel.service";
 import {VehicleModel} from "../../core/entity/vehiclemodel";
+import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
+import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
+import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 
 
 @Component({
@@ -55,6 +58,8 @@ export class VehicleComponent implements OnInit{
   vehicles: Vehicle[] = [];
 
   regexes:any;
+
+  currentOperation = "";
 
   dataSource!: MatTableDataSource<Vehicle>;
   data!: Observable<any>
@@ -217,6 +222,87 @@ export class VehicleComponent implements OnInit{
 
   }
 
+  getUpdates():string {
+    let updates: string = "";
+    for (const controlName in this.vehicleForm.controls) {
+      const control = this.vehicleForm.controls[controlName];
+      if (control.dirty) {
+        updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1)+" Changed";
+      }
+    }
+    return updates;
+  }
+
+  getErrors(){
+
+    let errors:string = "";
+
+    for(const controlName in this.vehicleForm.controls){
+      const control = this.vehicleForm.controls[controlName];
+      if(control.errors){
+        if(this.regexes[controlName] != undefined){
+          errors = errors + "<br>" + this.regexes[controlName]['message'];
+        }else{
+          errors = errors + "<br>Invalid " + controlName;
+        }
+      }
+    }
+    return errors;
+  }
+
+  add() {
+    let errors = this.getErrors();
+
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Vehicle Add ",message: "You Have Following Errors <br/> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+    }else{
+
+      if(this.vehicleForm.valid){
+
+            const vehicle:Vehicle = {
+              number: this.vehicleForm.controls['number'].value,
+              doattached: this.vehicleForm.controls['doattached'].value,
+              yom: this.vehicleForm.controls['yom'].value,
+              capacity: this.vehicleForm.controls['capacity'].value,
+              currentmeterreading: this.vehicleForm.controls['currentmeterreading'].value,
+              description: this.vehicleForm.controls['description'].value,
+              lastregdate: this.vehicleForm.controls['lastregdate'].value,
+
+              vehiclestatus: {id: parseInt(this.vehicleForm.controls['vehiclestatus'].value)},
+              vehicletype: {id: parseInt(this.vehicleForm.controls['vehicletype'].value)},
+              vehiclemodel: {id: parseInt(this.vehicleForm.controls['vehiclemodel'].value)},
+              moh: {id: parseInt(this.vehicleForm.controls['moh'].value)},
+            }
+
+            console.log(vehicle);
+
+            this.currentOperation = "Add Vehicle " + vehicle.number;
+
+            this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+              .afterClosed().subscribe(res => {
+              if(res) {
+                this.vs.save(vehicle).subscribe({
+                  next:() => {
+                    this.handleResult('success');
+                    this.loadTable("");
+                    this.clearForm();
+                  },
+                  error:(err:any) => {
+                    this.handleResult('failed');
+                  }
+                });
+              }
+            })
+          }
+      }
+    }
+
   handleSearch() {
 
   }
@@ -225,10 +311,6 @@ export class VehicleComponent implements OnInit{
 
   }
 
-
-  add() {
-
-  }
 
   update(vehicle:Vehicle){}
 
@@ -239,4 +321,26 @@ export class VehicleComponent implements OnInit{
   clearForm() {
 
   }
+
+handleResult(status:string){
+
+  if(status === "success"){
+    this.snackBar.openFromComponent(NotificationComponent,{
+      data:{ message: status,icon: "done_all" },
+      horizontalPosition: "end",
+      verticalPosition: "top",
+      duration: 5000,
+      panelClass: ['success-snackbar'],
+    });
+  }else{
+    this.snackBar.openFromComponent(NotificationComponent,{
+      data:{ message: status,icon: "report" },
+      horizontalPosition: "end",
+      verticalPosition: "top",
+      duration: 5000,
+      panelClass: ['failure-snackbar'],
+    });
+  }
+}
+
 }
