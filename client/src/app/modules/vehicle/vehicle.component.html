@@ -1,0 +1,173 @@
+<div class="px-4 py-3 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
+  <div class=" absolute mt-0 ml-3 mr-4 text-[1.7em] font-semibold pointer-events-none">Vehicle Details</div>
+  <div class="text-sm breadcrumbs absolute mt-5 ml-3">
+    <ul>
+      <li class="text-gray-500"><a routerLink="../home">Home</a></li>
+      <li>Vehicle Details</li>
+    </ul>
+  </div>
+
+  <form [formGroup]="vehicleSearchForm" class="flex flex-row animate animate-fade">
+    <div class="join ml-auto  scale-95">
+      <input
+        type="text"
+        placeholder="Number"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+        formControlName="ssnumber"
+      />
+
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+              formControlName="ssstatus"
+              data-tip="Rdh"
+      >
+        <option disabled value="">Status</option>
+
+        @for(vehiclestatus of vehiclestatuses; track vehiclestatuses){
+          <option value="{{vehiclestatus.id}}">{{vehiclestatus.name}}</option>
+        }
+      </select>
+
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+              formControlName="sstype"
+              data-tip="Rdh"
+      >
+        <option disabled value="">Type</option>
+
+        @for(vehicletype of vehicletypes; track vehicletypes){
+          <option value="{{vehicletype.id}}">{{vehicletype.name}}</option>
+        }
+      </select>
+
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+              formControlName="ssmoh"
+              data-tip="MOH"
+      >
+        <option disabled value="">MohStatus</option>
+
+        @for(moh of mohs; track mohs){
+          <option value="{{moh.id}}">{{moh.name}}</option>
+        }
+      </select>
+
+      <button class="btn join-item border-black bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="handleSearch()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-5 h-5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+          />
+        </svg>
+      </button>
+    </div>
+    <button class="btn border-gray-300 bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="clearSearch()">
+      Clear
+    </button>
+  </form>
+</div>
+
+<mat-grid-list [cols]="12" rowHeight="4rem">
+
+  <mat-grid-tile [colspan]="4" [rowspan]="10"></mat-grid-tile>
+  <mat-grid-tile [colspan]="8" [rowspan]="10">
+
+    <div class="w-full h-full bg-white mt-4 ml-2 mr-2 rounded-md shadow-md overflow-auto">
+      <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">
+        <span class="ml-5 text-white text-lg ">Data List</span>
+      </div>
+
+      <div class="overflow-auto p-4 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
+        @if(!isFailed && !isLoading && vehicles.length !== 0){
+          <table class="text-left p-4 table">
+            <thead>
+            <tr class="text-black bold">
+              <th>Number</th>
+              <th>YOM</th>
+              <th>Status</th>
+              <th>Type</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+
+            <tbody>
+              @for(vehicle of data | async ; track vehicles){
+                <tr>
+                  <td>
+                    <div>
+                      <div class="font-semibold">{{vehicle.number}}</div>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="flex items-center">
+                      {{vehicle.yom}}
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="flex items-center">
+                      <div class="badge badge-xs mr-1.5 {{vehicle.vehiclestatus.name === 'Available'? 'bg-success border-white' : 'bg-error border-white'}}"></div>
+                      {{vehicle.vehiclestatus.name}}
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="flex items-center">
+                      {{vehicle.vehicletype.name}}
+                    </div>
+                  </td>
+
+                  <th>
+                    <div class="join">
+                      <button
+                        class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                        (click) = "fillForm(vehicle)"
+                        [disabled]="!hasUpdateAuthority"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          data-slot="icon"
+                          class="w-5 h-5 mr-3"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                          />
+                        </svg>
+                      </button>
+
+                    </div>
+                  </th>
+
+                </tr>
+              }
+            </tbody>
+          </table>
+
+
+          <mat-paginator [length]="20" [pageSize]="5" [pageSizeOptions]="[3,5,10,20]"></mat-paginator>
+        }
+
+        @if (isLoading){
+          <app-page-loading/>
+        }
+
+        @if (isFailed){
+          <app-page-error/>
+        }
+      </div>
+    </div>
+
+  </mat-grid-tile>
+
+</mat-grid-list>

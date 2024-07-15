@@ -74,4 +74,10 @@ public interface ObjectMapper {
     List<VehicleDTO> vehicleListToDtoList(List<Vehicle> vehicles);
 
     Vehicle vehicleDtoToVehicle(VehicleDTO vehicleDTO);
+
+    List<VehicleTypeDTO> vehicleTypeListToDtoList(List<Vehicletype> vehicletypes);
+
+    List<VehicleStatusDTO> vehicleStatusListToDtoList(List<Vehiclestatus> vehiclestatuses);
+
+    List<VehicleModelDTO> vehicleModelListToDtoList(List<Vehiclemodel> vehicleModelList);
 }

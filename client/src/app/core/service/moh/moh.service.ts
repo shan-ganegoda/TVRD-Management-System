@@ -15,6 +15,10 @@ export class MohService {
     return this.http.get<Moh[]>(API_URL+query);
   }
 
+  getAllMohsList(){
+    return this.http.get<Moh[]>(API_URL + '/list');
+  }
+
   getMohById(id:number){
     return this.http.get<Moh>(API_URL + '/' + id);
   }
