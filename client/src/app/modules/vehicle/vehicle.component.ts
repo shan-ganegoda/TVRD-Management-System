@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import {VehicleStatus} from "../../core/entity/vehiclestatus";
 import {VehicleType} from "../../core/entity/vehicletype";
@@ -20,9 +20,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {VehiclestatusService} from "../../core/service/vehicle/vehiclestatus.service";
 import {VehicletypeService} from "../../core/service/vehicle/vehicletype.service";
 import {VehiclemodelService} from "../../core/service/vehicle/vehiclemodel.service";
+import {VehicleModel} from "../../core/entity/vehiclemodel";
 
-class VehicleModel {
-}
 
 @Component({
   selector: 'app-vehicle',
@@ -47,6 +46,7 @@ export class VehicleComponent implements OnInit{
   isFailed = false;
 
   vehicleSearchForm!:FormGroup;
+  vehicleForm!:FormGroup;
 
   vehiclestatuses: VehicleStatus[] = [];
   vehiclemodels: VehicleModel[] = [];
@@ -60,8 +60,15 @@ export class VehicleComponent implements OnInit{
   data!: Observable<any>
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  currentVehicle!: Vehicle;
+  oldVehicle!: Vehicle;
+
   hasUpdateAuthority = true;
   hasDeleteAuthority = true;
+
+  enaadd:boolean = false;
+  enaupd:boolean = false;
+  enadel:boolean = false;
 
   constructor(
               private vs : VehicleService,
@@ -82,6 +89,20 @@ export class VehicleComponent implements OnInit{
       sstype:[''],
       ssmoh:[''],
     });
+
+    this.vehicleForm = this.fb.group({
+      "number": new FormControl('',[Validators.required]),
+      "doattached": new FormControl('',[Validators.required]),
+      "yom": new FormControl('',[Validators.required]),
+      "capacity": new FormControl('',[Validators.required]),
+      "currentmeterreading": new FormControl('',[Validators.required]),
+      "lastregdate": new FormControl('',[Validators.required]),
+      "description": new FormControl('',[Validators.required]),
+      "vehiclestatus": new FormControl(null,[Validators.required]),
+      "vehicletype": new FormControl(null,[Validators.required]),
+      "vehiclemodel": new FormControl(null,[Validators.required]),
+      "moh": new FormControl(null,[Validators.required]),
+    },{updateOn:'change'});
   }
 
   ngOnInit() {
@@ -128,7 +149,73 @@ export class VehicleComponent implements OnInit{
     });
   }
 
-  createForm(){}
+  createForm(){
+    this.vehicleForm.controls['number'].setValidators([Validators.required]);
+    this.vehicleForm.controls['doattached'].setValidators([Validators.required]);
+    this.vehicleForm.controls['yom'].setValidators([Validators.required]);
+    this.vehicleForm.controls['capacity'].setValidators([Validators.required]);
+    this.vehicleForm.controls['currentmeterreading'].setValidators([Validators.required]);
+    this.vehicleForm.controls['lastregdate'].setValidators([Validators.required]);
+    this.vehicleForm.controls['description'].setValidators([Validators.required]);
+    this.vehicleForm.controls['vehiclestatus'].setValidators([Validators.required]);
+    this.vehicleForm.controls['vehicletype'].setValidators([Validators.required]);
+    this.vehicleForm.controls['vehiclemodel'].setValidators([Validators.required]);
+    this.vehicleForm.controls['moh'].setValidators([Validators.required]);
+
+    for (const controlName in this.vehicleForm.controls) {
+      const control = this.vehicleForm.controls[controlName];
+      control.valueChanges.subscribe(value => {
+
+          if (this.oldVehicle != undefined && control.valid) {
+            // @ts-ignore
+            if (value === this.currentVehicle[controlName]) {
+              control.markAsPristine();
+            } else {
+              control.markAsDirty();
+            }
+          } else {
+            control.markAsPristine();
+          }
+        }
+      );
+
+    }
+    this.enableButtons(true,false,false);
+  }
+
+  enableButtons(add:boolean, upd:boolean, del:boolean){
+    this.enaadd=add;
+    this.enaupd=upd;
+    this.enadel=del;
+  }
+
+  fillForm(vehicle:Vehicle){
+
+    this.enableButtons(false,true,true);
+
+    this.currentVehicle = vehicle;
+    this.oldVehicle = this.currentVehicle;
+
+    this.vehicleForm.setValue({
+      number: this.currentVehicle.number,
+      doattached: this.currentVehicle.doattached,
+      yom: this.currentVehicle.yom,
+      capacity: this.currentVehicle.capacity,
+      currentmeterreading: this.currentVehicle.currentmeterreading,
+      lastregdate: this.currentVehicle.lastregdate,
+      description: this.currentVehicle.description,
+
+      vehiclestatus: this.currentVehicle.vehiclestatus?.id,
+      vehicletype: this.currentVehicle.vehicletype?.id,
+      vehiclemodel: this.currentVehicle.vehiclemodel?.id,
+      moh: this.currentVehicle.moh?.id
+    });
+
+    this.vehicleForm.markAsPristine();
+
+    //this.currentOperation = 'Update'+ " '" + this.currentMoh.name + "'" + this.getUpdates();
+
+  }
 
   handleSearch() {
 
@@ -138,7 +225,18 @@ export class VehicleComponent implements OnInit{
 
   }
 
-  fillForm(vehicle: any) {
+
+  add() {
+
+  }
+
+  update(vehicle:Vehicle){}
+
+  delete(currentVehicle: any) {
+
+  }
+
+  clearForm() {
 
   }
 }

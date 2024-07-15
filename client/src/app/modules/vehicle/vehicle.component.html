@@ -73,7 +73,153 @@
 
 <mat-grid-list [cols]="12" rowHeight="4rem">
 
-  <mat-grid-tile [colspan]="4" [rowspan]="10"></mat-grid-tile>
+  <mat-grid-tile [colspan]="4" [rowspan]="10">
+
+    <div class="w-full h-full bg-white mt-4 ml-2 rounded-md shadow-md border-2 border-[[#1e4263]] overflow-auto">
+
+      <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">
+        <span class="ml-5 text-white text-lg ">Data Form</span>
+      </div>
+
+      <form [formGroup]="vehicleForm" class="mt-5 animate animate-fade">
+
+        <div class="relative w-full mb-3 px-2">
+          <input
+            type="text"
+            placeholder="Number"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="number"
+          />
+          <label class="floating-label">Number</label>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+          <input
+            type="text"
+            placeholder="Date Of Attached"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="doattached"
+            onfocus="(this.type='date')"
+          />
+          <label class="floating-label">Date Of Attached</label>
+        </div>
+
+        <div class="flex flex-row mb-3 px-2">
+          <div class="relative w-full mr-2">
+            <input
+              type="text"
+              placeholder="Year of Made"
+              class="peer input input-bordered w-full max-w-xs focus:outline-none"
+              formControlName="yom"
+            />
+            <label class="floating-label">Year of Made</label>
+
+          </div>
+
+          <div class="relative w-full">
+            <input
+              type="text"
+              placeholder="Capacity"
+              class="peer input input-bordered w-full max-w-xs focus:outline-none"
+              formControlName="capacity"
+            />
+            <label class="floating-label">Capacity</label>
+          </div>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+          <input
+            type="text"
+            placeholder="Current Meter Reading"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="currentmeterreading"
+          />
+          <label class="floating-label">Current Meter Reading</label>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+          <input
+            type="text"
+            placeholder="Last Registered Date"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="lastregdate"
+          />
+          <label class="floating-label">Last Registered Date</label>
+        </div>
+
+        <div class="mb-3 px-2">
+          <select
+            class="select select-bordered w-full bg-white focus:outline-none"
+            formControlName="moh"
+          >
+            <option disabled [ngValue]="null">MOH</option>
+
+            @for (moh of mohs; track mohs) {
+              <option [ngValue]="moh.id">{{moh.name}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3 px-2">
+          <select
+            class="select select-bordered w-full bg-white focus:outline-none"
+            formControlName="vehiclestatus"
+          >
+            <option disabled [ngValue]="null">Vehicle Status</option>
+
+            @for (status of vehiclestatuses; track vehiclestatuses) {
+              <option [ngValue]="status.id">{{status.name}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3 px-2">
+          <div class="flex flex-row">
+            <select
+              class="select select-bordered w-full bg-white focus:outline-none mr-2"
+              formControlName="vehicletype"
+            >
+              <option disabled [ngValue]="null">Vehicle Type</option>
+
+              @for (vehicletype of vehicletypes; track vehicletypes) {
+                <option value="{{vehicletype.id}}">{{vehicletype.name}}</option>
+              }
+            </select>
+
+            <select
+              class="select select-bordered w-full bg-white focus:outline-none"
+              formControlName="vehiclemodel"
+            >
+              <option disabled [ngValue]="null">Vehicle Model</option>
+
+              @for (vehiclemodel of vehiclemodels; track vehiclemodels) {
+                <option [ngValue]="vehiclemodel.id">{{vehiclemodel.name}}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+            <textarea
+              class="peer textarea textarea-bordered w-full h-36 focus:outline-none"
+              placeholder="Description"
+              formControlName="description"
+            ></textarea>
+          <label class="floating-label">Description</label>
+        </div>
+
+        <div class="flex flex-row mt-3 max-w-[97%] px-2 pb-5">
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="add()" [disabled]="!enaadd">Add</button>
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(currentVehicle)" [disabled]="!enaupd">Update</button>
+          <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900" (click)="delete(currentVehicle)"
+                  [disabled]="!hasDeleteAuthority || !enadel " >Delete</button>
+          <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="clearForm()">Clear</button>
+        </div>
+
+      </form>
+    </div>
+
+  </mat-grid-tile>
   <mat-grid-tile [colspan]="8" [rowspan]="10">
 
     <div class="w-full h-full bg-white mt-4 ml-2 mr-2 rounded-md shadow-md overflow-auto">
