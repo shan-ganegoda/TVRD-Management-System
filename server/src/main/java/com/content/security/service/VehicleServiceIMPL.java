@@ -71,9 +71,15 @@ public class VehicleServiceIMPL implements VehicleService {
         Vehicle vh = vehicleRepository.findById(vehicleDTO.getId()).orElseThrow(null);
 
         if(vh!=null){
-            Vehicle vehicle = objectMapper.vehicleDtoToVehicle(vehicleDTO);
-            vehicleRepository.save(vehicle);
-            return vehicleDTO;
+
+            Vehicle vh1 = vehicleRepository.findByNumber(vehicleDTO.getNumber()).orElseThrow(null);
+            if(vh1==null){
+                Vehicle vehicle = objectMapper.vehicleDtoToVehicle(vehicleDTO);
+                vehicleRepository.save(vehicle);
+                return vehicleDTO;
+            }else{
+                throw new ResourceAlreadyExistException("Vehicle with this Number Already Exist!");
+            }
         }else{
             throw new ResourceNotFountException("Vehicle Not Found!");
         }

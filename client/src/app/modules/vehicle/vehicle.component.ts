@@ -303,24 +303,154 @@ export class VehicleComponent implements OnInit{
       }
     }
 
-  handleSearch() {
+  update(currentvehicle:Vehicle){
 
+    let errors = this.getErrors();
+
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Vehicle Update ",message: "You Have Following Errors <br/> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+
+    }else{
+
+      let updates:string = this.getUpdates();
+
+      if(updates != ""){
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Vehicle Update ",message: "You Have Following Updates <br> " + updates}
+        }).afterClosed().subscribe(res => {
+          if(!res){
+            return;
+          }else{
+
+            if(this.vehicleForm.valid){
+
+              const vehicle:Vehicle = {
+                number: this.vehicleForm.controls['number'].value,
+                doattached: this.vehicleForm.controls['doattached'].value,
+                yom: this.vehicleForm.controls['yom'].value,
+                capacity: this.vehicleForm.controls['capacity'].value,
+                currentmeterreading: this.vehicleForm.controls['currentmeterreading'].value,
+                description: this.vehicleForm.controls['description'].value,
+                lastregdate: this.vehicleForm.controls['lastregdate'].value,
+
+                vehiclestatus: {id: parseInt(this.vehicleForm.controls['vehiclestatus'].value)},
+                vehicletype: {id: parseInt(this.vehicleForm.controls['vehicletype'].value)},
+                vehiclemodel: {id: parseInt(this.vehicleForm.controls['vehiclemodel'].value)},
+                moh: {id: parseInt(this.vehicleForm.controls['moh'].value)},
+              }
+
+                  vehicle.id = currentvehicle.id;
+
+                  this.currentOperation = "Update Vehicle " + currentvehicle.number;
+
+                  this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+                    .afterClosed().subscribe(res => {
+                    if(res) {
+                      this.vs.update(vehicle).subscribe({
+                        next:() => {
+                          this.handleResult('success');
+                          this.loadTable("");
+                          this.clearForm();
+                        },
+                        error:(err:any) => {
+                          this.handleResult('failed');
+                        }
+                      });
+                    }
+                  })
+                }
+
+            }
+
+        });
+
+      }else{
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Vehicle Update ",message: "No Fields Updated "}
+        }).afterClosed().subscribe(res =>{
+          if(res){return;}
+        })
+      }
+    }
   }
 
-  clearSearch() {
+  delete(currentVehicle: Vehicle) {
 
-  }
+    const operation = "Delete Vehicle " + currentVehicle.number;
+    //console.log(operation);
 
-
-  update(vehicle:Vehicle){}
-
-  delete(currentVehicle: any) {
-
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe((res:boolean) => {
+      if(res){
+        if (currentVehicle.id) {
+          this.vs.delete(currentVehicle.id).subscribe({
+            next: () => {
+              this.loadTable("");
+              this.handleResult('success');
+              this.clearForm();
+            },
+            error: (err:any) => {
+              this.handleResult('failed');
+              console.log(err);
+            },
+          });
+        } else {
+          this.handleResult('failed');
+        }
+      }
+    })
   }
 
   clearForm() {
+    this.vehicleForm.reset();
+    this.vehicleForm.controls['moh'].setValue(null);
+    this.vehicleForm.controls['vehiclestatus'].setValue(null);
+    this.vehicleForm.controls['vehiclemodel'].setValue(null);
+    this.vehicleForm.controls['vehicletype'].setValue(null);
 
+    this.enableButtons(true,false,false);
   }
+
+  handleSearch() {
+    const ssnumber  = this.vehicleSearchForm.controls['ssnumber'].value;
+    const ssstatus  = this.vehicleSearchForm.controls['ssstatus'].value;
+    const sstype = this.vehicleSearchForm.controls['sstype'].value;
+    const ssmoh  = this.vehicleSearchForm.controls['ssmoh'].value;
+
+    let query = ""
+
+    if(ssnumber != null && ssnumber.trim() !="") query = query + "&number=" + ssnumber;
+    if(ssstatus != '') query = query + "&vehiclestatusid=" + parseInt(ssstatus);
+    if(sstype != '') query = query + "&vehicletypeid=" + parseInt(sstype);
+    if(ssmoh != '') query = query + "&mohid=" + parseInt(ssmoh);
+
+    if(query != "") query = query.replace(/^./, "?")
+    this.loadTable(query);
+  }
+
+  clearSearch() {
+    this.dialog.open(ConfirmDialogComponent,{data:"Clear Search"}
+    ).afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.vehicleSearchForm.reset();
+        this.vehicleSearchForm.controls['ssstatus'].setValue('');
+        this.vehicleSearchForm.controls['sstype'].setValue('');
+        this.vehicleSearchForm.controls['ssmoh'].setValue('');
+        this.loadTable("");
+      }
+    });
+  }
+
+
+
 
 handleResult(status:string){
 

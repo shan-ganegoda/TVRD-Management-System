@@ -4,7 +4,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #949496;
+  background-color: #1E4263;
+  flex-direction: column;
 }
 
 
@@ -19,6 +20,11 @@ mat-card{
   padding: 1rem;
   border: 1px solid #484c5d;
 }
+
+//mat-card-header{
+//  display: flex;
+//  flex-direction: column;
+//}
 
 .loginHeader{
   //margin-top: 1rem;
