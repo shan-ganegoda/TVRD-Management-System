@@ -397,6 +397,78 @@ export class VaccineComponent implements OnInit{
 
   updates(currentVaccine: Vaccine) {
 
+    let errors = this.getErrors();
+
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Vaccine Update ",message: "You Have Following Errors <br> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+
+    }else{
+
+      let updates:string = this.getUpdates();
+
+      if(updates != ""){
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Vaccine Update ",message: "You Have Following Updates <br> " + updates}
+        }).afterClosed().subscribe(res => {
+          if(!res){
+            return;
+          }else{
+
+            // @ts-ignore
+            this.innerdata.forEach((i)=> delete i.id);
+
+            const vaccine:Vaccine = {
+              name: this.vaccineForm.controls['name'].value,
+              code: this.vaccineForm.controls['code'].value,
+              dosecount: this.vaccineForm.controls['dosecount'].value,
+              dosaved: this.vaccineForm.controls['dosaved'].value,
+              containindications: this.vaccineForm.controls['containindications'].value,
+              offeredinstitute: this.vaccineForm.controls['offeredinstitute'].value,
+
+              vaccineofferings: this.innerdata,
+
+              vaccinestatus: {id: parseInt(this.vaccineForm.controls['vaccinestatus'].value)},
+              employee: {id: parseInt(this.vaccineForm.controls['employee'].value)},
+            }
+
+            vaccine.id = currentVaccine.id;
+
+            this.currentOperation = "Vaccine Update ";
+
+            this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+              .afterClosed().subscribe(res => {
+              if(res) {
+                this.vs.update(vaccine).subscribe({
+                  next:() => {
+                    this.handleResult('success');
+                    this.loadTable("");
+                    this.clearForm();
+                  },
+                  error:(err:any) => {
+                    this.handleResult('failed');
+                    //console.log(err);
+                  }
+                });
+              }
+            })
+
+          }
+        });
+
+      }else{
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Vaccine Update ",message: "No Fields Updated "}
+        }).afterClosed().subscribe(res =>{
+          if(res){return;}
+        })
+      }
+    }
   }
 
   delete(currentVaccine: Vaccine) {
