@@ -4,6 +4,7 @@ import com.content.security.entity.Employee;
 import com.content.security.entity.Vaccineoffering;
 import com.content.security.entity.Vaccinestatus;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.Set;
 public class VaccineDTO {
 
     private Integer id;
+    @Pattern(regexp = "^.*$", message = "Invalid Name")
     private String name;
     private String code;
     private Integer dosecount;

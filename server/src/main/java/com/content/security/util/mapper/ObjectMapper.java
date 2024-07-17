@@ -84,4 +84,10 @@ public interface ObjectMapper {
     List<VaccineDTO> vaccineListToDtoList(List<Vaccine> vaccineList);
 
     Vaccine vaccineDtoToVaccine(VaccineDTO vaccineDTO);
+
+    List<DoseDTO> doseListToDtoList(List<Dose> doses);
+
+    List<VaccineStatusDTO> vaccineStatusListToDtoList(List<Vaccinestatus> vaccinestatuses);
+
+    List<VaccineStatusDTO> vaccinationStageListToVaccinationDtoList(List<Vaccinationstage> vaccinationstages);
 }
