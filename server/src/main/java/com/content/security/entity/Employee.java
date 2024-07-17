@@ -69,11 +69,4 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private Collection<Moh> mohs;
 
-//    public Collection<Moh> getMohs() {
-//        return mohs;
-//    }
-//
-//    public void setMohs(Collection<Moh> mohs) {
-//        this.mohs = mohs;
-//    }
 }

@@ -80,4 +80,8 @@ public interface ObjectMapper {
     List<VehicleStatusDTO> vehicleStatusListToDtoList(List<Vehiclestatus> vehiclestatuses);
 
     List<VehicleModelDTO> vehicleModelListToDtoList(List<Vehiclemodel> vehicleModelList);
+
+    List<VaccineDTO> vaccineListToDtoList(List<Vaccine> vaccineList);
+
+    Vaccine vaccineDtoToVaccine(VaccineDTO vaccineDTO);
 }
