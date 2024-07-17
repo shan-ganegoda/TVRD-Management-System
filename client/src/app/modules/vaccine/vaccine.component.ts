@@ -472,7 +472,25 @@ export class VaccineComponent implements OnInit{
   }
 
   delete(currentVaccine: Vaccine) {
+    const operation = "Delete Vaccine " + currentVaccine.name;
+    //console.log(operation);
 
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe((res:boolean) => {
+      if(res && currentVaccine.id){
+        this.vs.delete(currentVaccine.id).subscribe({
+          next: () => {
+            this.loadTable("");
+            this.handleResult("success");
+            this.clearForm();
+          },
+
+          error: () => {
+            this.handleResult("failed");
+          }
+        });
+      }
+    });
   }
 
   clearForm() {

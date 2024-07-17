@@ -25,6 +25,6 @@ export class VaccineService {
   }
 
   delete(id:number){
-    this.http.delete(API_URL + "/" + id);
+    return this.http.delete(API_URL + "/" + id);
   }
 }
