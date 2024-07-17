@@ -503,11 +503,35 @@ export class VaccineComponent implements OnInit{
   }
 
   handleSearch() {
+    const ssname  = this.vaccineSearchForm.controls['ssname'].value;
+    const sscode  = this.vaccineSearchForm.controls['sscode'].value;
+    const ssvaccinestatus  = this.vaccineSearchForm.controls['ssvaccinestatus'].value;
+    const ssofferedinstitute  = this.vaccineSearchForm.controls['ssofferedinstitute'].value;
 
+    let query = ""
+
+    if(ssname != null && ssname.trim() !="") query = query + "&name=" + ssname;
+    if(sscode != null && sscode.trim() !="") query = query + "&code=" + sscode;
+    if(ssofferedinstitute != null && ssofferedinstitute.trim() !="") query = query + "&offeredinstitute=" + ssofferedinstitute;
+    if(ssvaccinestatus != '') query = query + "&vaccinestatusid=" + parseInt(ssvaccinestatus);
+
+    if(query != "") query = query.replace(/^./, "?")
+    this.loadTable(query);
   }
 
   clearSearch() {
+    const operation = "Clear Search";
 
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.vaccineSearchForm.reset();
+        this.vaccineSearchForm.controls['ssvaccinestatus'].setValue('');
+        this.loadTable("");
+      }
+    });
   }
 
   handleResult(status: string) {
