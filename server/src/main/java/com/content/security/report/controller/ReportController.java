@@ -1,11 +1,14 @@
 package com.content.security.report.controller;
 
-import com.content.security.dto.ProductOrderDTO;
 import com.content.security.report.dto.CountByProductOrderDTO;
+import com.content.security.report.entity.CountByDesignation;
 import com.content.security.report.entity.CountByPdh;
 import com.content.security.report.entity.CountByProductOrder;
+import com.content.security.report.entity.VehicleCountByMoh;
+import com.content.security.report.repository.CountByDesignationRepository;
 import com.content.security.report.repository.CountByPdhRepository;
 import com.content.security.report.repository.CountByProductOrderRepository;
+import com.content.security.report.repository.VehicleCountByMohRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +31,8 @@ public class ReportController {
 
     private final CountByPdhRepository countByRdhRepository;
     private final CountByProductOrderRepository countByRdhProductOrderRepository;
+    private final CountByDesignationRepository countByDesignationRepository;
+    private final VehicleCountByMohRepository vehicleCountByMohRepository;
 
     @GetMapping(path = "/countbypdh")
     public List<CountByPdh> getCountByPdh() {
@@ -86,4 +90,19 @@ public class ReportController {
 
         return list;
     }
+
+    @GetMapping(path = "/countbydesignation")
+    public List<CountByDesignation> getCountByDesignation() {
+
+        List<CountByDesignation> countByDesignations = countByDesignationRepository.countByDesignation();
+        return countByDesignations;
+    }
+
+    @GetMapping(path = "/vehiclecountbymoh")
+    public List<VehicleCountByMoh> getVehicleCountByMoh() {
+
+        List<VehicleCountByMoh> vehicleCountByMohs = vehicleCountByMohRepository.findVehicleCountByMoh();
+        return vehicleCountByMohs;
+    }
+
 }

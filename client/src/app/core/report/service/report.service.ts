@@ -4,6 +4,8 @@ import {environment} from "../../../environment";
 import {Moh} from "../../entity/moh";
 import {CountByPdh} from "../entity/countByPdh";
 import {CountByPOrders} from "../entity/countByPOrders";
+import {CountByDesignation} from "../entity/countByDesignation";
+import {VehicleCountByMoh} from "../entity/vehiclecountbymoh";
 
 const API_URL = environment.apiUrl + '/admin/reports';
 
@@ -20,5 +22,13 @@ export class ReportService {
 
   countByPorder(){
     return this.http.get<CountByPOrders[]>(API_URL + "/countbyproductorderdate");
+  }
+
+  countByDesignation(){
+    return this.http.get<CountByDesignation[]>(API_URL + "/countbydesignation");
+  }
+
+  vehicleCountByMoh(){
+    return this.http.get<VehicleCountByMoh[]>(API_URL + "/vehiclecountbymoh");
   }
 }

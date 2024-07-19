@@ -183,11 +183,15 @@
           </div>
 
           <div class="flex flex-row mt-3 max-w-[97%] px-2 pb-5">
-            <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="add()" [disabled]="!enaadd">Add</button>
-            <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(currentMoh)" [disabled]="!enaupd">Update</button>
-            <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900" (click)="deleteUser(currentMoh)"
+            <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
+                    (click)="add()" [disabled]="!enaadd">Add</button>
+            <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
+                    (click)="update(currentMoh)" [disabled]="!enaupd">Update</button>
+            <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900"
+                    (click)="deleteUser(currentMoh)"
                     [disabled]="!hasDeleteAuthority || !enadel " >Delete</button>
-            <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="clearForm()">Clear</button>
+            <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900"
+                    (click)="clearForm()">Clear</button>
           </div>
 
         </form>

@@ -114,34 +114,20 @@
         </a>
       </li>
 
-      <li class="mb-1 group active ml-7">
-        <a
-          href="#"
-          class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
-          routerLinkActive="bg-blue-500"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
-            <path fill-rule="evenodd" d="M2.5 3A1.5 1.5 0 0 0 1 4.5v4A1.5 1.5 0 0 0 2.5 10h6A1.5 1.5 0 0 0 10 8.5v-4A1.5 1.5 0 0 0 8.5 3h-6Zm11 2A1.5 1.5 0 0 0 12 6.5v7a1.5 1.5 0 0 0 1.5 1.5h4a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 17.5 5h-4Zm-10 7A1.5 1.5 0 0 0 2 13.5v2A1.5 1.5 0 0 0 3.5 17h6a1.5 1.5 0 0 0 1.5-1.5v-2A1.5 1.5 0 0 0 9.5 12h-6Z" clip-rule="evenodd" />
-          </svg>
-
-          <span class="text-sm ml-7">Operations</span>
-        </a>
-      </li>
-
     </ul>
    </div>
     }
 <!--ADMIN-END-->
-<!--ORGANIZATION-START-->
+<!--DIVISIONS-START-->
     <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu=!togglemenu">
         <span class=" text-white flex mt-1 mx-2.5" >
-          ORGANIZATIONS
+          DIVISIONS
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none" viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-5 h-5 -mt-0.5 relative ml-[4.2rem] {{togglemenu ? 'rotate-180' : ''}}">
+            class="w-5 h-5 -mt-0.5 relative ml-[6.8rem] {{togglemenu ? 'rotate-180' : ''}}">
          <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
          </svg>
         </span>
@@ -168,20 +154,6 @@
 
           <li class="mb-1 group active ml-7">
             <a
-              routerLink="productorder"
-              class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
-              routerLinkActive="bg-blue-500"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 relative bottom-0.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-              </svg>
-
-              <span class="text-sm ml-7">Product Order</span>
-            </a>
-          </li>
-
-          <li class="mb-1 group active ml-7">
-            <a
               routerLink="vehicle"
               class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
               routerLinkActive="bg-blue-500"
@@ -193,6 +165,81 @@
               <span class="text-sm ml-7">Vehicle</span>
             </a>
           </li>
+
+        </ul>
+      </div>
+    }
+<!--DIVISIONS-END-->
+<!--ORDER-START-->
+    <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu2=!togglemenu2">
+        <span class=" text-white flex mt-1 mx-2.5" >
+          ORDER
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none" viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5 -mt-0.5 ml-[8.2rem]{{togglemenu2 ? 'rotate-180' : ''}}">
+         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+         </svg>
+        </span>
+
+    </div>
+    @if(togglemenu2){
+      <div class="animate-drop">
+      <ul class="mt-2">
+
+        <li class="mb-1 group active ml-7">
+          <a
+            routerLink="productorder"
+            class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
+            routerLinkActive="bg-blue-500"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 relative bottom-0.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+            </svg>
+
+            <span class="text-sm ml-7">Product Order</span>
+          </a>
+        </li>
+
+        <li class="mb-1 group active ml-7">
+          <a
+            routerLink="vaccineorder"
+            class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
+            routerLinkActive="bg-blue-500"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
+              <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+            </svg>
+
+
+            <span class="text-sm ml-7">Vaccine Order</span>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+    }
+<!--ORDER-->
+    <!--PROGRAMMES-START-->
+    <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu3=!togglemenu3">
+        <span class=" text-white flex mt-1 mx-2.5" >
+          PROGRAMMS
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none" viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5 -mt-0.5 ml-[5.5rem]{{togglemenu3 ? 'rotate-180' : ''}}">
+         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+         </svg>
+        </span>
+
+    </div>
+    @if(togglemenu3){
+      <div class="animate-drop">
+        <ul class="mt-2">
 
           <li class="mb-1 group active ml-7">
             <a
@@ -208,95 +255,81 @@
             </a>
           </li>
 
+          <li class="mb-1 group active ml-7">
+            <a
+              routerLink="vaccineorder"
+              class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
+              routerLinkActive="bg-blue-500"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
+                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+              </svg>
+
+
+              <span class="text-sm ml-7">Special Programms</span>
+            </a>
+          </li>
+
         </ul>
       </div>
     }
-<!--ORGANIZATION-END-->
-<!--REGISTRATION-START-->
-    <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu2=!togglemenu2">
+    <!--PROGRAMMS-->
+    <!--REGISTRATION-START-->
+    <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu4=!togglemenu4">
         <span class=" text-white flex mt-1 mx-2.5" >
-          REGISTRATIONS
+          REGISTRATION
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none" viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-5 h-5 -mt-0.5 relative ml-[4.4rem] {{togglemenu2 ? 'rotate-180' : ''}}">
+            class="w-5 h-5 -mt-0.5 relative ml-[4.9rem] {{togglemenu4 ? 'rotate-180' : ''}}">
          <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
          </svg>
         </span>
 
     </div>
-    @if(togglemenu2){
+    @if(togglemenu4){
       <div class="animate-drop">
-      <ul class="mt-2">
+        <ul class="mt-2">
 
-        <li class="mb-1 group active ml-7">
-          <a
-            href="#"
-            class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
-            routerLinkActive="bg-blue-500"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
-              <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clip-rule="evenodd" />
-              <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
-            </svg>
+          <li class="mb-1 group active ml-7">
+            <a
+              routerLink="parentregister"
+              class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
+              routerLinkActive="bg-blue-500"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
+                <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clip-rule="evenodd" />
+                <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
+              </svg>
 
-            <span class="text-sm ml-7">Employee</span>
-          </a>
-        </li>
+              <span class="text-sm ml-7">Parent Registration</span>
+            </a>
+          </li>
 
-        <li class="mb-1 group active ml-7">
-          <a
-            href="#"
-            class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
-            routerLinkActive="bg-blue-500"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
-              <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-            </svg>
-
-
-            <span class="text-sm ml-7">User</span>
-          </a>
-        </li>
-
-        <li class="mb-1 group active ml-7">
-          <a
-            href="#"
-            class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
-            routerLinkActive="bg-blue-500"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
-              <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
-            </svg>
+          <li class="mb-1 group active ml-7">
+            <a
+              routerLink="babyregistration"
+              class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
+              routerLinkActive="bg-blue-500"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
+                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+              </svg>
 
 
-            <span class="text-sm ml-7">Privilage</span>
-          </a>
-        </li>
+              <span class="text-sm ml-7">Baby Registration</span>
+            </a>
+          </li>
 
-        <li class="mb-1 group active ml-7">
-          <a
-            href="#"
-            class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
-            routerLinkActive="bg-blue-500"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
-              <path fill-rule="evenodd" d="M2.5 3A1.5 1.5 0 0 0 1 4.5v4A1.5 1.5 0 0 0 2.5 10h6A1.5 1.5 0 0 0 10 8.5v-4A1.5 1.5 0 0 0 8.5 3h-6Zm11 2A1.5 1.5 0 0 0 12 6.5v7a1.5 1.5 0 0 0 1.5 1.5h4a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 17.5 5h-4Zm-10 7A1.5 1.5 0 0 0 2 13.5v2A1.5 1.5 0 0 0 3.5 17h6a1.5 1.5 0 0 0 1.5-1.5v-2A1.5 1.5 0 0 0 9.5 12h-6Z" clip-rule="evenodd" />
-            </svg>
-
-            <span class="text-sm ml-7">Operations</span>
-          </a>
-        </li>
-
-      </ul>
-    </div>
+        </ul>
+      </div>
     }
-<!--REGISTRATION-END-->
+    <!--REGISTRATION-END-->
 
     <!--REPORT-START-->
-    <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu3=!togglemenu3">
+    <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu5=!togglemenu5">
         <span class=" text-white flex mt-1 mx-2.5" >
           REPORTS
           <svg
@@ -304,13 +337,13 @@
             fill="none" viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-5 h-5 -mt-0.5 relative ml-[7.2rem] {{togglemenu3 ? 'rotate-180' : ''}}">
+            class="w-5 h-5 -mt-0.5 relative ml-[7.2rem] {{togglemenu5 ? 'rotate-180' : ''}}">
          <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
          </svg>
         </span>
 
     </div>
-    @if(togglemenu3){
+    @if(togglemenu5){
       <div class="animate-drop">
         <ul class="mt-2">
 
@@ -346,30 +379,30 @@
 
           <li class="mb-1 group active ml-7">
             <a
-              href="#"
+              routerLink="employeereport"
               class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
               routerLinkActive="bg-blue-500"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 relative bottom-0.5">
-                <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6" class="w-6 h-6 relative bottom-0.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
               </svg>
 
 
-              <span class="text-sm ml-7">Privilage</span>
+              <span class="text-sm ml-7">Employee Report</span>
             </a>
           </li>
 
           <li class="mb-1 group active ml-7">
             <a
-              href="#"
+              routerLink="vehiclereport"
               class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
               routerLinkActive="bg-blue-500"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
-                <path fill-rule="evenodd" d="M2.5 3A1.5 1.5 0 0 0 1 4.5v4A1.5 1.5 0 0 0 2.5 10h6A1.5 1.5 0 0 0 10 8.5v-4A1.5 1.5 0 0 0 8.5 3h-6Zm11 2A1.5 1.5 0 0 0 12 6.5v7a1.5 1.5 0 0 0 1.5 1.5h4a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 17.5 5h-4Zm-10 7A1.5 1.5 0 0 0 2 13.5v2A1.5 1.5 0 0 0 3.5 17h6a1.5 1.5 0 0 0 1.5-1.5v-2A1.5 1.5 0 0 0 9.5 12h-6Z" clip-rule="evenodd" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6" class="w-6 h-6 relative bottom-0.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
               </svg>
 
-              <span class="text-sm ml-7">Operations</span>
+              <span class="text-sm ml-7">Vehicle Report</span>
             </a>
           </li>
 

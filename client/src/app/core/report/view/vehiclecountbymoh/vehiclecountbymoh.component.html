@@ -1,0 +1,63 @@
+<div class="px-4 py-3 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg h-20">
+  <div class=" absolute mt-1 ml-3 mr-4 text-[1.7em] font-semibold pointer-events-none">Employee Count By Designation</div>
+  <div class="text-sm breadcrumbs absolute mt-6 ml-3">
+    <ul>
+      <li class="text-gray-500"><a routerLink="../home">Home</a></li>
+      <li>Report</li>
+      <li>CountByDesignation</li>
+    </ul>
+  </div>
+</div>
+
+<mat-grid-list [cols]="1" rowHeight="12rem">
+
+  <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Interactive Panel</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full"><p></p><h3>Static Report - No Interactive Panel Available</h3></mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+
+
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Table View</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full">
+        <mat-table [dataSource]="data">
+          <!--          @for(column of columns;track columns){}-->
+          <ng-container *ngFor="let column of columns; let i = index;" [matColumnDef]="column">
+            <mat-header-cell *matHeaderCellDef> {{ headers[i] }} </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element[binders[i]] }} </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+        </mat-table>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Bar Chart</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full"><div #barchart></div></mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+
+
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+
+    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Pie Chat View</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full"><div #piechart></div></mat-card-content>
+    </mat-card>
+
+
+    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Line Chart View</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full"><div #linechart></div></mat-card-content>
+    </mat-card>
+
+  </mat-grid-tile>
+
+</mat-grid-list>
+
+
+

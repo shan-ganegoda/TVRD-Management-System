@@ -15,6 +15,8 @@ import {CountbymohComponent} from "./core/report/view/countbymoh/countbymoh.comp
 import {CountbyporderComponent} from "./core/report/view/countbyporder/countbyporder.component";
 import {VehicleComponent} from "./modules/vehicle/vehicle.component";
 import {VaccineComponent} from "./modules/vaccine/vaccine.component";
+import {EmployeebydesignationComponent} from "./core/report/view/employeebydesignation/employeebydesignation.component";
+import {VehiclecountbymohComponent} from "./core/report/view/vehiclecountbymoh/vehiclecountbymoh.component";
 
 export const routes: Routes = [
   { path: "login", component: AuthComponent },
@@ -36,6 +38,8 @@ export const routes: Routes = [
 
       {path: "mohreport", component: CountbymohComponent,title: "MOH Report"},
       {path: "porderreport", component: CountbyporderComponent,title: "POrder Report"},
+      {path: "employeereport", component: EmployeebydesignationComponent,title: "Employee Report"},
+      {path: "vehiclereport", component: VehiclecountbymohComponent,title: "Vehicle Report"},
       {path:"**", component:NotfoundpageComponent}
 
     ]
