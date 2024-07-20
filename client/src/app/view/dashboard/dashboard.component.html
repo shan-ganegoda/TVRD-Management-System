@@ -1,1 +1,112 @@
-<p>dashboard works!</p>
+<div>
+  <div class="flex ">
+
+      <div class="stats shadow w-1/4 shadow-xl mx-4 mt-4 bg-[#1E4263] justify-center">
+        <div class="stat">
+          <div class="stat-title text-gray-100">Total Mohs</div>
+          <div class="stat-value text-gray-100">336</div>
+          <div class="stat-desc text-gray-100">21% more than last month</div>
+        </div>
+      </div>
+
+    <div class="stats shadow w-1/4 shadow-xl mx-4 mt-4 bg-[#1E4263] justify-center">
+      <div class="stat">
+        <div class="stat-title text-gray-100">Total Page Views</div>
+        <div class="stat-value text-gray-100">89,400</div>
+        <div class="stat-desc text-gray-100">21% more than last month</div>
+      </div>
+    </div>
+
+    <div class="stats shadow w-1/4 shadow-xl mx-4 mt-4 bg-[#1E4263] justify-center">
+      <div class="stat">
+        <div class="stat-title text-gray-100">Total Page Views</div>
+        <div class="stat-value text-gray-100">89,400</div>
+        <div class="stat-desc text-gray-100">21% more than last month</div>
+      </div>
+    </div>
+
+    <div class="stats shadow w-1/4 shadow-xl mx-4 mt-4 bg-[#1E4263] justify-center">
+      <div class="stat">
+        <div class="stat-title text-gray-100">Total Page Views</div>
+        <div class="stat-value text-gray-100">89,400</div>
+        <div class="stat-desc text-gray-100">21% more than last month</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<mat-grid-list [cols]="12" rowHeight="4rem" class="mx-3">
+
+  <mat-grid-tile [colspan]="6" [rowspan]="6" class="mr-1">
+
+    <div class="w-full h-fit bg-white mt-4 rounded-md shadow-md border-2 border-[[#1e4263]] overflow-visible">
+
+      <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">
+        <span class="ml-5 text-white text-lg ">Technical Support</span>
+      </div>
+
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Email</th>
+          <th>Last Updated</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for(mail of userspecmessages; track userspecmessages){
+          <tr>
+            <td>
+              <div class="flex">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                </svg>
+                <span class="ml-3">{{mail.name}}</span>
+              </div>
+
+            </td>
+
+            <td>{{mail.updated | date}}</td>
+          </tr>
+        }
+        </tbody>
+      </table>
+    </div>
+  </mat-grid-tile>
+
+
+  <mat-grid-tile [colspan]="6" [rowspan]="6" class="ml-1">
+    <div class="w-full h-fit bg-white mt-4 rounded-md shadow-md border-2 border-[[#1e4263]] overflow-auto">
+
+      <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">
+        <span class="ml-5 text-white text-lg ">General Support</span>
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Email</th>
+          <th>Last Updated</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for(mail of userspecmessages; track userspecmessages){
+            <tr>
+              <td>
+                <div class="flex">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                  </svg>
+                  <span class="ml-3">{{mail.name}}</span>
+                </div>
+
+              </td>
+
+              <td>{{mail.updated | date}}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

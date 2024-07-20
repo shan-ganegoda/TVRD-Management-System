@@ -106,7 +106,7 @@ export class CountbyporderComponent {
     const barOptions = {
       title: 'Order Count (Bar Chart)',
       subtitle: 'Count of Orders By Date',
-      bars: 'vertical',
+      bars: 'horizontal',
       height: 400,
       width: 600
     };
