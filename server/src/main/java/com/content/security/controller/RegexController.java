@@ -44,5 +44,10 @@ public class RegexController {
         return RegexProvider.get(new VaccineDTO());
     }
 
+    @GetMapping(path = "/vaccineorder")
+    public HashMap<String, HashMap<String,String>> vaccineorder(){
+        return RegexProvider.get(new VaccineOrderDTO());
+    }
+
 }
 
