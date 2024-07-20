@@ -392,25 +392,156 @@ export class VaccineorderComponent implements OnInit{
     }
   }
 
-  handleSearch() {
+  update(currentvorder: VaccineOrder) {
 
+    let errors = this.getErrors();
+
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Vaccine Order Update ",message: "You Have Following Errors <br>" + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+
+    }else{
+
+      let updates:string = this.getUpdates();
+
+      if(updates != ""){
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Vaccine Order Update ",message: "You Have Following Updates <br> " + updates}
+        }).afterClosed().subscribe(res => {
+          if(!res){
+            return;
+          }else{
+
+            // @ts-ignore
+            this.innerdata.forEach((i)=> delete i.id);
+
+            const vorder:VaccineOrder = {
+              id: currentvorder.id,
+              dorequired: this.vorderForm.controls['dorequired'].value,
+              code: this.vorderForm.controls['code'].value,
+              dorequested: this.vorderForm.controls['dorequested'].value,
+              description: this.vorderForm.controls['description'].value,
+              vaccineordervaccines: this.innerdata,
+
+              vaccineorderstatus: {id: parseInt(this.vorderForm.controls['vaccineorderstatus'].value)},
+              moh: {id: parseInt(this.vorderForm.controls['moh'].value)},
+              employee: {id: parseInt(this.vorderForm.controls['employee'].value)},
+            }
+
+            this.currentOperation = "Product Order Update ";
+
+            this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+              .afterClosed().subscribe(res => {
+              if(res) {
+                this.vos.update(vorder).subscribe({
+                  next:() => {
+                    this.handleResult('success');
+                    this.loadTable("");
+                    this.clearForm();
+                  },
+                  error:(err:any) => {
+                    this.handleResult('failed');
+                    //console.log(err);
+                  }
+                });
+              }
+            })
+
+          }
+        });
+
+      }else{
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - VaccineOrder Update ",message: "No Fields Updated "}
+        }).afterClosed().subscribe(res =>{
+          if(res){return;}
+        })
+      }
+    }
+  }
+
+  delete(vorder: VaccineOrder) {
+    const operation = "Delete Vaccine Order " + vorder.code;
+    //console.log(operation);
+
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe((res:boolean) => {
+      if(res && vorder.id){
+        this.vos.delete(vorder.id).subscribe({
+          next: () => {
+            this.loadTable("");
+            this.handleResult("success");
+            this.clearForm();
+          },
+
+          error: () => {
+            this.handleResult("failed");
+          }
+        });
+      }
+    });
+  }
+
+  handleSearch() {
+    const ssmoh  = this.voSearchForm.controls['ssmoh'].value;
+    const sscode  = this.voSearchForm.controls['sscode'].value;
+    const ssvorderstatus  = this.voSearchForm.controls['ssvorderstatus'].value;
+    const ssdorequired  = this.voSearchForm.controls['ssdorequired'].value;
+    const ssdorequested  = this.voSearchForm.controls['ssdorequested'].value;
+
+    let query = ""
+
+    if(ssdorequired != null && ssdorequired.trim() !="") query = query + "&dorequired=" + ssdorequired;
+    if(ssdorequested != null && ssdorequested.trim() !="") query = query + "&dorequested=" + ssdorequested;
+    if(sscode != null && sscode.trim() !="") query = query + "&code=" + sscode;
+    if(ssmoh != '') query = query + "&mohid=" + parseInt(ssmoh);
+    if(ssvorderstatus != '') query = query + "&vostatusid=" + parseInt(ssvorderstatus);
+
+    if(query != "") query = query.replace(/^./, "?")
+    this.loadTable(query);
   }
 
   clearSearch() {
+    const operation = "Clear Search";
 
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.voSearchForm.reset();
+        this.voSearchForm.controls['ssmoh'].setValue('');
+        this.voSearchForm.controls['ssporderstatus'].setValue('');
+        this.loadTable("");
+      }
+    });
   }
 
-
-  update(vaccineOrder: any) {
-
-  }
-
-  delete(vaccineOrder: any) {
-
-  }
 
   clearForm() {
 
+    const operation = "Clear Form";
+
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.vorderForm.reset();
+        this.vorderForm.controls['moh'].setValue(null);
+        this.vorderForm.controls['employee'].setValue(null);
+        this.vorderForm.controls['vaccineorderstatus'].setValue(null);
+        this.innerdata = [];
+      }
+    });
+
+
+    this.enableButtons(true,false,false);
   }
 
   handleResult(status: string) {

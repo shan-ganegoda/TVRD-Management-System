@@ -134,7 +134,9 @@
           <label class="floating-label">Offered Institute</label>
         </div>
 
-        <div>
+        <hr/>
+
+        <div class="border-y-4  py-4 mb-3">
 
           <form [formGroup]="innerForm">
 
@@ -320,7 +322,7 @@
                   <td>
                     <div class="flex items-center">
                       <div
-                        class="badge badge-xs mr-1.5 {{vaccine.vaccinestatus.name === 'Discontinued'? 'bg-warning border-white' : vaccine.vaccinestatus.name === 'Relesed' ? 'bg-success border-white' :'bg-error border-white'}}"></div>
+                        class="badge badge-xs mr-1.5 {{vaccine.vaccinestatus.name === 'Discontinued'? 'bg-warning border-white' : vaccine.vaccinestatus.name === 'Available' ? 'bg-success border-white' :'bg-error border-white'}}"></div>
                       {{ vaccine.vaccinestatus.name }}
                     </div>
                   </td>

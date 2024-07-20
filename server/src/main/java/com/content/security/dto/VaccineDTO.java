@@ -19,11 +19,20 @@ import java.util.Set;
 @NoArgsConstructor
 public class VaccineDTO {
 
+    public VaccineDTO(Integer id,String name,String code){
+        this.id = id;
+        this.name = name;
+        this.code = code;
+    }
+
     private Integer id;
     @Pattern(regexp = "^.*$", message = "Invalid Name")
     private String name;
+    @Pattern(regexp = "^VC\\d{3}$", message = "Invalid Code")
     private String code;
+    @Pattern(regexp = "^\\d+$", message = "Invalid Dose Count")
     private Integer dosecount;
+    @Pattern(regexp = "^.*$", message = "Invalid Indications")
     private String containindications;
     private LocalDate dosaved;
     private String offeredinstitute;

@@ -14,4 +14,6 @@ public interface VaccineService {
     VaccineDTO updateVaccine(VaccineDTO vaccineDTO);
 
     void deleteVaccine(Integer id);
+
+    List<VaccineDTO> getAllList();
 }

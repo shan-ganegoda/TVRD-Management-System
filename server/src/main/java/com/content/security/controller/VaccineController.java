@@ -23,6 +23,11 @@ public class VaccineController {
         return vaccineService.getAll(params);
     }
 
+    @GetMapping(path = "/list")
+    public List<VaccineDTO> getAllList(){
+        return vaccineService.getAllList();
+    }
+
     @PostMapping
     public VaccineDTO save(@RequestBody VaccineDTO vaccineDTO){
         return vaccineService.saveVaccine(vaccineDTO);

@@ -142,7 +142,7 @@ export class VaccineComponent implements OnInit{
       next: data => this.vaccinestatuses = data
     });
 
-    this.es.getAllEmployeesList("").subscribe({
+    this.es.getAllEmployeesList("?designationid=1").subscribe({
       next: data => this.employees = data
     });
 
@@ -169,10 +169,10 @@ export class VaccineComponent implements OnInit{
   }
 
   createForm() {
-    this.vaccineForm.controls['name'].setValidators([Validators.required]);
-    this.vaccineForm.controls['code'].setValidators([Validators.required]);
-    this.vaccineForm.controls['dosecount'].setValidators([Validators.required]);
-    this.vaccineForm.controls['containindications'].setValidators([Validators.required]);
+    this.vaccineForm.controls['name'].setValidators([Validators.required,Validators.pattern(this.regexes['name']['regex'])]);
+    this.vaccineForm.controls['code'].setValidators([Validators.required,Validators.pattern(this.regexes['code']['regex'])]);
+    this.vaccineForm.controls['dosecount'].setValidators([Validators.required,Validators.pattern(this.regexes['dosecount']['regex'])]);
+    this.vaccineForm.controls['containindications'].setValidators([Validators.required,Validators.pattern(this.regexes['containindications']['regex'])]);
     this.vaccineForm.controls['dosaved'].setValidators([Validators.required]);
     this.vaccineForm.controls['offeredinstitute'].setValidators([Validators.required]);
     this.vaccineForm.controls['vaccinestatus'].setValidators([Validators.required]);
@@ -494,10 +494,20 @@ export class VaccineComponent implements OnInit{
   }
 
   clearForm() {
-    this.vaccineForm.reset();
-    this.vaccineForm.controls['employee'].setValue(null);
-    this.vaccineForm.controls['vaccinestatus'].setValue(null);
-    this.innerdata = [];
+
+    const operation = "Clear Search";
+
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.vaccineForm.reset();
+        this.vaccineForm.controls['employee'].setValue(null);
+        this.vaccineForm.controls['vaccinestatus'].setValue(null);
+        this.innerdata = [];
+      }
+    });
 
     this.enableButtons(true,false,false);
   }

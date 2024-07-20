@@ -13,4 +13,5 @@ public interface VaccineOrderService {
     VaccineOrderDTO update(VaccineOrderDTO vaccineOrderDTO);
 
     void delete(Integer id);
+
 }

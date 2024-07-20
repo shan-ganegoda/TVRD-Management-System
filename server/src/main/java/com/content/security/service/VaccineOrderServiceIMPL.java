@@ -1,5 +1,6 @@
 package com.content.security.service;
 
+import com.content.security.dto.EmployeeDTO;
 import com.content.security.dto.ProductOrderDTO;
 import com.content.security.dto.VaccineOrderDTO;
 import com.content.security.entity.Productorder;
@@ -40,10 +41,12 @@ public class VaccineOrderServiceIMPL implements VaccineOrderService{
                 String dorequested = params.get("dorequested");
                 String mohid = params.get("mohid");
                 String vostatusid = params.get("vostatusid");
+                String code = params.get("code");
 
                 Stream<VaccineOrderDTO> vostream = vaccineOrderDTOS.stream();
 
                 if(mohid!=null) vostream = vostream.filter(e-> e.getMoh().getId()==Integer.parseInt(mohid));
+                if(code!=null) vostream = vostream.filter(e-> e.getCode().equals(code));
                 if(vostatusid!=null) vostream = vostream.filter(e-> e.getVaccineorderstatus().getId()==Integer.parseInt(vostatusid));
                 if(dorequired!=null) vostream = vostream.filter(e-> e.getDorequired().equals(LocalDate.parse(dorequired)));
                 if(dorequested!=null) vostream = vostream.filter(e-> e.getDorequested().equals(LocalDate.parse(dorequested)));
@@ -108,4 +111,6 @@ public class VaccineOrderServiceIMPL implements VaccineOrderService{
             throw new ResourceNotFountException("Vaccine Order Not Found");
         }
     }
+
+
 }

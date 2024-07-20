@@ -1,5 +1,6 @@
 package com.content.security.service;
 
+import com.content.security.dto.EmployeeDTO;
 import com.content.security.dto.VaccineDTO;
 import com.content.security.entity.Productorder;
 import com.content.security.entity.Vaccine;
@@ -103,6 +104,25 @@ public class VaccineServiceIMPL implements VaccineService{
 
         }else{
             throw new ResourceNotFountException("Vaccine Not Found");
+        }
+    }
+
+    @Override
+    public List<VaccineDTO> getAllList() {
+        List<Vaccine> vaccineList = vaccineRepository.findAll();
+        if(!vaccineList.isEmpty()){
+            List<VaccineDTO> vaccineDTO = objectMapper.vaccineListToDtoList(vaccineList);
+
+            vaccineDTO = vaccineDTO.stream().map(
+                    vaccinedto -> {
+                        VaccineDTO v = new VaccineDTO(vaccinedto.getId(),vaccinedto.getName(),vaccinedto.getCode());
+                        return v;
+                    }
+            ).collect(Collectors.toList());
+
+            return vaccineDTO;
+        }else{
+            throw new ResourceNotFountException("No Vaccine found");
         }
     }
 }
