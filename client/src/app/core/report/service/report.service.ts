@@ -20,8 +20,8 @@ export class ReportService {
     return this.http.get<CountByPdh[]>(API_URL + "/countbypdh");
   }
 
-  countByPorder(){
-    return this.http.get<CountByPOrders[]>(API_URL + "/countbyproductorderdate");
+  countByPorder(query:string){
+    return this.http.get<CountByPOrders[]>(API_URL + "/countbyproductorderdate"+ query);
   }
 
   countByDesignation(){

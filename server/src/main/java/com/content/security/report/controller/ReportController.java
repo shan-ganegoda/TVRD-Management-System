@@ -55,11 +55,12 @@ public class ReportController {
         LocalDate startDate;
         LocalDate endDate;
 
-        String startDateStr = params.getOrDefault("startdate","2015-01-01");
-        String endDateStr = params.getOrDefault("enddate","2024-12-31");
+        String startDateStr = params.getOrDefault("startDate","2015-01-01");
+        String endDateStr = params.getOrDefault("endDate","2024-12-31");
 
         startDate = LocalDate.parse(startDateStr);
         endDate = LocalDate.parse(endDateStr);
+
 
         List<CountByProductOrder> countByProductOrders = countByRdhProductOrderRepository.findCountByProductOrderBetween(startDate,endDate);
 

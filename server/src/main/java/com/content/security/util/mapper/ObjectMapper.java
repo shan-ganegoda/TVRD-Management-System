@@ -96,4 +96,12 @@ public interface ObjectMapper {
     Vaccineorder vaccineOrderDtoToVaccineOrder(VaccineOrderDTO vaccineOrderDTO);
 
     List<VaccineOrderStatusDTO> vaccineOrderStatusListToDtoList(List<Vaccineorderstatus> vaccineorderstatuses);
+
+    List<ClinicDTO> clinicListToDtoList(List<Clinic> clinics);
+
+    Clinic clinicDtoToClinic(ClinicDTO clinicDTO);
+
+    List<ClinicstatusDTO> clinicStatusListToDtoList(List<Clinicstatus> clinicStatusList);
+
+    List<ClinictypeDTO> clinicTypeListToDtoList(List<Clinictype> clinictypes);
 }

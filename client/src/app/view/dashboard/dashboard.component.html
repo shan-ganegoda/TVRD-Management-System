@@ -5,37 +5,63 @@
         <div class="stat">
           <div class="stat-title text-gray-100">Total Mohs</div>
           <div class="stat-value text-gray-100">336</div>
-          <div class="stat-desc text-gray-100">21% more than last month</div>
+          <div class="stat-desc text-gray-100">last updated {{today | date }}</div>
         </div>
       </div>
 
     <div class="stats shadow w-1/4 shadow-xl mx-4 mt-4 bg-[#1E4263] justify-center">
       <div class="stat">
-        <div class="stat-title text-gray-100">Total Page Views</div>
-        <div class="stat-value text-gray-100">89,400</div>
-        <div class="stat-desc text-gray-100">21% more than last month</div>
+        <div class="stat-title text-gray-100">Total Parent Registrations</div>
+        <div class="stat-value text-gray-100">1004</div>
+        <div class="stat-desc text-gray-100">last updated {{today | date }}</div>
       </div>
     </div>
 
     <div class="stats shadow w-1/4 shadow-xl mx-4 mt-4 bg-[#1E4263] justify-center">
       <div class="stat">
-        <div class="stat-title text-gray-100">Total Page Views</div>
-        <div class="stat-value text-gray-100">89,400</div>
-        <div class="stat-desc text-gray-100">21% more than last month</div>
+        <div class="stat-title text-gray-100">Total Clinics</div>
+        <div class="stat-value text-gray-100">400</div>
+        <div class="stat-desc text-gray-100">last updated {{today | date }}</div>
       </div>
     </div>
 
     <div class="stats shadow w-1/4 shadow-xl mx-4 mt-4 bg-[#1E4263] justify-center">
       <div class="stat">
-        <div class="stat-title text-gray-100">Total Page Views</div>
-        <div class="stat-value text-gray-100">89,400</div>
-        <div class="stat-desc text-gray-100">21% more than last month</div>
+        <div class="stat-title text-gray-100">Total Employees</div>
+        <div class="stat-value text-gray-100">280</div>
+        <div class="stat-desc text-gray-100">last updated {{today | date }}</div>
       </div>
     </div>
 
   </div>
 </div>
 
+<!--Title Bar-->
+<div class="flex justify-center mt-8">
+
+  <div class="w-full h-32 bg-gray-500 relative mx-4 top-4 rounded-lg ">
+
+    <div class="flex flex-row justify-center">
+      <div>
+        <img class="w-32 h-32 relative" src="assets/logo-nobg.png" alt="Logo" />
+      </div>
+      <div>
+        <p class="font-lexend  relative text-white text-2xl top-5 left-8 w-xl">
+          Welcome to Threeposha And Vaccination Request And Distribution <br> Management System ePortal
+        </p>
+
+        <div class=" relative text-xs left-8 flex flex-row gap-7 font-lexend text-white top-7">
+          <p>Hotline: 0112326248/0112452440</p>
+          <p>Email: rdhscolombodoct&#64;gmail.com</p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!--Support-->
 <mat-grid-list [cols]="12" rowHeight="4rem" class="mx-3">
 
   <mat-grid-tile [colspan]="6" [rowspan]="6" class="mr-1">
@@ -89,7 +115,7 @@
         </tr>
         </thead>
         <tbody>
-          @for(mail of userspecmessages; track userspecmessages){
+          @for(mail of generalmessages; track generalmessages){
             <tr>
               <td>
                 <div class="flex">

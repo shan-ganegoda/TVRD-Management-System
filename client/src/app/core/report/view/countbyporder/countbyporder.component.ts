@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {
   MatCell,
@@ -13,7 +13,8 @@ import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {NgForOf} from "@angular/common";
 import {CountByPOrders} from "../../entity/countByPOrders";
 import {ReportService} from "../../service/report.service";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {RouterLink} from "@angular/router";
 
 
 declare var google: any;
@@ -39,15 +40,18 @@ declare var google: any;
     NgForOf,
     MatColumnDef,
     MatHeaderCellDef,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   templateUrl: './countbyporder.component.html',
   styleUrl: './countbyporder.component.scss'
 })
-export class CountbyporderComponent {
+export class CountbyporderComponent implements OnInit{
 
   countbyPorders!: CountByPOrders[];
   data!: MatTableDataSource<CountByPOrders>;
+
+  search!: FormGroup;
 
   columns: string[] = ['requestedDate', 'count'];
   headers: string[] = ['Date', 'Count'];
@@ -57,24 +61,52 @@ export class CountbyporderComponent {
   @ViewChild('piechart', { static: false }) piechart: any;
   @ViewChild('linechart', { static: false }) linechart: any;
 
-  constructor(private rs:ReportService) {
+  constructor(private rs:ReportService,
+              private fb:FormBuilder
+  ) {
+
+    this.search = this.fb.group({
+      "startDate": new FormControl(''),
+      "endDate": new FormControl(''),
+    });
   }
 
   ngOnInit() {
-
-    this.rs.countByPorder().subscribe({
-      next:data => {
-        this.countbyPorders = data;
-        console.log(this.countbyPorders);
-        this.loadTable();
-        this.loadCharts();
-      }
-    });
+    this.initialize();
 
   }
 
-  loadTable(){
-    this.data = new MatTableDataSource(this.countbyPorders);
+  initialize(){
+    this.loadTable("")
+  }
+
+  handleSearch(){
+    const ssstartDate  = this.search.controls['startDate'].value;
+    const ssendDate  = this.search.controls['endDate'].value;
+
+    let query = ""
+
+    if(ssstartDate != null && ssstartDate.trim() !="") query = query + "&startDate=" + ssstartDate;
+    if(ssendDate != null && ssendDate.trim() !="") query = query + "&endDate=" + ssendDate;
+
+    if(query != "") query = query.replace(/^./, "?")
+    this.loadTable(query);
+  }
+
+  loadTable(query:string){
+    this.rs.countByPorder(query).subscribe({
+      next:data => {
+        this.countbyPorders = data;
+        //console.log(this.countbyPorders);
+        this.loadCharts();
+        console.log(query);
+        this.data = new MatTableDataSource(this.countbyPorders);
+      }
+    });
+  }
+
+  clearSearch(){
+      this.search.reset();
   }
 
   loadCharts(){

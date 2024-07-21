@@ -13,31 +13,33 @@ import {
 import {CountByPdh} from "../../entity/countByPdh";
 import {ReportService} from "../../service/report.service";
 import {NgForOf} from "@angular/common";
+import {RouterLink} from "@angular/router";
 
 declare var google: any;
 
 @Component({
   selector: 'app-countbymoh',
   standalone: true,
-  imports: [
-    MatGridList,
-    MatGridTile,
-    MatCard,
-    MatCardHeader,
-    MatCardContent,
-    MatTable,
-    MatHeaderCell,
-    MatCell,
-    MatHeaderRow,
-    MatRow,
-    MatColumnDef,
-    MatCardModule,
-    NgForOf,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatHeaderRowDef,
-    MatRowDef
-  ],
+    imports: [
+        MatGridList,
+        MatGridTile,
+        MatCard,
+        MatCardHeader,
+        MatCardContent,
+        MatTable,
+        MatHeaderCell,
+        MatCell,
+        MatHeaderRow,
+        MatRow,
+        MatColumnDef,
+        MatCardModule,
+        NgForOf,
+        MatHeaderCellDef,
+        MatCellDef,
+        MatHeaderRowDef,
+        MatRowDef,
+        RouterLink
+    ],
   templateUrl: './countbymoh.component.html',
   styleUrl: './countbymoh.component.scss'
 })

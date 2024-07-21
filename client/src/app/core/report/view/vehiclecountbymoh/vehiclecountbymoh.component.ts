@@ -103,7 +103,7 @@ export class VehiclecountbymohComponent implements OnInit{
     const barOptions = {
       title: 'Vehicle Count (Bar Chart)',
       subtitle: 'Count of Vehicle by MOH',
-      bars: 'horizontal',
+      orientation: 'horizontal',
       height: 400,
       width: 600
     };

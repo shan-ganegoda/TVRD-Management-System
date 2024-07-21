@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
 import {MatList, MatListItem} from "@angular/material/list";
@@ -23,20 +23,28 @@ import {DatePipe, NgForOf} from "@angular/common";
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit{
+
+  today:any;
 
   userspecmessages: any[] = [
-    {name: 'ashan.d@earth.lk', updated: new Date('5/30/23')},
-    {name: 'rukmal.d@earth.lk', updated: new Date('5/17/23')},
-    {name: 'it@earth.lk', updated: new Date('5/28/23')},
-    {name: 'it@earth.lk', updated: new Date('4/28/23')},
+    {name: 'support.tec@pdhs.lk', updated: new Date('5/30/23')},
+    {name: 'it@pdhs.lk', updated: new Date('5/17/23')},
+    {name: 'it.gov@pdhs.lk', updated: new Date('5/28/23')},
+    {name: 'it@health.lk', updated: new Date('4/28/23')},
   ];
 
   generalmessages: any[] = [
-    {name: 'hr@earth.lk', updated: new Date('5/30/23')},
-    {name: 'admin@earth.lk', updated: new Date('5/17/23')},
-    {name: 'it@earth.lk', updated: new Date('5/28/23')},
-    {name: 'it@earth.lk', updated: new Date('4/28/23')}
+    {name: 'hr@heath.lk', updated: new Date('5/30/23')},
+    {name: 'admin@health.lk', updated: new Date('5/17/23')},
+    {name: 'it@health.lk', updated: new Date('5/28/23')},
+    {name: 'it@pdhs.lk', updated: new Date('4/28/23')}
   ];
+
+
+
+  ngOnInit(){
+    this.today = new Date();
+  }
 
 }

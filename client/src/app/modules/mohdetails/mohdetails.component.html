@@ -279,47 +279,6 @@
           </tbody>
         </table>
 
-        <!--    <mat-table [dataSource]="data">-->
-
-          <!--&lt;!&ndash;      <ng-container *ngFor="let column of columns;let i = index;" [matColumnDef]="column">&ndash;&gt;-->
-          <!--&lt;!&ndash;        <mat-header-cell *matHeaderCellDef> {{headers[i]}} </mat-header-cell>&ndash;&gt;-->
-          <!--&lt;!&ndash;        <mat-cell *matCellDef="let element">{{ uiassist.getProperty(element, binders[i]) }} </mat-cell>&ndash;&gt;-->
-          <!--&lt;!&ndash;      </ng-container>&ndash;&gt;-->
-
-          <!--    &lt;!&ndash; Position Column &ndash;&gt;-->
-          <!--    <ng-container matColumnDef="MOH">-->
-          <!--      <th mat-header-cell class="mr-8" *matHeaderCellDef> MOH </th>-->
-          <!--      <td mat-cell *matCellDef="let element">-->
-          <!--        <div class="py-2 w-24">-->
-          <!--         <div class="font-semibold">{{element.name}}</div>-->
-          <!--         <div class="text-sm badge badge-neutral">{{element.rdh.name}}</div>-->
-          <!--        </div>-->
-          <!--      </td>-->
-          <!--    </ng-container>-->
-
-          <!--    <ng-container matColumnDef="Email">-->
-          <!--      <th mat-header-cell *matHeaderCellDef> Email </th>-->
-          <!--      <td mat-cell *matCellDef="let element">-->
-          <!--        <div class="flex items-center py-5">-->
-          <!--          {{element.email}}-->
-          <!--        </div>-->
-          <!--      </td>-->
-          <!--    </ng-container>-->
-
-          <!--    <ng-container matColumnDef="Telephone No">-->
-          <!--      <th mat-header-cell *matHeaderCellDef> Telephone No </th>-->
-          <!--      <td mat-cell *matCellDef="let element">-->
-          <!--        <div class="flex items-center">-->
-          <!--          {{element.tele}}-->
-          <!--        </div>-->
-          <!--      </td>-->
-          <!--    </ng-container>-->
-
-          <!--      <mat-header-row *matHeaderRowDef="headers"></mat-header-row>-->
-          <!--      <mat-row *matRowDef="let row; columns: headers;" ></mat-row>-->
-
-          <!--  </mat-table>-->
-
         <mat-paginator [length]="20" [pageSize]="5" [pageSizeOptions]="[3,5,10,20]"></mat-paginator>
       }
 

@@ -482,6 +482,7 @@ export class EmployeeComponent implements OnInit{
   }
 
   clearForm(){
+
     this.employeeForm.reset();
     this.employeeForm.controls['gender'].setValue(null);
     this.employeeForm.controls['designation'].setValue(null);
