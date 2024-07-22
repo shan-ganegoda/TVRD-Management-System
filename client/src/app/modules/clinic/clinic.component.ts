@@ -279,7 +279,6 @@ export class ClinicComponent implements OnInit{
               clinictype: {id: parseInt(this.clinicForm.controls['clinictype'].value)},
             }
 
-        console.log(clinic);
 
             this.currentOperation = "Add Clinic " + clinic.divisionname;
 
@@ -303,7 +302,74 @@ export class ClinicComponent implements OnInit{
   }
 
   update(currentClinic: Clinic) {
+    let errors = this.getErrors();
 
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Clinic Update ",message: "You Have Following Errors <br/> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+
+    }else{
+
+      let updates:string = this.getUpdates();
+
+      if(updates != ""){
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Clinic Update ",message: "You Have Following Updates <br> " + updates}
+        }).afterClosed().subscribe(res => {
+          if(!res){
+            return;
+          }else{
+
+            const clinic:Clinic = {
+              divisionname: this.clinicForm.controls['divisionname'].value,
+              divisionno: this.clinicForm.controls['divisionno'].value,
+              clinicdate: this.clinicForm.controls['clinicdate'].value,
+              tostart: this.clinicForm.controls['tostart'].value,
+              toend: this.clinicForm.controls['toend'].value,
+              location: this.clinicForm.controls['location'].value,
+              description: this.clinicForm.controls['description'].value,
+
+              employee: {id: parseInt(this.clinicForm.controls['employee'].value)},
+              moh: {id: parseInt(this.clinicForm.controls['moh'].value)},
+              clinicstatus: {id: parseInt(this.clinicForm.controls['clinicstatus'].value)},
+              clinictype: {id: parseInt(this.clinicForm.controls['clinictype'].value)},
+            }
+
+                  clinic.id = currentClinic.id;
+
+                  this.currentOperation = "Update Clinic " + clinic.divisionname;
+
+                  this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+                    .afterClosed().subscribe(res => {
+                    if(res) {
+                      this.cs.update(clinic).subscribe({
+                        next:() => {
+                          this.handleResult('success');
+                          this.loadTable("");
+                          this.clearForm();
+                        },
+                        error:(err:any) => {
+                          this.handleResult('failed');
+                        }
+                      });
+                    }
+                  })
+                }
+        });
+
+      }else{
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Clinic Update ",message: "No Fields Updated "}
+        }).afterClosed().subscribe(res =>{
+          if(res){return;}
+        })
+      }
+    }
   }
 
   deleteUser(currentClinic: Clinic) {
