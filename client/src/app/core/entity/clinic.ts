@@ -5,7 +5,7 @@ import {ClinicStatus} from "./clinicstatus";
 
 export interface Clinic{
 
-  id: number;
+  id?: number;
   divisionname?:string;
   divisionno?:string;
   moh?:Moh;

@@ -21,6 +21,9 @@ import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {AsyncPipe} from "@angular/common";
 import {PageErrorComponent} from "../../shared/page-error/page-error.component";
 import {PageLoadingComponent} from "../../shared/page-loading/page-loading.component";
+import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
+import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
+import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 
 @Component({
   selector: 'app-clinic',
@@ -127,7 +130,7 @@ export class ClinicComponent implements OnInit{
       next: data => this.clinictypes = data,
     });
 
-    this.rs.getRegexes('moh').subscribe({
+    this.rs.getRegexes('clinic').subscribe({
       next:data => {
         this.regexes = data;
         this.createForm();
@@ -149,7 +152,37 @@ export class ClinicComponent implements OnInit{
   }
 
   createForm(){
+    this.clinicForm.controls['divisionname'].setValidators([Validators.required,Validators.pattern(this.regexes['divisionname']['regex'])]);
+    this.clinicForm.controls['divisionno'].setValidators([Validators.required,Validators.pattern(this.regexes['divisionno']['regex'])]);
+    this.clinicForm.controls['clinicdate'].setValidators([Validators.required]);
+    this.clinicForm.controls['tostart'].setValidators([Validators.required,Validators.pattern(this.regexes['tostart']['regex'])]);
+    this.clinicForm.controls['toend'].setValidators([Validators.required,Validators.pattern(this.regexes['toend']['regex'])]);
+    this.clinicForm.controls['location'].setValidators([Validators.required]);
+    this.clinicForm.controls['description'].setValidators([Validators.required,Validators.pattern(this.regexes['description']['regex'])]);
+    this.clinicForm.controls['moh'].setValidators([Validators.required]);
+    this.clinicForm.controls['employee'].setValidators([Validators.required]);
+    this.clinicForm.controls['clinictype'].setValidators([Validators.required]);
+    this.clinicForm.controls['clinicstatus'].setValidators([Validators.required]);
 
+    for (const controlName in this.clinicForm.controls) {
+      const control = this.clinicForm.controls[controlName];
+      control.valueChanges.subscribe(value => {
+
+          if (this.oldClinic != undefined && control.valid) {
+            // @ts-ignore
+            if (value === this.clinicForm[controlName]) {
+              control.markAsPristine();
+            } else {
+              control.markAsDirty();
+            }
+          } else {
+            control.markAsPristine();
+          }
+        }
+      );
+
+    }
+    this.enableButtons(true,false,false);
   }
 
   enableButtons(add:boolean, upd:boolean, del:boolean){
@@ -164,12 +197,17 @@ export class ClinicComponent implements OnInit{
     this.currentClinic = clinic;
     this.oldClinic = this.currentClinic;
 
+    // @ts-ignore
+    const [shours, sminutes, sseconds] = this.currentClinic.tostart.split(":");
+    // @ts-ignore
+    const [ehours, eminutes, eseconds] = this.currentClinic.toend.split(":");
+
     this.clinicForm.setValue({
       divisionname: this.currentClinic.divisionname,
       divisionno: this.currentClinic.divisionno,
       clinicdate: this.currentClinic.clinicdate,
-      tostart: this.currentClinic.tostart,
-      toend: this.currentClinic.toend,
+      tostart: `${shours}:${sminutes}`,
+      toend: `${ehours}:${eminutes}`,
       description: this.currentClinic.description,
       location: this.currentClinic.location,
 
@@ -183,18 +221,85 @@ export class ClinicComponent implements OnInit{
     this.clinicForm.markAsPristine();
   }
 
-  handleSearch() {
-
+  getUpdates():string {
+    let updates: string = "";
+    for (const controlName in this.clinicForm.controls) {
+      const control = this.clinicForm.controls[controlName];
+      if (control.dirty) {
+        updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1)+" Changed";
+      }
+    }
+    return updates;
   }
 
-  clearSearch() {
+  getErrors(){
 
+    let errors:string = "";
+
+    for(const controlName in this.clinicForm.controls){
+      const control = this.clinicForm.controls[controlName];
+      if(control.errors){
+        if(this.regexes[controlName] != undefined){
+          errors = errors + "<br>" + this.regexes[controlName]['message'];
+        }else{
+          errors = errors + "<br>Invalid " + controlName;
+        }
+      }
+    }
+    return errors;
   }
-
-
 
   add() {
+    let errors = this.getErrors();
 
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Clinic Add ",message: "You Have Following Errors <br/> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+    }else{
+
+      if(this.clinicForm.valid){
+
+            const clinic:Clinic = {
+              divisionname: this.clinicForm.controls['divisionname'].value,
+              divisionno: this.clinicForm.controls['divisionno'].value,
+              clinicdate: this.clinicForm.controls['clinicdate'].value,
+              tostart: this.clinicForm.controls['tostart'].value,
+              toend: this.clinicForm.controls['toend'].value,
+              location: this.clinicForm.controls['location'].value,
+              description: this.clinicForm.controls['description'].value,
+
+              employee: {id: parseInt(this.clinicForm.controls['employee'].value)},
+              moh: {id: parseInt(this.clinicForm.controls['moh'].value)},
+              clinicstatus: {id: parseInt(this.clinicForm.controls['clinicstatus'].value)},
+              clinictype: {id: parseInt(this.clinicForm.controls['clinictype'].value)},
+            }
+
+        console.log(clinic);
+
+            this.currentOperation = "Add Clinic " + clinic.divisionname;
+
+            this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+              .afterClosed().subscribe(res => {
+              if(res) {
+                this.cs.save(clinic).subscribe({
+                  next:() => {
+                    this.handleResult('success');
+                    this.loadTable("");
+                    this.clearForm();
+                  },
+                  error:(err:any) => {
+                    this.handleResult('failed');
+                  }
+                });
+          }
+        });
+      }
+    }
   }
 
   update(currentClinic: Clinic) {
@@ -207,5 +312,34 @@ export class ClinicComponent implements OnInit{
 
   clearForm() {
 
+  }
+
+  handleSearch() {
+
+  }
+
+  clearSearch() {
+
+  }
+
+  handleResult(status:string){
+
+    if(status === "success"){
+      this.snackBar.openFromComponent(NotificationComponent,{
+        data:{ message: status,icon: "done_all" },
+        horizontalPosition: "end",
+        verticalPosition: "top",
+        duration: 5000,
+        panelClass: ['success-snackbar'],
+      });
+    }else{
+      this.snackBar.openFromComponent(NotificationComponent,{
+        data:{ message: status,icon: "report" },
+        horizontalPosition: "end",
+        verticalPosition: "top",
+        duration: 5000,
+        panelClass: ['failure-snackbar'],
+      });
+    }
   }
 }
