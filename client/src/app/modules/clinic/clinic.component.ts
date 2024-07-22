@@ -373,19 +373,69 @@ export class ClinicComponent implements OnInit{
   }
 
   deleteUser(currentClinic: Clinic) {
+    const operation = "Delete Clinic " + currentClinic.divisionname;
 
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe((res:boolean) => {
+      if(res){
+        if (currentClinic.id) {
+          this.cs.delete(currentClinic.id).subscribe({
+            next: () => {
+              this.loadTable("");
+              this.handleResult('success');
+              this.clearForm();
+            },
+            error: (err:any) => {
+              this.handleResult('failed');
+              console.log(err);
+            },
+          });
+        } else {
+          this.handleResult('failed');
+        }
+      }
+    })
   }
 
   clearForm() {
+    this.clinicForm.reset();
+    this.clinicForm.controls['employee'].setValue(null);
+    this.clinicForm.controls['moh'].setValue(null);
+    this.clinicForm.controls['clinicstatus'].setValue(null);
+    this.clinicForm.controls['clinictype'].setValue(null);
 
+    this.enableButtons(true,false,false);
   }
 
   handleSearch() {
+    const ssdivisionname  = this.clinicSearchForm.controls['ssdivisionname'].value;
+    const ssdivisionno  = this.clinicSearchForm.controls['ssdivisionno'].value;
+    const ssclinicstatus  = this.clinicSearchForm.controls['ssclinicstatus'].value;
+    const ssclinictype  = this.clinicSearchForm.controls['ssclinictype'].value;
 
+    let query = ""
+
+    if(ssdivisionname != null && ssdivisionname.trim() !="") query = query + "&divisionname=" + ssdivisionname;
+    if(ssdivisionno != null && ssdivisionno.trim() !="") query = query + "&divisionno=" + ssdivisionno;
+    if(ssclinicstatus != '') query = query + "&clinicstatusid=" + parseInt(ssclinicstatus);
+    if(ssclinictype != '') query = query + "&clinictypeid=" + parseInt(ssclinictype);
+
+    if(query != "") query = query.replace(/^./, "?")
+    this.loadTable(query);
   }
 
   clearSearch() {
-
+    this.dialog.open(ConfirmDialogComponent,{data:"Clear Search"}
+    ).afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.clinicSearchForm.reset();
+        this.clinicSearchForm.controls['ssclinicstatus'].setValue('');
+        this.clinicSearchForm.controls['ssclinictype'].setValue('');
+        this.loadTable("");
+      }
+    });
   }
 
   handleResult(status:string){
