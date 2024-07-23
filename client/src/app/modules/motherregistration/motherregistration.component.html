@@ -7,41 +7,37 @@
     </ul>
   </div>
 
-  <form [formGroup]="clinicSearchForm" class="flex flex-row animate animate-fade">
+  <form [formGroup]="motherregSearchForm" class="flex flex-row animate animate-fade">
     <div class="join ml-auto  scale-95">
       <input
         type="text"
-        placeholder="Division Name"
+        placeholder="Mother Name"
         class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
-        formControlName="ssdivisionname"
+        formControlName="ssmothername"
       />
 
       <input
         type="text"
-        placeholder="Division Number"
+        placeholder="Register No"
         class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
-        formControlName="ssdivisionno"
+        formControlName="ssregisterno"
+      />
+
+      <input
+        type="text"
+        placeholder="Nic"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+        formControlName="ssnic"
       />
 
       <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
-              formControlName="ssclinicstatus"
-              data-tip="Clinic Status"
+              formControlName="ssclinic"
+              data-tip="Clinic"
       >
-        <option disabled value="">Clinic Status</option>
+        <option disabled value="">Clinic</option>
 
-        @for(clinicstatus of clinicstatuses; track clinicstatuses){
-          <option value="{{clinicstatus.id}}">{{clinicstatus.name}}</option>
-        }
-      </select>
-
-      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
-              formControlName="ssclinictype"
-              data-tip="Clinic Type"
-      >
-        <option disabled value="">Clinic Type</option>
-
-        @for(clinictype of clinictypes; track clinictypes){
-          <option value="{{clinictype.id}}">{{clinictype.name}}</option>
+        @for(clinic of clinics; track clinics){
+          <option value="{{clinic.id}}">{{clinic.divisionname}}</option>
         }
       </select>
 
@@ -67,6 +63,7 @@
   </form>
 </div>
 
+
 <mat-grid-list [cols]="12" rowHeight="4rem">
 
   <mat-grid-tile [colspan]="4" [rowspan]="10">
@@ -77,138 +74,159 @@
         <span class="ml-5 text-white text-lg ">Data Form</span>
       </div>
 
-      <form [formGroup]="clinicForm" class="mt-5 animate animate-fade">
+      <form [formGroup]="motherregForm" class="mt-5 animate animate-fade">
 
         <div class="relative w-full mb-3 px-2">
           <input
             type="text"
-            placeholder="Division Name"
+            placeholder="Mother Name"
             class="peer input input-bordered w-full focus:outline-none"
-            formControlName="divisionname"
+            formControlName="mothername"
           />
-          <label class="floating-label">Division Name</label>
+          <label class="floating-label">Mother Name</label>
         </div>
-
-          <div class="relative w-full mb-3 px-2">
-            <input
-              type="text"
-              placeholder="Division Number"
-              class="peer input input-bordered w-full focus:outline-none"
-              formControlName="divisionno"
-            />
-            <label class="floating-label">Division Number</label>
-
-          </div>
-
-          <div class="relative w-full mb-3 px-2">
-            <select
-              class="select select-bordered w-full bg-white focus:outline-none"
-              formControlName="moh"
-            >
-              <option disabled [ngValue]="null">MOH</option>
-
-              @for (moh of mohs; track mohs) {
-                <option [ngValue]="moh.id">{{moh.name}}</option>
-              }
-            </select>
-          </div>
-
-          <div class="relative w-full mb-3 px-2">
-            <input
-              type="text"
-              placeholder="Clinic Date"
-              class="peer input input-bordered w-full focus:outline-none"
-              formControlName="clinicdate"
-              onfocus="(this.type='date')"
-            />
-            <label class="floating-label">Clinic Date</label>
-          </div>
-
-          <div class="relative w-full mb-3 px-2">
-            <input
-              type="time"
-              placeholder="Start Time"
-              class="peer input input-bordered w-full focus:outline-none"
-              formControlName="tostart"
-            />
-            <label class="floating-label">Start Time</label>
-          </div>
-
-          <div class="relative w-full mb-3 px-2">
-            <input
-              type="time"
-              placeholder="End Time"
-              class="peer input input-bordered w-full focus:outline-none"
-              formControlName="toend"
-            />
-            <label class="floating-label">End Time</label>
-          </div>
 
         <div class="relative w-full mb-3 px-2">
           <input
             type="text"
-            placeholder="Location"
+            placeholder="Register Number"
             class="peer input input-bordered w-full focus:outline-none"
-            formControlName="location"
+            formControlName="registerno"
           />
-          <label class="floating-label">Location</label>
+          <label class="floating-label">Register Number</label>
+
         </div>
 
-          <div class="relative w-full mb-3 px-2">
-            <select
-              class="select select-bordered w-full bg-white focus:outline-none"
-              formControlName="employee"
-            >
-              <option disabled [ngValue]="null">PHN Officer</option>
+        <div class="relative w-full mb-3 px-2">
+          <select
+            class="select select-bordered w-full bg-white focus:outline-none"
+            formControlName="clinic"
+          >
+            <option disabled [ngValue]="null">Clinic</option>
 
-              @for (employee of employees; track employees) {
-                <option [ngValue]="employee.id">{{employee.fullname  + " (" + employee.number + ")"}}</option>
-              }
-            </select>
-          </div>
+            @for (clinic of clinics; track clinics) {
+              <option [ngValue]="clinic.id">{{clinic.divisionname}}</option>
+            }
+          </select>
+        </div>
 
-          <div class="relative w-full mb-3 px-2">
-            <select
-              class="select select-bordered w-full bg-white focus:outline-none"
-              formControlName="clinictype"
-            >
-              <option disabled [ngValue]="null">Clinic Type</option>
+        <div class="relative w-full mb-3 px-2">
+          <input
+            type="text"
+            placeholder="NIC"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="nic"
+          />
+          <label class="floating-label">NIC</label>
 
-              @for (clinictype of clinictypes; track clinictypes) {
-                <option [ngValue]="clinictype.id">{{clinictype.name}}</option>
-              }
-            </select>
-          </div>
+        </div>
 
-          <div class="relative w-full mb-3 px-2">
-            <select
-              class="select select-bordered w-full bg-white focus:outline-none"
-              formControlName="clinicstatus"
-            >
-              <option disabled [ngValue]="null">Clinic Status</option>
+        <div class="relative w-full mb-3 px-2">
+          <input
+            type="text"
+            placeholder="Mobile Number"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="mobileno"
+          />
+          <label class="floating-label">Mobile Number</label>
+        </div>
 
-              @for (clinicstatus of clinicstatuses; track clinicstatuses) {
-                <option [ngValue]="clinicstatus.id">{{clinicstatus.name}}</option>
-              }
-            </select>
-          </div>
+        <div class="relative w-full mb-3 px-2">
+          <input
+            type="text"
+            placeholder="Date of Pregnancy"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="dopregnant"
+            onfocus="(this.type='date')"
+          />
+          <label class="floating-label">Date of Pregnancy</label>
+        </div>
 
-          <div class="relative w-full mb-3 px-2">
+        <div class="relative w-full mb-3 px-2">
+          <select
+            class="select select-bordered w-full bg-white focus:outline-none"
+            formControlName="bloodtype"
+          >
+            <option disabled [ngValue]="null">Blood Type</option>
+
+            @for (bloodtype of bloodtypes; track bloodtypes) {
+              <option [ngValue]="bloodtype.id">{{bloodtype.name}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+          <select
+            class="select select-bordered w-full bg-white focus:outline-none"
+            formControlName="maritalstatus"
+          >
+            <option disabled [ngValue]="null">Marital Status</option>
+
+            @for (maritalstatus of maritalstatuses; track maritalstatuses) {
+              <option [ngValue]="maritalstatus.id">{{maritalstatus.name}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+          <input
+            type="number"
+            placeholder="Age"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="age"
+          />
+          <label class="floating-label">Age</label>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+          <input
+            type="text"
+            placeholder="Address"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="address"
+          />
+          <label class="floating-label">Address</label>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+          <input
+            type="text"
+            placeholder="Current Weight(KG)"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="currentweight"
+          />
+          <label class="floating-label">Current Weight(KG)</label>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+          <select
+            class="select select-bordered w-full bg-white focus:outline-none"
+            formControlName="involvementstatus"
+          >
+            <option disabled [ngValue]="null">Involment Status</option>
+
+            @for (involvementstatus of involvementstatuses; track involvementstatuses) {
+              <option [ngValue]="involvementstatus.id">{{involvementstatus.name}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
             <textarea
               class="peer textarea textarea-bordered w-full h-36 focus:outline-none"
               placeholder="Description"
               formControlName="description"
             ></textarea>
-            <label class="floating-label">Description</label>
-          </div>
+          <label class="floating-label">Description</label>
+        </div>
 
         <div class="flex flex-row mt-3 max-w-[97%] px-2 pb-5">
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
                   (click)="add()" [disabled]="!enaadd">Add</button>
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
-                  (click)="update(currentClinic)" [disabled]="!enaupd">Update</button>
+                  (click)="update(currentMother)" [disabled]="!enaupd">Update</button>
           <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900"
-                  (click)="delete(currentClinic)"
+                  (click)="delete(currentMother)"
                   [disabled]="!hasDeleteAuthority || !enadel " >Delete</button>
           <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900"
                   (click)="clearForm()">Clear</button>
@@ -218,6 +236,7 @@
     </div>
 
   </mat-grid-tile>
+
   <mat-grid-tile [colspan]="8" [rowspan]="10">
 
     <div class="w-full h-full bg-white mt-4 ml-2 mr-2 rounded-md shadow-md overflow-auto">
@@ -226,51 +245,50 @@
       </div>
 
       <div class="overflow-auto p-4 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
-        @if(!isFailed || !isLoading || clinics.length !== 0){
+        @if(!isFailed || !isLoading || mothers.length !== 0){
           <table class="text-left p-4 table">
             <thead>
             <tr class="text-black bold">
-              <th>Division Name</th>
-              <th>Division No</th>
-              <th>Type</th>
-              <th>Clinic Date</th>
+              <th>Mother Name</th>
+              <th>Registration No</th>
+              <th>NIC</th>
+              <th>Clinic</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
             </thead>
 
             <tbody>
-              @for(clinic of data | async ; track clinics){
+              @for(mother of data | async ; track mothers){
                 <tr>
                   <td>
                     <div>
-                      <div class="font-semibold">{{clinic.divisionname}}</div>
-                      <div class="text-sm badge badge-neutral">{{clinic.moh.name}}</div>
+                      <div>{{mother.mothername}}</div>
                     </div>
                   </td>
 
                   <td>
                     <div class="flex items-center">
-                      {{clinic.divisionno}}
+                      {{mother.registerno}}
                     </div>
                   </td>
 
                   <td>
                     <div class="flex items-center">
-                      {{clinic.clinictype.name}}
+                      {{mother.nic}}
                     </div>
                   </td>
 
                   <td>
                     <div class="flex items-center">
-                      {{clinic.clinicdate}}
+                      {{mother.clinic.divisionname}}
                     </div>
                   </td>
 
                   <td>
                     <div class="flex items-center">
-                      <div class="badge badge-xs mr-1.5 {{clinic.clinicstatus.name === 'On Schedule'? 'bg-success border-white' : clinic.clinicstatus.name === 'Delayed'? 'bg-warning border-white' : 'bg-error border-white'}}"></div>
-                      {{clinic.clinicstatus.name}}
+                      <div class="badge badge-xs mr-1.5 {{mother.involvementstatus.name === 'On Program'? 'bg-success border-white' : mother.involvementstatus.name === 'Off Program'? 'bg-error border-white' : 'bg-warning border-white'}}"></div>
+                      {{mother.involvementstatus.name}}
                     </div>
                   </td>
 
@@ -278,7 +296,7 @@
                     <div class="join">
                       <button
                         class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
-                        (click) = "fillForm(clinic)"
+                        (click) = "fillForm(mother)"
                         [disabled]="!hasUpdateAuthority"
                       >
                         <svg
@@ -320,5 +338,4 @@
     </div>
 
   </mat-grid-tile>
-
 </mat-grid-list>

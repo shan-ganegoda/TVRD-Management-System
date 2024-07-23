@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environment";
-import {Employee} from "../../entity/employee";
 import {Moh} from "../../entity/moh";
 
 const API_URL = environment.apiUrl + '/admin/mohdetails';

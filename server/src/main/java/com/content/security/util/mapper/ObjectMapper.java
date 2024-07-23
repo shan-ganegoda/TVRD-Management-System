@@ -104,4 +104,14 @@ public interface ObjectMapper {
     List<ClinicstatusDTO> clinicStatusListToDtoList(List<Clinicstatus> clinicStatusList);
 
     List<ClinictypeDTO> clinicTypeListToDtoList(List<Clinictype> clinictypes);
+
+    List<MotherDTO> motherListToDtoList(List<Mother> mothers);
+
+    Mother motherDtoToMother(MotherDTO motherDTO);
+
+    List<BloodTypeDTO> bloodTypeListToDtoList(List<Bloodtype> bloodTypeList);
+
+    List<InvolvementStatusDTO> involvementStatusListToDtoList(List<Involvementstatus> all);
+
+    List<MaritalstatusDTO> maritalStatusListToDtoList(List<Maritalstatus> maritalStatuses);
 }

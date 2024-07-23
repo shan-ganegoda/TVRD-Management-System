@@ -372,7 +372,7 @@ export class ClinicComponent implements OnInit{
     }
   }
 
-  deleteUser(currentClinic: Clinic) {
+  delete(currentClinic: Clinic) {
     const operation = "Delete Clinic " + currentClinic.divisionname;
 
     this.dialog.open(ConfirmDialogComponent,{data:operation})

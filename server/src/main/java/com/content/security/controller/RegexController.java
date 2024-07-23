@@ -54,5 +54,10 @@ public class RegexController {
         return RegexProvider.get(new ClinicDTO());
     }
 
+    @GetMapping(path = "/mother")
+    public HashMap<String, HashMap<String,String>> mother(){
+        return RegexProvider.get(new MotherDTO());
+    }
+
 }
 
