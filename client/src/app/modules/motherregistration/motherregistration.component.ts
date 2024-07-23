@@ -383,7 +383,28 @@ export class MotherregistrationComponent implements OnInit{
   }
 
   delete(currentMother: Mother) {
+    const operation = "Delete Mother " + currentMother.registerno;
 
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe((res:boolean) => {
+      if(res){
+        if (currentMother.id) {
+          this.ms.delete(currentMother.id).subscribe({
+            next: () => {
+              this.loadTable("");
+              this.handleResult('success');
+              this.clearForm();
+            },
+            error: (err:any) => {
+              this.handleResult('failed');
+              console.log(err);
+            },
+          });
+        } else {
+          this.handleResult('failed');
+        }
+      }
+    });
   }
 
   clearForm() {
@@ -397,11 +418,33 @@ export class MotherregistrationComponent implements OnInit{
   }
 
   handleSearch() {
+    const ssmothername  = this.motherregSearchForm.controls['ssmothername'].value;
+    const ssregisterno  = this.motherregSearchForm.controls['ssregisterno'].value;
+    const ssnic  = this.motherregSearchForm.controls['ssnic'].value;
+    const ssclinic  = this.motherregSearchForm.controls['ssclinic'].value;
 
+    let query = ""
+
+    if(ssmothername != null && ssmothername.trim() !="") query = query + "&mothername=" + ssmothername;
+    if(ssregisterno != null && ssregisterno.trim() !="") query = query + "&registerno=" + ssregisterno;
+    if(ssnic != null && ssnic.trim() !="") query = query + "&nic=" + ssnic;
+    if(ssclinic != '') query = query + "&clinicid=" + parseInt(ssclinic);
+
+    if(query != "") query = query.replace(/^./, "?")
+    this.loadTable(query);
   }
 
   clearSearch() {
-
+    this.dialog.open(ConfirmDialogComponent,{data:"Clear Search"}
+    ).afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.motherregSearchForm.reset();
+        this.motherregSearchForm.controls['ssclinic'].setValue('');
+        this.loadTable("");
+      }
+    });
   }
 
   handleResult(status:string){

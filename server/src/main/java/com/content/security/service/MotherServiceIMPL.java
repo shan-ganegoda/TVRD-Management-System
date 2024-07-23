@@ -39,7 +39,7 @@ public class MotherServiceIMPL implements MotherService{
 
                 if(registerno != null) mstream = mstream.filter(e -> e.getRegisterno().equals(registerno));
                 if(nic != null) mstream = mstream.filter(e -> e.getNic().equals(nic));
-                if(mothername != null) mstream = mstream.filter(e -> e.getMothername().equals(mothername));
+                if(mothername != null) mstream = mstream.filter(e -> e.getMothername().contains(mothername));
                 if(clinicid != null) mstream = mstream.filter(e -> e.getClinic().getId() == Integer.parseInt(clinicid));
 
                 return mstream.collect(Collectors.toList());
