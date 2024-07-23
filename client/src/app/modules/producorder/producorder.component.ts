@@ -139,7 +139,7 @@ export class ProducorderComponent implements OnInit {
       }
     });
 
-    this.es.getAllEmployeesList("").subscribe({
+    this.es.getAllEmployeesList("?designationid=1").subscribe({
       next: data => this.employees = data
     });
 

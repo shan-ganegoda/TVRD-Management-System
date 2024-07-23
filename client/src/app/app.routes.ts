@@ -19,6 +19,7 @@ import {EmployeebydesignationComponent} from "./core/report/view/employeebydesig
 import {VehiclecountbymohComponent} from "./core/report/view/vehiclecountbymoh/vehiclecountbymoh.component";
 import {VaccineorderComponent} from "./modules/vaccineorder/vaccineorder.component";
 import {ClinicComponent} from "./modules/clinic/clinic.component";
+import {ProfileComponent} from "./view/profile/profile.component";
 
 export const routes: Routes = [
   { path: "login", component: AuthComponent },
@@ -39,6 +40,7 @@ export const routes: Routes = [
       {path: "vaccineorder", component: VaccineorderComponent, title: "Vaccine Order Details"},
       {path: "clinicdetail", component: ClinicComponent, title: "Clinic"},
 
+      {path: "profile", component: ProfileComponent, title: "Profile"},
 
       {path: "mohreport", component: CountbymohComponent,title: "MOH Report"},
       {path: "porderreport", component: CountbyporderComponent,title: "POrder Report"},

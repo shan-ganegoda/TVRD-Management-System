@@ -1,0 +1,84 @@
+<div class="flex justify-center">
+
+  <div class="w-full bg-white shadow-2xl relative mx-4 top-4 rounded-lg px-8 py-6">
+    <p class="font-lexend font-bold text-lg">Profile Information</p>
+    <p class="font-lexend font-light">Update your account's profile information</p>
+
+    <form class="flex" [formGroup]="userForm">
+      <div class="w-1/2">
+      <label class="form-control w-full max-w-xs">
+        <div class="label">
+          <span class="label-text font-bold">Name</span>
+        </div>
+        <input type="text" placeholder="Name" class="input input-bordered w-full max-w-xs" formControlName="name"/>
+      </label>
+
+        <label class="form-control w-full max-w-xs">
+          <div class="label">
+            <span class="label-text font-bold">Email</span>
+          </div>
+          <input type="text" placeholder="Email" class="input input-bordered w-full max-w-xs" formControlName="email" />
+        </label>
+
+      <label class="form-control w-full max-w-xs mb-3">
+        <div class="label">
+          <span class="label-text font-bold">Description</span>
+        </div>
+        <textarea class="textarea textarea-bordered h-24" placeholder="Bio" formControlName="description"></textarea>
+      </label>
+
+      <button class="btn btn-active border-gray-300 bg-gray-950 text-gray-300 hover:bg-gray-900">Save</button>
+      </div>
+
+      <div class="w-1/2 ">
+        <div class="h-28 flex flex-row items-center justify-center">
+          <img class="h-64 w-64 rounded-full border-2" src="{{imageempurl ? imageempurl : 'assets/tabledefault.png'}}">
+          <div class="flex flex-col mt-2">
+            <input  id="userImage" hidden="hidden" (change)="selectImage($event)" Select type="file" formControlName="photo">
+            <label for="userImage" class="btn ml-10 mb-2 text-white rounded-md text-center bg-gray-950 text-white w-28 hover:bg-gray-900">Select</label>
+            <label class="btn ml-10 mb-2 text-white rounded-md text-center bg-gray-950 text-white hover:bg-gray-900" (click)="clearImage()">Clear</label>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+
+<div class="flex justify-center mt-4">
+
+  <div class="w-full bg-white shadow-2xl relative mx-4 top-4 rounded-lg px-8 py-6">
+    <p class="font-lexend font-bold text-lg">Update Password</p>
+    <p class="font-lexend font-light">Ensure your account is using a long, random password to stay secure</p>
+
+    <form class="flex" [formGroup]="passwordForm">
+      <div class="w-1/2">
+        <label class="form-control w-full max-w-xs">
+          <div class="label">
+            <span class="label-text font-bold">Current Password</span>
+          </div>
+          <input type="password" placeholder="Current Password" class="input input-bordered w-full max-w-xs" formControlName="currentpassword"/>
+        </label>
+
+        <label class="form-control w-full max-w-xs">
+          <div class="label">
+            <span class="label-text font-bold">New Password</span>
+          </div>
+          <input type="password" placeholder="New Password" class="input input-bordered w-full max-w-xs" formControlName="newpassword" />
+        </label>
+
+        <label class="form-control w-full max-w-xs mb-3">
+          <div class="label">
+            <span class="label-text font-bold">Confirm Password</span>
+          </div>
+          <input type="password" placeholder="Confirm Password" class="input input-bordered w-full max-w-xs" formControlName="confirmpassword" />
+        </label>
+
+        <button class="btn btn-active border-gray-300 bg-gray-950 text-gray-300 hover:bg-gray-900">Save</button>
+      </div>
+
+    </form>
+  </div>
+
+</div>
