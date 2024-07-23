@@ -310,7 +310,76 @@ export class MotherregistrationComponent implements OnInit{
   }
 
   update(currentMother: Mother) {
+    let errors = this.getErrors();
 
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Mother Update ",message: "You Have Following Errors <br/> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+
+    }else{
+
+      let updates:string = this.getUpdates();
+
+      if(updates != ""){
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Mother Update ",message: "You Have Following Updates <br> " + updates}
+        }).afterClosed().subscribe(res => {
+          if(!res){
+            return;
+          }else{
+
+            const mother:Mother = {
+              registerno: this.motherregForm.controls['registerno'].value,
+              mothername: this.motherregForm.controls['mothername'].value,
+              mobileno: this.motherregForm.controls['mobileno'].value,
+              nic: this.motherregForm.controls['nic'].value,
+              dopregnant: this.motherregForm.controls['dopregnant'].value,
+              age: this.motherregForm.controls['age'].value,
+              address: this.motherregForm.controls['address'].value,
+              description: this.motherregForm.controls['description'].value,
+              currentweight: this.motherregForm.controls['currentweight'].value,
+
+              clinic: {id: parseInt(this.motherregForm.controls['clinic'].value)},
+              bloodtype: {id: parseInt(this.motherregForm.controls['bloodtype'].value)},
+              involvementstatus: {id: parseInt(this.motherregForm.controls['involvementstatus'].value)},
+              maritalstatus: {id: parseInt(this.motherregForm.controls['maritalstatus'].value)},
+            }
+
+            mother.id = currentMother.id;
+
+            this.currentOperation = "Update Mother " + mother.registerno;
+
+            this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+              .afterClosed().subscribe(res => {
+              if(res) {
+                this.ms.update(mother).subscribe({
+                  next:() => {
+                    this.handleResult('success');
+                    this.loadTable("");
+                    this.clearForm();
+                  },
+                  error:(err:any) => {
+                    this.handleResult('failed');
+                  }
+                });
+              }
+            })
+          }
+        });
+
+      }else{
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Mother Update ",message: "No Fields Updated "}
+        }).afterClosed().subscribe(res =>{
+          if(res){return;}
+        })
+      }
+    }
   }
 
   delete(currentMother: Mother) {
