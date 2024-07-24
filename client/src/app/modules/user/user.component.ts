@@ -92,7 +92,6 @@ export class UserComponent implements OnInit{
     private es:EmployeeService,
     private uss:UserstatusService,
     private uts:UsertypeService,
-    // private snackBar: MatSnackBar,
     private tst: ToastService,
     private rxs:RegexService,
     private cdr:ChangeDetectorRef
@@ -215,6 +214,8 @@ export class UserComponent implements OnInit{
       userroles: null
     });
 
+    this.userForm.get('email')?.disable();
+
     this.userRoleList = this.user.roles;
     this.userForm.markAsPristine();
 
@@ -265,6 +266,9 @@ export class UserComponent implements OnInit{
         }
       }
     }
+    if(this.userRoleList.length == 0 ){
+      errors = errors + "<br>Invalid User Roles";
+    }
     return errors;
   }
 
@@ -306,7 +310,7 @@ export class UserComponent implements OnInit{
               if(res) {
                 this.us.saveUser(user).subscribe({
                   next:() => {
-                    this.tst.handleResult('success',"");
+                    this.tst.handleResult('success'," User Added Successfully");
                     this.loadTable("");
                     },
                   error:(err:any) => {
@@ -373,11 +377,12 @@ export class UserComponent implements OnInit{
                     if(res) {
                       this.us.updateUser(user).subscribe({
                         next:() => {
-                          this.tst.handleResult('success',"");
+                          this.tst.handleResult('success'," User Updated Successfully");
                           this.loadTable("");
+                          this.clearForm();
                           },
                         error:(err:any) => {
-                          this.tst.handleResult('failed',"");
+                          this.tst.handleResult('failed',err.error.data.message);
                         }
                       });
                     }
@@ -413,15 +418,13 @@ export class UserComponent implements OnInit{
           this.us.deleteUser(user.id).subscribe({
             next: () => {
               this.loadTable("");
-              this.tst.handleResult('success',"");
+              this.tst.handleResult('success'," User Deleted Successfully");
             },
 
-            error: () => {
-              this.tst.handleResult('failed',"");
+            error: (err:any) => {
+              this.tst.handleResult('failed',err.error.data.message);
             }
           });
-        } else {
-          this.tst.handleResult('failed',"");
         }
       }
     })
@@ -435,7 +438,7 @@ export class UserComponent implements OnInit{
     this.userRoleList.splice(0,this.userRoleList.length);
 
     this.enableButtons(true,false,false);
-    
+
   }
 
   handleSearch() {

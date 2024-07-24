@@ -198,7 +198,7 @@
         <span class="ml-5 text-white text-lg ">Data List</span>
       </div>
     <div class="overflow-visible p-4 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
-      @if(!isFailed && !isLoading && users.length !== 0){
+      @if(!isFailed || !isLoading || users.length !== 0){
         <table class="text-left p-4 table" >
           <thead>
           <tr class="text-black bold">

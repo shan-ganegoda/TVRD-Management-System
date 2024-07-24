@@ -1,6 +1,5 @@
 package com.content.security.service;
 
-import com.content.security.dto.EmployeeDTO;
 import com.content.security.dto.UserDTO;
 import com.content.security.entity.User;
 import com.content.security.exception.ResourceAlreadyExistException;
@@ -18,7 +17,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,12 +40,12 @@ public class UserServiceIMPL implements UserService{
             }else{
                 String fullname = params.get("fullname");
                 String email = params.get("email");
-                String usertypeid = params.get("usertypeid");
+                String roleid = params.get("roleid");
                 String userstatusid = params.get("userstatusid");
 
                 Stream<UserDTO> estreame = userDTOList.stream();
 
-                if(usertypeid!=null) estreame = estreame.filter(e-> e.getUsertype().getId()==Integer.parseInt(usertypeid));
+                if(roleid!=null) estreame = estreame.filter(e-> e.getRoles().stream().anyMatch(role -> role.getId() == Integer.parseInt(roleid)));
                 if(userstatusid!=null) estreame = estreame.filter(e-> e.getUserstatus().getId()==Integer.parseInt(userstatusid));
                 if(email!=null) estreame = estreame.filter(e-> e.getEmail().equals(email));
                 if(fullname!=null) estreame = estreame.filter(e-> e.getEmployee().getFullname().contains(fullname));
@@ -70,7 +68,6 @@ public class UserServiceIMPL implements UserService{
     @Override
     public UserDTO saveUser(UserDTO userdto) {
 
-        System.out.println(userdto.getEmail());
 
         if(!userRepository.existsByEmail(userdto.getEmail())){
             User user = objectMapper.userDTOToUser(userdto);
@@ -91,17 +88,17 @@ public class UserServiceIMPL implements UserService{
     @Override
     public String updateUser(UserDTO userdto) {
 
-        Optional<User> userOpt = userRepository.findById(userdto.getId());
+        User userOpt = userRepository.findById(userdto.getId()).orElseThrow(null);
 
         if(userRepository.existsById(userdto.getId())){
             User user = objectMapper.userDTOToUser(userdto);
 
-            if(user.getPassword() != userOpt.get().getPassword()){
+            if(!user.getPassword().equals(userOpt.getPassword())){
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
             }
 
-            user.setDocreated(userOpt.get().getDocreated());
-            user.setTocreated(userOpt.get().getTocreated());
+            user.setDocreated(userOpt.getDocreated());
+            user.setTocreated(userOpt.getTocreated());
 
             userRepository.save(user);
 

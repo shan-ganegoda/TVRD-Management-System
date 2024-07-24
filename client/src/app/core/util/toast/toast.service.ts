@@ -13,7 +13,7 @@ export class ToastService {
 
     if(status === "success"){
       this.snackBar.openFromComponent(NotificationComponent,{
-        data:{ message: `${status}  ${message}`,icon: "done_all" },
+        data:{ message: `${message}`,icon: "done_all" },
         horizontalPosition: "end",
         verticalPosition: "top",
         duration: 5000,
