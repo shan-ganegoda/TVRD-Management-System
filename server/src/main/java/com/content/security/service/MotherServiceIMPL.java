@@ -9,6 +9,7 @@ import com.content.security.util.mapper.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,8 +53,10 @@ public class MotherServiceIMPL implements MotherService{
     @Override
     public MotherDTO create(MotherDTO motherDTO) {
         if(motherDTO != null){
-            if(!motherRepository.existsByRegisterno(motherDTO.getRegisterno()) || motherRepository.existsByNic(motherDTO.getNic())){
+            if(!motherRepository.existsByRegisterno(motherDTO.getRegisterno()) && !motherRepository.existsByNic(motherDTO.getNic())){
+                LocalDate today = LocalDate.now();
                 Mother mother = objectMapper.motherDtoToMother(motherDTO);
+                mother.setDoregistered(today);
                 motherRepository.save(mother);
                 return motherDTO;
             }else{

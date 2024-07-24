@@ -70,6 +70,8 @@ public class UserServiceIMPL implements UserService{
     @Override
     public UserDTO saveUser(UserDTO userdto) {
 
+        System.out.println(userdto.getEmail());
+
         if(!userRepository.existsByEmail(userdto.getEmail())){
             User user = objectMapper.userDTOToUser(userdto);
 

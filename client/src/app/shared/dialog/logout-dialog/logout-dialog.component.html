@@ -1,0 +1,12 @@
+<div class="p-6 w-96 rounded-3xl flex flex-col justify-center items-center">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+  </svg>
+
+  <p class="font-bold text-2xl font-lexend mt-5">Logout</p>
+  <p class="pt-3 font-light font-lexend">Are You Sure You Want To Logout?</p>
+  <div class="modal-action">
+    <button class="btn mr-2 bg-red-500 text-white" [mat-dialog-close]="true" >Logout</button>
+    <button class="btn" mat-dialog-close>Cancel</button>
+  </div>
+</div>

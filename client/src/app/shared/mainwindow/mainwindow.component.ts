@@ -14,6 +14,9 @@ import {User} from "../../core/entity/user";
 import {StorageService} from "../../core/service/auth/storage.service";
 import {AuthService} from "../../core/service/auth/auth.service";
 import {Location} from "@angular/common";
+import {WarningDialogComponent} from "../dialog/warning-dialog/warning-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
+import {LogoutDialogComponent} from "../dialog/logout-dialog/logout-dialog.component";
 
 @Component({
   selector: 'app-mainwindow',
@@ -52,7 +55,8 @@ export class MainwindowComponent implements OnInit{
   constructor(
     private storageService:StorageService,
     private authService:AuthService,
-    private location:Location
+    private location:Location,
+    private dialog:MatDialog
     ) {
   }
 
@@ -64,9 +68,17 @@ export class MainwindowComponent implements OnInit{
   }
 
   logout(){
+
+    this.dialog.open(LogoutDialogComponent,{}).afterClosed().subscribe(res => {
+      if(res){
+        this.storageService.logout();
+        location.reload();
+      }else{
+        return;
+      }
+    });
     //this.authService.logout()
-    this.storageService.logout();
-    location.reload();
+
   }
 
 }

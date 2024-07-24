@@ -28,6 +28,7 @@ import {Moh} from "../../core/entity/moh";
 import {Observable} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {AsyncPipe} from "@angular/common";
+import {ToastService} from "../../core/util/toast/toast.service";
 
 @Component({
   selector: 'app-user-list',
@@ -91,7 +92,8 @@ export class UserComponent implements OnInit{
     private es:EmployeeService,
     private uss:UserstatusService,
     private uts:UsertypeService,
-    private snackBar: MatSnackBar,
+    // private snackBar: MatSnackBar,
+    private tst: ToastService,
     private rxs:RegexService,
     private cdr:ChangeDetectorRef
   ) {
@@ -104,7 +106,7 @@ export class UserComponent implements OnInit{
 
     this.userForm = this.fb.group({
       "email": new FormControl('',[Validators.required]),
-      "password": new FormControl(''),
+      "password": new FormControl('',[Validators.required]),
       "description": new FormControl('',[Validators.required]),
       "usertype": new FormControl(null,[Validators.required]),
       "userstatus": new FormControl(null,[Validators.required]),
@@ -161,7 +163,7 @@ export class UserComponent implements OnInit{
 
   createForm(){
     this.userForm.controls['email'].setValidators([Validators.required, Validators.pattern(this.regexes['email']['regex'])]);
-    this.userForm.controls['password'].setValidators([Validators.pattern(this.regexes['password']['regex'])]);
+    this.userForm.controls['password'].setValidators([Validators.required,Validators.pattern(this.regexes['password']['regex'])]);
     this.userForm.controls['description'].setValidators([Validators.required,Validators.pattern(this.regexes['description']['regex'])]);
     this.userForm.controls['usertype'].setValidators([Validators.required]);
     this.userForm.controls['userstatus'].setValidators([Validators.required]);
@@ -304,12 +306,12 @@ export class UserComponent implements OnInit{
               if(res) {
                 this.us.saveUser(user).subscribe({
                   next:() => {
-                    this.handleResult('success');
+                    this.tst.handleResult('success',"");
                     this.loadTable("");
                     },
                   error:(err:any) => {
-                    console.log(err.data.message);
-                    this.handleResult('failed');
+                    // console.log(err.error.data.message);
+                    this.tst.handleResult('failed',err.error.data.message);
                   }
                 });
               }
@@ -371,11 +373,11 @@ export class UserComponent implements OnInit{
                     if(res) {
                       this.us.updateUser(user).subscribe({
                         next:() => {
-                          this.handleResult('success');
+                          this.tst.handleResult('success',"");
                           this.loadTable("");
                           },
                         error:(err:any) => {
-                          this.handleResult('failed');
+                          this.tst.handleResult('failed',"");
                         }
                       });
                     }
@@ -411,15 +413,15 @@ export class UserComponent implements OnInit{
           this.us.deleteUser(user.id).subscribe({
             next: () => {
               this.loadTable("");
-              this.handleResult('success');
+              this.tst.handleResult('success',"");
             },
 
             error: () => {
-              this.handleResult('failed');
+              this.tst.handleResult('failed',"");
             }
           });
         } else {
-          this.handleResult('failed');
+          this.tst.handleResult('failed',"");
         }
       }
     })
@@ -433,8 +435,7 @@ export class UserComponent implements OnInit{
     this.userRoleList.splice(0,this.userRoleList.length);
 
     this.enableButtons(true,false,false);
-
-
+    
   }
 
   handleSearch() {
@@ -466,27 +467,6 @@ export class UserComponent implements OnInit{
         this.loadTable("");
       }
     });
-  }
-
-  handleResult(status:string){
-
-    if(status === "success"){
-      this.snackBar.openFromComponent(NotificationComponent,{
-        data:{ message: status,icon: "done_all" },
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['success-snackbar'],
-      });
-    }else{
-      this.snackBar.openFromComponent(NotificationComponent,{
-        data:{ message: status,icon: "report" },
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['failure-snackbar'],
-      });
-    }
   }
 
 

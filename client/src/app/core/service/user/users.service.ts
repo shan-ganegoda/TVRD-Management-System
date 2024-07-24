@@ -21,7 +21,6 @@ export class UsersService {
   }
 
   saveUser(user:User){
-    console.log(user);
     return this.http.post<[]>(API_URL,user);
   }
 
