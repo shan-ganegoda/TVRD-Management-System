@@ -23,6 +23,7 @@ import {ProfileComponent} from "./view/profile/profile.component";
 import {MotherregistrationComponent} from "./modules/motherregistration/motherregistration.component";
 import {PrivilageComponent} from "./modules/privilage/privilage.component";
 import {CountbyvorderComponent} from "./core/report/view/countbyvorder/countbyvorder.component";
+import {ChildrecordComponent} from "./modules/childrecord/childrecord.component";
 
 export const routes: Routes = [
   { path: "login", component: AuthComponent },
@@ -44,6 +45,7 @@ export const routes: Routes = [
       {path: "vaccineorder", component: VaccineorderComponent, title: "Vaccine Order Details"},
       {path: "clinicdetail", component: ClinicComponent, title: "Clinic"},
       {path: "motherregistration", component: MotherregistrationComponent, title: "Mother Registration"},
+      {path: "childrecord", component: ChildrecordComponent, title: "Child Record"},
 
       {path: "profile", component: ProfileComponent, title: "Profile"},
 

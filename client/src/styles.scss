@@ -21,14 +21,13 @@ body {font-family: lexend, "lexend", sans-serif; }
 .floating-labels-select {
   @apply absolute bg-white px-1 py-0 h-fit left-3 -top-2.5 text-gray-400 text-sm transition-all;
 }
-.peer:focus ~ .floating-labels-select,
-.peer:valid ~ .floating-labels-select {
-  @apply -top-2.5 text-gray-400 text-xs;
-}
-.peer:invalid ~ .floating-labels-select {
+//.peer:focus ~ .floating-labels-select,
+//.peer:valid ~ .floating-labels-select {
+//  @apply -top-2.5 text-gray-400 text-sm;
+//}
+select.ng-invalid ~ .floating-labels-select {
   @apply hidden;
 }
-
 
 
 

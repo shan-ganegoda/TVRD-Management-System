@@ -4,13 +4,11 @@ import {MatCardModule} from "@angular/material/card";
 import {MatInputModule} from "@angular/material/input";
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
-import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {AuthService} from "../service/auth/auth.service";
-import {MatDialog} from "@angular/material/dialog";
-import {ToastrService} from "ngx-toastr";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 import {StorageService} from "../service/auth/storage.service";
+import {ToastService} from "../util/toast/toast.service";
 
 // interface AuthForm {
 //   password: FormControl<string>;
@@ -38,8 +36,8 @@ export class AuthComponent implements OnInit{
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly formBuilder: FormBuilder,
-    private readonly message: MatSnackBar,
-    private readonly storageService: StorageService
+    private readonly storageService: StorageService,
+    private readonly tst:ToastService
   ) {
     // use FormBuilder to create a form group
     this.authForm = this.formBuilder.group({
@@ -74,19 +72,11 @@ export class AuthComponent implements OnInit{
           },
           error: (error:any) => {
             console.log(error);
-            this.message.openFromComponent(NotificationComponent,{
-              data:{
-                message: "Wrong Credentials!",
-                icon: "clear"
-              },
-              horizontalPosition: "end",
-              verticalPosition: "top",
-              duration: 5000,
-              panelClass: ['failure-snackbar'],
-            });
-
+            this.tst.handleResult("failed","Invalid Email And Password!");
           }
           })
+      }else{
+        this.tst.handleResult("Failed","Invalid Email And Password!");
       }
 
     }
