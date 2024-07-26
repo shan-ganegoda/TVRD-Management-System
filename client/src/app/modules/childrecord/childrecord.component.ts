@@ -270,7 +270,7 @@ export class ChildrecordComponent implements OnInit{
 
     if(errors != ""){
       this.dialog.open(WarningDialogComponent,{
-        data:{heading:"Errors - Child Record Add ",message: "You Have Following Errors <br/> " + errors}
+        data:{heading:"Errors - Child Record Add ",message: "You Have Following Errors <br> " + errors}
       }).afterClosed().subscribe(res => {
         if(!res){
           return;
@@ -288,8 +288,8 @@ export class ChildrecordComponent implements OnInit{
           birthweight: this.childRecordForm.controls['birthweight'].value,
           headperimeter: this.childRecordForm.controls['headperimeter'].value,
           heightinbirth: this.childRecordForm.controls['heightinbirth'].value,
-          placeofbirth: this.childRecordForm.controls['heightinbirth'].value,
-          apgarscore: this.childRecordForm.controls['heightinbirth'].value,
+          placeofbirth: this.childRecordForm.controls['placeofbirth'].value,
+          apgarscore: this.childRecordForm.controls['apgarscore'].value,
 
           gender: {id: parseInt(this.childRecordForm.controls['gender'].value)},
           mother: {id: parseInt(this.childRecordForm.controls['mother'].value)},
@@ -320,6 +320,84 @@ export class ChildrecordComponent implements OnInit{
     }
   }
 
+  update(currentChildRecord: ChildRecord) {
+    let errors = this.getErrors();
+
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Child Record Update ",message: "You Have Following Errors <br> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+
+    }else{
+
+      let updates:string = this.getUpdates();
+
+      if(updates != ""){
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Child Record Update ",message: "You Have Following Updates <br> " + updates}
+        }).afterClosed().subscribe(res => {
+          if(!res){
+            return;
+          }else{
+
+            const childRecord:ChildRecord = {
+              fullname: this.childRecordForm.controls['fullname'].value,
+              regno: this.childRecordForm.controls['regno'].value,
+              dobirth: this.childRecordForm.controls['dobirth'].value,
+              doregistered: this.childRecordForm.controls['doregistered'].value,
+              birthweight: this.childRecordForm.controls['birthweight'].value,
+              headperimeter: this.childRecordForm.controls['headperimeter'].value,
+              heightinbirth: this.childRecordForm.controls['heightinbirth'].value,
+              placeofbirth: this.childRecordForm.controls['placeofbirth'].value,
+              apgarscore: this.childRecordForm.controls['apgarscore'].value,
+
+              gender: {id: parseInt(this.childRecordForm.controls['gender'].value)},
+              mother: {id: parseInt(this.childRecordForm.controls['mother'].value)},
+              bloodtype: {id: parseInt(this.childRecordForm.controls['bloodtype'].value)},
+              healthstatus: {id: parseInt(this.childRecordForm.controls['healthstatus'].value)},
+              involvementstatus: {id: parseInt(this.childRecordForm.controls['involvementstatus'].value)},
+            }
+
+            childRecord.id = currentChildRecord.id;
+
+            this.currentOperation = "Update Child Record " + currentChildRecord.regno;
+
+            this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+              .afterClosed().subscribe(res => {
+              if(res) {
+                this.cs.update(childRecord).subscribe({
+                  next:() => {
+                    this.tst.handleResult('success',"Child Record Updated Successfully");
+                    this.loadTable("");
+                    this.clearForm();
+                  },
+                  error:(err:any) => {
+                    this.tst.handleResult('failed',err.error.data.message);
+                  }
+                });
+              }
+            })
+          }
+        });
+
+      }else{
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Child Record Update ",message: "No Fields Updated "}
+        }).afterClosed().subscribe(res =>{
+          if(res){return;}
+        })
+      }
+    }
+  }
+
+  delete(currentChildRecord: ChildRecord) {
+
+  }
+
   handleSearch() {
 
   }
@@ -328,15 +406,14 @@ export class ChildrecordComponent implements OnInit{
 
   }
 
-  update(currentChildRecord: ChildRecord) {
-
-  }
-
-  delete(currentChildRecord: ChildRecord) {
-
-  }
-
   clearForm() {
+    this.childRecordForm.reset();
+    this.childRecordForm.controls['gender'].setValue(null);
+    this.childRecordForm.controls['mother'].setValue(null);
+    this.childRecordForm.controls['bloodtype'].setValue(null);
+    this.childRecordForm.controls['healthstatus'].setValue(null);
+    this.childRecordForm.controls['involvementstatus'].setValue(null);
 
+    this.enableButtons(true,false,false);
   }
 }
