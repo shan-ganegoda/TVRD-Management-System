@@ -395,15 +395,57 @@ export class ChildrecordComponent implements OnInit{
   }
 
   delete(currentChildRecord: ChildRecord) {
+    const operation = "Delete Child Record " + currentChildRecord.regno;
 
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe((res:boolean) => {
+      if(res){
+        if (currentChildRecord.id) {
+          this.cs.delete(currentChildRecord.id).subscribe({
+            next: () => {
+              this.loadTable("");
+              this.tst.handleResult('success',"Child Record Deleted Successfully");
+              this.clearForm();
+            },
+            error: (err:any) => {
+              this.tst.handleResult('failed',err.error.data.message);
+              console.log(err);
+            },
+          });
+        }
+      }
+    });
   }
 
   handleSearch() {
+    const ssfullname  = this.childRecordSearchForm.controls['ssfullname'].value;
+    const ssregno  = this.childRecordSearchForm.controls['ssregno'].value;
+    const sshealthstatus  = this.childRecordSearchForm.controls['sshealthstatus'].value;
+    const ssgender  = this.childRecordSearchForm.controls['ssgender'].value;
 
+    let query = ""
+
+    if(ssfullname != null && ssfullname.trim() !="") query = query + "&fullname=" + ssfullname;
+    if(ssregno != null && ssregno.trim() !="") query = query + "&regno=" + ssregno;
+    if(sshealthstatus != '') query = query + "&healthstatusid=" + parseInt(sshealthstatus);
+    if(ssgender != '') query = query + "&genderid=" + parseInt(ssgender);
+
+    if(query != "") query = query.replace(/^./, "?")
+    this.loadTable(query);
   }
 
   clearSearch() {
-
+    this.dialog.open(ConfirmDialogComponent,{data:"Clear Search"}
+    ).afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.childRecordSearchForm.reset();
+        this.childRecordSearchForm.controls['ssgender'].setValue('');
+        this.childRecordSearchForm.controls['sshealthstatus'].setValue('');
+        this.loadTable("");
+      }
+    });
   }
 
   clearForm() {
