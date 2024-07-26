@@ -1,6 +1,7 @@
 package com.content.security.report.controller;
 
 import com.content.security.report.dto.CountByProductOrderDTO;
+import com.content.security.report.dto.ProductOrdersByProductDTO;
 import com.content.security.report.dto.CountByVaccineOrderDTO;
 import com.content.security.report.entity.*;
 import com.content.security.report.repository.*;
@@ -29,6 +30,7 @@ public class ReportController {
     private final CountByDesignationRepository countByDesignationRepository;
     private final VehicleCountByMohRepository vehicleCountByMohRepository;
     private final CountByVaccineOrderRepository countByVaccineOrderRepository;
+    private final ProductOrderByProductRepository productOrderByProductRepository;
 
     @GetMapping(path = "/countbypdh")
     public List<CountByPdh> getCountByPdh() {
@@ -82,6 +84,56 @@ public class ReportController {
          */
         List<CountByProductOrderDTO> list = combinedMap.entrySet().stream()
                 .map(entry -> new CountByProductOrderDTO(entry.getKey(),entry.getValue()))
+                .toList();
+
+
+        return list;
+    }
+
+    @GetMapping(path = "/countbyproductorderdateandproduct")
+    public List<ProductOrdersByProductDTO> getCountByProductOrderDateAndProduct(@RequestParam HashMap<String,String> params) throws Exception {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        LocalDate startDate;
+        LocalDate endDate;
+
+        String startDateStr = params.getOrDefault("startDate","2015-01-01");
+        String endDateStr = params.getOrDefault("endDate","2024-12-31");
+
+        startDate = LocalDate.parse(startDateStr);
+        endDate = LocalDate.parse(endDateStr);
+
+
+        List<ProductOrdersByProduct> productOrdersByProducts = productOrderByProductRepository.findOrderByProducts(startDate,endDate);
+
+        List<ProductOrdersByProductDTO> dtoList = new ArrayList<>();
+
+        /**
+         * This split date into YYYY-MM format and put all these result into dto list
+         */
+        for (ProductOrdersByProduct productOrdersByProduct : productOrdersByProducts) {
+            ProductOrdersByProductDTO dto = new ProductOrdersByProductDTO(YearMonth.from(productOrdersByProduct.getRequestedDate()),productOrdersByProduct.getProduct1count(),productOrdersByProduct.getProduct2count());
+            dtoList.add(dto);
+        }
+        /**
+         * This combine the duplicate month entries and return a Map with result
+         */
+        Map<YearMonth, ProductCount> combinedMap = dtoList.stream()
+                .collect(Collectors.toMap(
+                        ProductOrdersByProductDTO::getRequestedDate,
+                        dto -> new ProductCount(dto.getProduct1count(), dto.getProduct2count()),
+                        (existing, replacement) -> {
+                            existing.add(replacement.getProduct1count(), replacement.getProduct2count());
+                            return existing;
+                        }
+                ));
+
+        /**
+         * This is the place where the map convert into a list of CountByProductOrderDTO
+         */
+        List<ProductOrdersByProductDTO> list = combinedMap.entrySet().stream()
+                .map(entry -> new ProductOrdersByProductDTO(entry.getKey(),entry.getValue().getProduct1count(),entry.getValue().getProduct2count()))
                 .toList();
 
 

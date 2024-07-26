@@ -68,6 +68,7 @@ export class ChildrecordComponent implements OnInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   regexes:any;
+  datetoday!:any;
 
   currentOperation = '';
 
@@ -92,6 +93,9 @@ export class ChildrecordComponent implements OnInit{
               private cdr:ChangeDetectorRef
   ) {
 
+    const today = new Date();
+    this.datetoday = today.toISOString().split('T')[0];
+
     this.childRecordSearchForm = this.fb.group({
       "ssregno": new FormControl(''),
       "ssfullname": new FormControl(''),
@@ -103,7 +107,7 @@ export class ChildrecordComponent implements OnInit{
       "fullname": new FormControl("",[Validators.required]),
       "regno": new FormControl("",[Validators.required]),
       "dobirth": new FormControl("",[Validators.required]),
-      "doregistered": new FormControl("",[Validators.required]),
+      "doregistered": [{value:this.datetoday, disabled:true}],
       "birthweight": new FormControl("",[Validators.required]),
       "headperimeter": new FormControl("",[Validators.required]),
       "heightinbirth": new FormControl("",[Validators.required]),
@@ -120,6 +124,7 @@ export class ChildrecordComponent implements OnInit{
 
   ngOnInit() {
     this.initialize();
+
   }
 
   initialize(){
@@ -455,6 +460,7 @@ export class ChildrecordComponent implements OnInit{
     this.childRecordForm.controls['bloodtype'].setValue(null);
     this.childRecordForm.controls['healthstatus'].setValue(null);
     this.childRecordForm.controls['involvementstatus'].setValue(null);
+    this.childRecordForm.controls['doregistered'].setValue(this.datetoday);
 
     this.enableButtons(true,false,false);
   }
