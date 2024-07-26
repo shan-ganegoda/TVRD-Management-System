@@ -114,4 +114,14 @@ public interface ObjectMapper {
     List<InvolvementStatusDTO> involvementStatusListToDtoList(List<Involvementstatus> all);
 
     List<MaritalstatusDTO> maritalStatusListToDtoList(List<Maritalstatus> maritalStatuses);
+    
+    Operation operationDtoToOperation(OperationDTO operation);
+
+    Module moduleDtoToModule(ModuleDTO module);
+
+    List<ChildRecordDTO> childRecordListToDtoList(List<Childrecord> childRecords);
+
+    Childrecord childRecordDtoToChildRecord(ChildRecordDTO childRecordDTO);
+
+    List<HealthStatusDTO> healthStatusListToDtoList(List<Healthstatus> healthStatusList);
 }

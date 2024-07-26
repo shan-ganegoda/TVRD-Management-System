@@ -1,4 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {
   MatCell,
@@ -11,18 +12,18 @@ import {
 } from "@angular/material/table";
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {NgForOf} from "@angular/common";
-import {CountByPOrders} from "../../entity/countByPOrders";
-import {ReportService} from "../../service/report.service";
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
-
+import {CountByVOrders} from "../../entity/countbyvorders";
+import {ReportService} from "../../service/report.service";
+import {CountByPOrders} from "../../entity/countByPOrders";
 
 declare var google: any;
 
 @Component({
-  selector: 'app-countbyporder',
+  selector: 'app-countbyvorder',
   standalone: true,
   imports: [
+    FormsModule,
     MatCard,
     MatCardContent,
     MatCardHeader,
@@ -38,18 +39,18 @@ declare var google: any;
     MatRowDef,
     MatTable,
     NgForOf,
-    MatColumnDef,
-    MatHeaderCellDef,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    MatColumnDef,
+    MatHeaderCellDef
   ],
-  templateUrl: './countbyporder.component.html',
-  styleUrl: './countbyporder.component.scss'
+  templateUrl: './countbyvorder.component.html',
+  styleUrl: './countbyvorder.component.scss'
 })
-export class CountbyporderComponent implements OnInit{
+export class CountbyvorderComponent implements OnInit{
 
-  countbyPorders!: CountByPOrders[];
-  data!: MatTableDataSource<CountByPOrders>;
+  countbyVorders!: CountByVOrders[];
+  data!: MatTableDataSource<CountByVOrders>;
 
   search!: FormGroup;
 
@@ -57,7 +58,7 @@ export class CountbyporderComponent implements OnInit{
   headers: string[] = ['Month', 'Count'];
   binders: string[] = ['requestedDate', 'count'];
 
-  @ViewChild('barchart', { static: false }) barchart: any;
+  @ViewChild('columnchart', { static: false }) columnchart: any;
   @ViewChild('piechart', { static: false }) piechart: any;
   @ViewChild('linechart', { static: false }) linechart: any;
 
@@ -94,19 +95,18 @@ export class CountbyporderComponent implements OnInit{
   }
 
   loadTable(query:string){
-    this.rs.countByPorder(query).subscribe({
+    this.rs.countByVorder(query).subscribe({
       next:data => {
-        this.countbyPorders = data;
+        this.countbyVorders = data;
         //console.log(this.countbyPorders);
         this.loadCharts();
-        console.log(query);
-        this.data = new MatTableDataSource(this.countbyPorders);
+        this.data = new MatTableDataSource(this.countbyVorders);
       }
     });
   }
 
   clearSearch(){
-      this.search.reset();
+    this.search.reset();
   }
 
   loadCharts(){
@@ -120,6 +120,7 @@ export class CountbyporderComponent implements OnInit{
     const barData = new google.visualization.DataTable();
     barData.addColumn('string', 'Date');
     barData.addColumn('number', 'Count');
+    barData.addColumn('number', 'Expected');
 
     const pieData = new google.visualization.DataTable();
     pieData.addColumn('string', 'Date');
@@ -129,10 +130,10 @@ export class CountbyporderComponent implements OnInit{
     lineData.addColumn('string', 'Date');
     lineData.addColumn('number', 'Count');
 
-    this.countbyPorders.forEach((po: CountByPOrders) => {
-      barData.addRow([po.requestedDate, po.count]);
-      pieData.addRow([po.requestedDate, po.count]);
-      lineData.addRow([po.requestedDate, po.count]);
+    this.countbyVorders.forEach((vo: CountByVOrders) => {
+      barData.addRow([vo.requestedDate, vo.count,10]);
+      pieData.addRow([vo.requestedDate, vo.count]);
+      lineData.addRow([vo.requestedDate, vo.count]);
     });
 
     const barOptions = {
@@ -155,7 +156,7 @@ export class CountbyporderComponent implements OnInit{
       width: 600
     };
 
-    const barChart = new google.visualization.BarChart(this.barchart.nativeElement);
+    const barChart = new google.visualization.ColumnChart(this.columnchart.nativeElement);
     barChart.draw(barData, barOptions);
 
     const pieChart = new google.visualization.PieChart(this.piechart.nativeElement);

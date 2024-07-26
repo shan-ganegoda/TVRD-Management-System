@@ -21,6 +21,8 @@ import {VaccineorderComponent} from "./modules/vaccineorder/vaccineorder.compone
 import {ClinicComponent} from "./modules/clinic/clinic.component";
 import {ProfileComponent} from "./view/profile/profile.component";
 import {MotherregistrationComponent} from "./modules/motherregistration/motherregistration.component";
+import {PrivilageComponent} from "./modules/privilage/privilage.component";
+import {CountbyvorderComponent} from "./core/report/view/countbyvorder/countbyvorder.component";
 
 export const routes: Routes = [
   { path: "login", component: AuthComponent },
@@ -34,6 +36,7 @@ export const routes: Routes = [
       {path: "dashboard", component: DashboardComponent,title: "Dashboard"},
       {path: "employee", component: EmployeeComponent,title: "Employee"},
       {path: "user", component: UserComponent,title: "User"},
+      {path: "privilege", component: PrivilageComponent,title: "Privileges"},
       {path: "mohdetail", component: MohdetailsComponent,title: "MOH Details"},
       {path: "productorder", component: ProducorderComponent,title: "Product Order"},
       {path: "vehicle", component: VehicleComponent, title: "Vehicle Details"},
@@ -48,6 +51,7 @@ export const routes: Routes = [
       {path: "porderreport", component: CountbyporderComponent,title: "POrder Report"},
       {path: "employeereport", component: EmployeebydesignationComponent,title: "Employee Report"},
       {path: "vehiclereport", component: VehiclecountbymohComponent,title: "Vehicle Report"},
+      {path: "vorderreport", component: CountbyvorderComponent,title: "VOrder Report"},
       {path:"**", component:NotfoundpageComponent}
 
     ]

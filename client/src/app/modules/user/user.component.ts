@@ -225,6 +225,9 @@ export class UserComponent implements OnInit{
   addRoleToList(){
     const roleId = this.userForm.controls['role'].value;
 
+
+    //add table validation
+
       const role = this.roles.filter(r =>  r.id === parseInt(roleId))[0];
 
       if (!this.userRoleList.some(r => r.name === role.name)) {
@@ -236,7 +239,7 @@ export class UserComponent implements OnInit{
     //this.userForm.controls['role'].setValue(null);
 
   }
-  removeFromRoleList(id:number) {
+  removeFromRoleList(id:number | undefined) {
     this.userRoleList = this.userRoleList.filter(r => r.id !== id);
     this.userForm.controls["userroles"].updateValueAndValidity();
   }
