@@ -25,7 +25,7 @@ public class ChildRecordDTO {
     private Gender gender;
     private LocalDate doregistered;
     private Mother mother;
-    @Pattern(regexp = "^\\d.\\d{3}$", message = "Invalid Birth Weight")
+    @Pattern(regexp = "^\\d.\\d+$", message = "Invalid Birth Weight")
     private BigDecimal birthweight;
     @Pattern(regexp = "^\\d{2}$", message = "Invalid Head Perimeter")
     private Integer headperimeter;
@@ -34,7 +34,7 @@ public class ChildRecordDTO {
     private Integer heightinbirth;
     @Pattern(regexp = "^.*$", message = "Invalid Place of Birth")
     private String placeofbirth;
-    @Pattern(regexp = "^\\d{2}$", message = "Invalid Apgar Score")
+    @Pattern(regexp = "^([1-9]|10)$", message = "Invalid Apgar Score")
     private Integer apgarscore;
     private Healthstatus healthstatus;
     private Involvementstatus involvementstatus;

@@ -24,6 +24,7 @@ import {PageLoadingComponent} from "../../shared/page-loading/page-loading.compo
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
+import {ToastService} from "../../core/util/toast/toast.service";
 
 @Component({
   selector: 'app-clinic',
@@ -82,7 +83,7 @@ export class ClinicComponent implements OnInit{
               private cts:ClinictypeService,
               private rs:RegexService,
               private dialog:MatDialog,
-              private snackBar:MatSnackBar,
+              private tst:ToastService,
               private cdr:ChangeDetectorRef
   ) {
     this.clinicSearchForm = this.fb.group({
@@ -287,12 +288,12 @@ export class ClinicComponent implements OnInit{
               if(res) {
                 this.cs.save(clinic).subscribe({
                   next:() => {
-                    this.handleResult('success');
+                    this.tst.handleResult('success',"Clinic Saved Successfully");
                     this.loadTable("");
                     this.clearForm();
                   },
                   error:(err:any) => {
-                    this.handleResult('failed');
+                    this.tst.handleResult('failed',err.error.data.message);
                   }
                 });
           }
@@ -349,12 +350,12 @@ export class ClinicComponent implements OnInit{
                     if(res) {
                       this.cs.update(clinic).subscribe({
                         next:() => {
-                          this.handleResult('success');
+                          this.tst.handleResult('success',"Clinic Updated Successfully");
                           this.loadTable("");
                           this.clearForm();
                         },
                         error:(err:any) => {
-                          this.handleResult('failed');
+                          this.tst.handleResult('failed',err.error.data.message);
                         }
                       });
                     }
@@ -382,16 +383,14 @@ export class ClinicComponent implements OnInit{
           this.cs.delete(currentClinic.id).subscribe({
             next: () => {
               this.loadTable("");
-              this.handleResult('success');
+              this.tst.handleResult('success',"Clinic Deleted Successfully");
               this.clearForm();
             },
             error: (err:any) => {
-              this.handleResult('failed');
+              this.tst.handleResult('failed',err.error.data.message);
               console.log(err);
             },
           });
-        } else {
-          this.handleResult('failed');
         }
       }
     })
@@ -438,24 +437,4 @@ export class ClinicComponent implements OnInit{
     });
   }
 
-  handleResult(status:string){
-
-    if(status === "success"){
-      this.snackBar.openFromComponent(NotificationComponent,{
-        data:{ message: status,icon: "done_all" },
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['success-snackbar'],
-      });
-    }else{
-      this.snackBar.openFromComponent(NotificationComponent,{
-        data:{ message: status,icon: "report" },
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['failure-snackbar'],
-      });
-    }
-  }
 }

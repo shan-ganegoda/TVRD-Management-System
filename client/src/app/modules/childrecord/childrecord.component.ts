@@ -25,6 +25,8 @@ import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {AsyncPipe} from "@angular/common";
 import {PageErrorComponent} from "../../shared/page-error/page-error.component";
 import {PageLoadingComponent} from "../../shared/page-loading/page-loading.component";
+import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
+import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-childrecord',
@@ -142,6 +144,14 @@ export class ChildrecordComponent implements OnInit{
     this.is.getAll().subscribe({
       next:data => this.involvementstatuses = data,
     });
+
+    this.rs.getRegexes('childrecord').subscribe({
+      next:data => {
+        this.regexes = data;
+        this.createForm();
+      },
+      error: () => this.regexes = [] || undefined
+    });
   }
 
   loadTable(query:string){
@@ -156,19 +166,165 @@ export class ChildrecordComponent implements OnInit{
     });
   }
 
+  createForm(){
+    this.childRecordForm.controls['fullname'].setValidators([Validators.required,Validators.pattern(this.regexes['fullname']['regex'])]);
+    this.childRecordForm.controls['regno'].setValidators([Validators.required,Validators.pattern(this.regexes['regno']['regex'])]);
+    this.childRecordForm.controls['dobirth'].setValidators([Validators.required]);
+    this.childRecordForm.controls['doregistered'].setValidators([Validators.required]);
+    this.childRecordForm.controls['birthweight'].setValidators([Validators.required,Validators.pattern(this.regexes['birthweight']['regex'])]);
+    this.childRecordForm.controls['headperimeter'].setValidators([Validators.required,Validators.pattern(this.regexes['headperimeter']['regex'])]);
+    this.childRecordForm.controls['heightinbirth'].setValidators([Validators.required,Validators.pattern(this.regexes['heightinbirth']['regex'])]);
+    this.childRecordForm.controls['placeofbirth'].setValidators([Validators.required,Validators.pattern(this.regexes['placeofbirth']['regex'])]);
+    this.childRecordForm.controls['apgarscore'].setValidators([Validators.required,Validators.pattern(this.regexes['apgarscore']['regex'])]);
+    this.childRecordForm.controls['gender'].setValidators([Validators.required]);
+    this.childRecordForm.controls['mother'].setValidators([Validators.required]);
+    this.childRecordForm.controls['bloodtype'].setValidators([Validators.required]);
+    this.childRecordForm.controls['healthstatus'].setValidators([Validators.required]);
+    this.childRecordForm.controls['involvementstatus'].setValidators([Validators.required]);
+
+    for (const controlName in this.childRecordForm.controls) {
+      const control = this.childRecordForm.controls[controlName];
+      control.valueChanges.subscribe(value => {
+
+          if (this.oldChildRecord != undefined && control.valid) {
+            // @ts-ignore
+            if (value === this.childRecordForm[controlName]) {
+              control.markAsPristine();
+            } else {
+              control.markAsDirty();
+            }
+          } else {
+            control.markAsPristine();
+          }
+        }
+      );
+
+    }
+    this.enableButtons(true,false,false);
+  }
+
+  enableButtons(add:boolean, upd:boolean, del:boolean){
+    this.enaadd=add;
+    this.enaupd=upd;
+    this.enadel=del;
+  }
+
+  fillForm(child: ChildRecord) {
+    this.enableButtons(false,true,true);
+
+    this.currentChildRecord = child;
+    this.oldChildRecord = this.currentChildRecord;
+
+    this.childRecordForm.setValue({
+      fullname: this.currentChildRecord.fullname,
+      regno: this.currentChildRecord.regno,
+      dobirth: this.currentChildRecord.dobirth,
+      doregistered: this.currentChildRecord.doregistered,
+      birthweight: this.currentChildRecord.birthweight,
+      headperimeter: this.currentChildRecord.headperimeter,
+      heightinbirth: this.currentChildRecord.heightinbirth,
+      placeofbirth: this.currentChildRecord.placeofbirth,
+      apgarscore: this.currentChildRecord.apgarscore,
+
+
+      gender: this.currentChildRecord.gender?.id,
+      mother: this.currentChildRecord.mother?.id,
+      bloodtype: this.currentChildRecord.bloodtype?.id,
+      healthstatus: this.currentChildRecord.healthstatus?.id,
+      involvementstatus: this.currentChildRecord.involvementstatus?.id
+    });
+
+    this.childRecordForm.markAsPristine();
+  }
+
+  getUpdates():string {
+    let updates: string = "";
+    for (const controlName in this.childRecordForm.controls) {
+      const control = this.childRecordForm.controls[controlName];
+      if (control.dirty) {
+        updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1)+" Changed";
+      }
+    }
+    return updates;
+  }
+
+  getErrors(){
+
+    let errors:string = "";
+
+    for(const controlName in this.childRecordForm.controls){
+      const control = this.childRecordForm.controls[controlName];
+      if(control.errors){
+        if(this.regexes[controlName] != undefined){
+          errors = errors + "<br>" + this.regexes[controlName]['message'];
+        }else{
+          errors = errors + "<br>Invalid " + controlName;
+        }
+      }
+    }
+    return errors;
+  }
+
+  add() {
+    let errors = this.getErrors();
+
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Child Record Add ",message: "You Have Following Errors <br/> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+    }else{
+
+      if(this.childRecordForm.valid){
+
+        const childRecord:ChildRecord = {
+          fullname: this.childRecordForm.controls['fullname'].value,
+          regno: this.childRecordForm.controls['regno'].value,
+          dobirth: this.childRecordForm.controls['dobirth'].value,
+          doregistered: this.childRecordForm.controls['doregistered'].value,
+          birthweight: this.childRecordForm.controls['birthweight'].value,
+          headperimeter: this.childRecordForm.controls['headperimeter'].value,
+          heightinbirth: this.childRecordForm.controls['heightinbirth'].value,
+          placeofbirth: this.childRecordForm.controls['heightinbirth'].value,
+          apgarscore: this.childRecordForm.controls['heightinbirth'].value,
+
+          gender: {id: parseInt(this.childRecordForm.controls['gender'].value)},
+          mother: {id: parseInt(this.childRecordForm.controls['mother'].value)},
+          bloodtype: {id: parseInt(this.childRecordForm.controls['bloodtype'].value)},
+          healthstatus: {id: parseInt(this.childRecordForm.controls['healthstatus'].value)},
+          involvementstatus: {id: parseInt(this.childRecordForm.controls['involvementstatus'].value)},
+        }
+
+
+        this.currentOperation = "Add Child Record " + childRecord.regno;
+
+        this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+          .afterClosed().subscribe(res => {
+          if(res) {
+            this.cs.save(childRecord).subscribe({
+              next:() => {
+                this.tst.handleResult('success',"Child Record Saved Successfully");
+                this.loadTable("");
+                this.clearForm();
+              },
+              error:(err:any) => {
+                this.tst.handleResult('failed',err.error.data.message);
+              }
+            });
+          }
+        });
+      }
+    }
+  }
+
   handleSearch() {
 
   }
 
   clearSearch() {
-
-  }
-
-  fillForm(child: any) {
-
-  }
-
-  add() {
 
   }
 
