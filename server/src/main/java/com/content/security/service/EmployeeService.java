@@ -12,15 +12,13 @@ public interface EmployeeService {
 
     EmployeeDTO getEmployeeById(Integer id);
 
-    String saveEmployee(EmployeeDTO employeeDTO);
+    EmployeeDTO saveEmployee(EmployeeDTO employeeDTO);
 
     String deleteEmployee(Integer id);
 
     String updateEmployee(EmployeeUpdateDTO employeeUpdateDTO);
 
     EmployeeDTO getEmployeeByNumber(String number);
-
-    String deleteEmployeeByNumber(String number);
 
     List<EmployeeDTO> getEmployees(HashMap<String,String> params);
 }

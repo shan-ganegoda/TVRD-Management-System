@@ -9,8 +9,6 @@ public interface EmployeeRepository extends JpaRepository<Employee,Integer> {
 
     Employee findByNic(String nic);
 
-    Employee findByNicAndNumber(String nic,String number);
-
     boolean existsByNumber(String number);
 
     Employee findByNumber(String number);

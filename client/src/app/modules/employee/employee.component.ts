@@ -10,7 +10,6 @@ import {
   FormControl,
   FormGroup,
   FormsModule,
-  NgForm,
   ReactiveFormsModule,
   Validators
 } from "@angular/forms";
@@ -19,8 +18,6 @@ import {Gender} from "../../core/entity/gender";
 import {DesignationService} from "../../core/service/employee/designation.service";
 import {Designation} from "../../core/entity/designation";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
-import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {AuthorizationService} from "../../core/service/auth/authorization.service";
 import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
@@ -33,10 +30,10 @@ import {EmptypeService} from "../../core/service/employee/emptype.service";
 import {EmployeestatusService} from "../../core/service/employee/employeestatus.service";
 import {RouterLink} from "@angular/router";
 import {MatTableDataSource} from "@angular/material/table";
-import {Moh} from "../../core/entity/moh";
 import {Observable} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {AsyncPipe} from "@angular/common";
+import {ToastService} from "../../core/util/toast/toast.service";
 
 
 
@@ -80,7 +77,6 @@ export class EmployeeComponent implements OnInit{
   currentOperation = '';
 
   imageempurl: any = 'assets/tabledefault.png';
-  //employeeImage: any = null;
 
   protected hasUpdateAuthority = this.authorizationService.hasAuthority("Employee-Update"); //need to be false
   protected hasDeleteAuthority = this.authorizationService.hasAuthority("Employee-Delete"); //need to be false
@@ -102,7 +98,7 @@ export class EmployeeComponent implements OnInit{
               private gs:GenderService,
               private ds:DesignationService,
               private fb:FormBuilder,
-              private snackBar:MatSnackBar,
+              private tst:ToastService,
               private rs:RegexService,
               private ets:EmptypeService,
               private ess:EmployeestatusService,
@@ -165,12 +161,10 @@ export class EmployeeComponent implements OnInit{
 
     this.ess.getAllEmployeeStatuses().subscribe({
       next:data => this.employeestatuses = data,
-      error: () => this.handleResult('failed')
     });
 
     this.ets.getAllEmpTypes().subscribe({
       next:data => this.emptypes = data,
-      error: () => this.handleResult('failed')
     });
   }
 
@@ -196,7 +190,7 @@ export class EmployeeComponent implements OnInit{
     this.employeeForm.controls['dobirth'].setValidators([Validators.required]);
     this.employeeForm.controls['photo'].setValidators([Validators.required]);
     this.employeeForm.controls['address'].setValidators([Validators.required]);
-    this.employeeForm.controls['email'].setValidators([Validators.required]);
+    this.employeeForm.controls['email'].setValidators([Validators.required, Validators.pattern(this.regexes['email']['regex'])]);
     this.employeeForm.controls['mobile'].setValidators([Validators.required, Validators.pattern(this.regexes['mobile']['regex'])]);
     this.employeeForm.controls['land'].setValidators([Validators.required,Validators.pattern(this.regexes['land']['regex'])]);
     this.employeeForm.controls['designation'].setValidators([Validators.required]);
@@ -361,12 +355,12 @@ export class EmployeeComponent implements OnInit{
         if(res) {
           this.es.saveEmployee(employee).subscribe({
             next:() => {
-              this.handleResult('success');
+              this.tst.handleResult('success',"Employee Saved Successfully");
               this.loadTable("");
               this.clearForm();
               },
             error:(err:any) => {
-              this.handleResult('failed');
+              this.tst.handleResult('failed',err.error.data.message);
               //console.log(err);
             }
           });
@@ -428,12 +422,12 @@ export class EmployeeComponent implements OnInit{
               if(res) {
                 this.es.updateEmployee(employees).subscribe({
                   next:() => {
-                    this.handleResult('success');
+                    this.tst.handleResult('success',"Employee Updated Successfully");
                     this.loadTable("");
                     this.clearForm();
                     },
                   error:(err:any) => {
-                    this.handleResult('failed');
+                    this.tst.handleResult('failed',err.error.data.message);
                     //console.log(err);
                   }
                 });
@@ -461,16 +455,15 @@ export class EmployeeComponent implements OnInit{
 
     this.dialog.open(ConfirmDialogComponent,{data:operation})
       .afterClosed().subscribe((res:boolean) => {
-      if(res && employee.number){
-        this.es.deleteEmployeeByNumber(employee.number).subscribe({
+      if(res && employee.id){
+        this.es.delete(employee.id).subscribe({
           next: () => {
             this.loadTable("");
-            this.handleResult("success");
+            this.tst.handleResult("success","Employee Deleted Successfully");
             this.clearForm();
           },
-
-          error: () => {
-            this.handleResult("failed");
+          error: (err:any) => {
+            this.tst.handleResult("failed",err.error.data.message);
           }
         });
       }
@@ -489,7 +482,7 @@ export class EmployeeComponent implements OnInit{
     this.employeeForm.controls['employeestatus'].setValue(null);
     this.enableButtons(true,false,false);
 
-    this.imageempurl = null;
+    this.clearImage();
 
   }
 
@@ -509,27 +502,6 @@ export class EmployeeComponent implements OnInit{
 
     if(query != "") query = query.replace(/^./, "?")
     this.loadTable(query);
-  }
-
-  handleResult(status:string){
-
-    if(status === "success"){
-      this.snackBar.openFromComponent(NotificationComponent,{
-        data:{ message: status,icon: "done_all" },
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['success-snackbar'],
-      });
-    }else{
-      this.snackBar.openFromComponent(NotificationComponent,{
-        data:{ message: status,icon: "report" },
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['failure-snackbar'],
-      });
-    }
   }
 
   clearSearch() {

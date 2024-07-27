@@ -31,7 +31,7 @@ export class EmployeeService {
     return this.http.post<[]>(API_URL,employee);
   }
 
-  deleteEmployee(id:number){
+  delete(id:number){
     return this.http.delete(API_URL + '/' + id);
   }
 
@@ -39,7 +39,4 @@ export class EmployeeService {
     return this.http.put<Employee>(API_URL,employee);
   }
 
-  deleteEmployeeByNumber(number:string){
-    return this.http.delete(API_URL + "/dnumber/" + number);
-  }
 }

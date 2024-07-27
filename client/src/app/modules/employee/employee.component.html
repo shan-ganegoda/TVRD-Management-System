@@ -90,22 +90,22 @@
         <div class="relative w-full px-2 mb-3">
           <input
             type="text"
-            placeholder="FullName"
+            placeholder="Full Name"
             class="peer input input-bordered w-full focus:outline-none"
             formControlName="fullname"
           />
-          <label class="floating-label">FullName</label>
+          <label class="floating-label">Full Name</label>
 
         </div>
 
         <div class="relative w-full px-2 mb-3">
           <input
             type="text"
-            placeholder="CallingName"
+            placeholder="Calling Name"
             class=" peer input input-bordered w-full focus:outline-none"
             formControlName="callingname"
           />
-          <label class="floating-label">CallingName</label>
+          <label class="floating-label">Calling Name</label>
 
         </div>
 
@@ -131,7 +131,8 @@
         </div>
 
         <div class="flex flex-row items-center mb-3">
-        <select class=" select select-bordered w-full mx-2 focus:outline-none"
+        <div class="w-full relative px-2">
+        <select class=" select select-bordered w-full focus:outline-none"
                 formControlName="gender"
         >
           <option disabled [ngValue]="null">Gender</option>
@@ -140,8 +141,11 @@
             <option [value]=gender.id>{{gender.name}}</option>
           }
         </select>
+          <label class="floating-labels-select">Gender</label>
+        </div>
 
-          <select class=" select select-bordered w-full mx-2 focus:outline-none"
+          <div class="w-full relative px-2">
+          <select class=" select select-bordered w-full focus:outline-none"
                   formControlName="employeestatus"
           >
             <option disabled [ngValue]="null">Status</option>
@@ -150,6 +154,8 @@
               <option value='{{employeestatus.id}}'>{{employeestatus.name}}</option>
             }
           </select>
+            <label class="floating-labels-select">Status</label>
+          </div>
         </div>
 
         <div class="relative w-full px-2 mb-3">
@@ -209,20 +215,23 @@
           <button class="btn bg-gray-950 text-white hover:bg-gray-900" (click)="generateRandomNumber()">Generate Number</button>
         </div>
 
-        <div class="flex flex-row items-center mb-3 px-2">
+        <div class="flex flex-row items-center mb-3">
+          <div class="relative w-full px-2">
           <select
-            class="select select-bordered w-full focus:outline-none mr-2"
+            class="peer select select-bordered w-full focus:outline-none mr-2"
             formControlName="emptype"
           >
             <option disabled [ngValue]="null">EmpType</option>
             @for (emptype of emptypes; track emptypes) {
               <option value="{{emptype.id}}">{{emptype.name}}</option>
             }
-
           </select>
+            <label class="floating-labels-select">EmpType</label>
+          </div>
 
+          <div class="relative w-full px-2">
           <select
-            class="select select-bordered w-full focus:outline-none"
+            class="peer select select-bordered w-full focus:outline-none"
             formControlName="designation"
           >
             <option disabled [ngValue]="null">Designation</option>
@@ -231,20 +240,10 @@
               <option value="{{designation.id}}">{{designation.name}}</option>
             }
           </select>
+            <label class="floating-labels-select">Designation</label>
+          </div>
+
         </div>
-
-<!--        <div class="px-2">-->
-<!--        <select-->
-<!--          class="select select-bordered w-full mb-3 px-2 focus:outline-none"-->
-<!--          formControlName="employeestatus"-->
-<!--        >-->
-<!--          <option disabled [ngValue]="null">Status</option>-->
-
-<!--&lt;!&ndash;          @for (employeeStatus of employeestatuses; track employeestatuses) {&ndash;&gt;-->
-<!--&lt;!&ndash;            <option value="{{employeeStatus.id}}">{{employeeStatus.name}}</option>&ndash;&gt;-->
-<!--&lt;!&ndash;          }&ndash;&gt;-->
-<!--        </select>-->
-<!--        </div>-->
 
         <div class="relative w-full mb-3 px-2">
             <textarea
@@ -269,12 +268,6 @@
 
     </div>
   </mat-grid-tile>
-
-<!--  <mat-grid-tile [colspan]="8" [rowspan]="4">-->
-<!--    <div class="w-full h-full bg-white mt-4 ml-2 mr-2 rounded-md shadow-md">-->
-
-<!--    </div>-->
-<!--  </mat-grid-tile>-->
 
   <mat-grid-tile [colspan]="8" [rowspan]="10">
     <div class="w-full h-full bg-white mt-4 ml-2 mr-2 rounded-md shadow-md overflow-auto">
@@ -317,7 +310,7 @@
 
                         <td class="block items-center">
                           <span>{{employee.designation.name}}</span>
-                          <div class="block mt-2 badge pb-3 badge-neutral badge-sm w-32">Since 2015-02-04</div>
+<!--                          <div class="block mt-2 badge pb-3 badge-neutral badge-sm w-32">Since 2015-02-04</div>-->
                         </td>
 
                         <td>

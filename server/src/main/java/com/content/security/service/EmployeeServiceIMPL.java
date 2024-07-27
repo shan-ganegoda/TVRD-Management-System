@@ -3,6 +3,7 @@ package com.content.security.service;
 import com.content.security.dto.EmployeeDTO;
 import com.content.security.dto.EmployeeUpdateDTO;
 import com.content.security.entity.Employee;
+import com.content.security.exception.ResourceAlreadyExistException;
 import com.content.security.exception.ResourceNotFountException;
 import com.content.security.repository.EmployeeRepository;
 import com.content.security.util.mapper.ObjectMapper;
@@ -65,22 +66,18 @@ public class EmployeeServiceIMPL implements EmployeeService{
 
     }
 
-
-
     @Override
-    public String saveEmployee(EmployeeDTO employeeDTO) {
+    public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
 
         Employee employee = employeeRepository.findByNic(employeeDTO.getNic());
-        Employee employee1 = employeeRepository.findByNicAndNumber(employeeDTO.getNic(),employeeDTO.getNumber());
-
-
+        Employee employee1 = employeeRepository.findByNumber(employeeDTO.getNumber());
 
         if(employee ==  null && employee1 == null){
             Employee employeeRecord = objectMapper.employeeDTOTOEmployee(employeeDTO);
             employeeRepository.save(employeeRecord);
-            return employeeDTO.getFullname() + " Saved Successfully";
+            return employeeDTO;
         }else{
-            throw new RuntimeException("Employee Already Exist");
+            throw new ResourceAlreadyExistException("Employee Already Exist");
         }
     }
 
@@ -99,11 +96,26 @@ public class EmployeeServiceIMPL implements EmployeeService{
     @Override
     public String updateEmployee(EmployeeUpdateDTO employeeUpdateDTO) {
 
-        if(employeeRepository.existsById(employeeUpdateDTO.getId())){
-            Employee employee = objectMapper.employeeUpdateDtoToEmployee(employeeUpdateDTO);
-            //System.out.println(employee);
-            employeeRepository.save(employee);
-            return employeeUpdateDTO.getFullname() + " Successfully Updated!";
+        Employee employee = employeeRepository.findById(employeeUpdateDTO.getId()).orElseThrow(null);
+
+        if(employee != null){
+            if(employee.getNic().equals(employeeUpdateDTO.getNic()) && employee.getNumber().equals(employeeUpdateDTO.getNumber())){
+                Employee employee1 = objectMapper.employeeUpdateDtoToEmployee(employeeUpdateDTO);
+                employeeRepository.save(employee1);
+                return employeeUpdateDTO.getFullname() + " Successfully Updated!";
+            }else{
+                Employee er1 = employeeRepository.findByNumber(employeeUpdateDTO.getNumber());
+                Employee er2 = employeeRepository.findByNic(employeeUpdateDTO.getNic());
+
+                if(er1 == null && er2 == null){
+                    Employee employee1 = objectMapper.employeeUpdateDtoToEmployee(employeeUpdateDTO);
+                    employeeRepository.save(employee1);
+                    return employeeUpdateDTO.getFullname() + " Successfully Updated!";
+                }else{
+                    throw new ResourceAlreadyExistException("Employee Already Exist");
+                }
+            }
+
         }else{
             throw new ResourceNotFountException("Employee Not Found!");
         }
@@ -117,17 +129,6 @@ public class EmployeeServiceIMPL implements EmployeeService{
             return objectMapper.employeeToEmployeeDTO(employee);
         }else{
             throw new ResourceNotFountException("No Employee Found");
-        }
-    }
-
-    @Override
-    public String deleteEmployeeByNumber(String number) {
-        Employee employee = employeeRepository.findByNumber(number);
-        if(employee != null){
-            employeeRepository.delete(employee);
-            return "Successfully Deleted!";
-        }else{
-            throw new ResourceNotFountException("No Employee Found!");
         }
     }
 

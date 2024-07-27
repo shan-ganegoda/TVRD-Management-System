@@ -49,12 +49,8 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<StandardResponse> saveEmployee(@RequestBody EmployeeDTO employeeDTO){
-        String message = employeeService.saveEmployee(employeeDTO);
-
-        return new ResponseEntity<StandardResponse>(
-                new StandardResponse(201,"Created",message),HttpStatus.CREATED
-        );
+    public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO){
+        return employeeService.saveEmployee(employeeDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -65,15 +61,6 @@ public class EmployeeController {
                 new StandardResponse(200,"Deleted",message),HttpStatus.OK
         );
     }
-
-    @DeleteMapping("/dnumber/{number}")
-    public ResponseEntity<StandardResponse> deleteEmployeeByNumber(@PathVariable String number){
-        String message = employeeService.deleteEmployeeByNumber(number);
-        return new ResponseEntity<StandardResponse>(
-                new StandardResponse(200,"Deleted",message),HttpStatus.OK
-        );
-    }
-
 
     @PutMapping
     public ResponseEntity<StandardResponse> updateEmployee(@RequestBody EmployeeUpdateDTO employeeUpdateDTO){

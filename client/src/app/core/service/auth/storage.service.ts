@@ -24,7 +24,7 @@ export class StorageService {
   saveUser(user:User){
     localStorage.removeItem(USER_KEY);
     localStorage.setItem(USER_KEY,JSON.stringify(user));
-    console.log(user);
+    //console.log(user);
   }
 
   getUser():User{

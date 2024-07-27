@@ -47,6 +47,7 @@ public class EmployeeDTO {
     @Pattern(regexp = "^.*$", message = "Invalid Description")
     private String description;
 
+    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Invalid Email")
     private String email;
 
     private Gender gender;
