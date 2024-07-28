@@ -18,4 +18,5 @@ public interface UserService {
     String deleteUser(Integer id);
 
     UserDTO getUserByEmail(String email);
+
 }

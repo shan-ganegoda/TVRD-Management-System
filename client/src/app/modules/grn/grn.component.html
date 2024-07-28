@@ -1,0 +1,357 @@
+<div class="px-4 py-3 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
+  <div class=" absolute mt-0 ml-3 mr-4 text-[1.7em] font-semibold pointer-events-none">Goods Receive Note</div>
+  <div class="text-sm breadcrumbs absolute mt-5 ml-3">
+    <ul>
+      <li class="text-gray-500"><a routerLink="../home">Home</a></li>
+      <li>Grn</li>
+    </ul>
+  </div>
+
+  <form [formGroup]="grnSearchForm" class="flex flex-row animate animate-fade">
+    <div class="join ml-auto  scale-95">
+
+      <input
+        type="text"
+        placeholder="Code"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+        formControlName="sscode"
+      />
+
+      <input
+        type="text"
+        placeholder="Date"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+        formControlName="ssdate"
+        onfocus="(this.type='date')"
+      />
+
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+              formControlName="ssgrnstatus"
+      >
+        <option disabled value="">GRN Status</option>
+        @for(grnstatus of grnstatuses; track grnstatuses){
+          <option value="{{grnstatus.id}}">{{grnstatus.name}}</option>
+        }
+      </select>
+
+      <button class="btn join-item border-black bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="handleSearch()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-5 h-5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+          />
+        </svg>
+      </button>
+    </div>
+    <button class="btn border-gray-300 bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="clearSearch()">
+      Clear
+    </button>
+  </form>
+</div>
+
+<mat-grid-list [cols]="12" rowHeight="4rem">
+
+  <mat-grid-tile [colspan]="5" [rowspan]="10">
+
+    <div class="w-full h-full bg-white mt-4 ml-2 rounded-md shadow-md border-2 border-[[#1e4263]] overflow-auto">
+
+      <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">
+        <span class="ml-5 text-white text-lg ">Data Form</span>
+      </div>
+
+      <form [formGroup]="grnForm" class="mt-5 animate animate-fade">
+
+        <div class="relative w-full px-2 mb-3">
+          <input
+            type="text"
+            placeholder="Code"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="code"
+          />
+          <label class="floating-label">Code</label>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+          <select
+            class="peer select select-bordered w-full bg-white focus:outline-none"
+            formControlName="productorder"
+          >
+            <option disabled [ngValue]="null">Product Order</option>
+
+            @for (productorder of productorders; track productorders) {
+              <option [ngValue]="productorder.id">{{productorder.code}}</option>
+            }
+          </select>
+          <label class="floating-labels-select">Product Order</label>
+        </div>
+
+        <div class="relative w-full px-2 mb-3">
+          <input
+            type="text"
+            placeholder="Date Received"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="date"
+            onfocus="(this.type='date')"
+          />
+          <label class="floating-label">Date Received</label>
+        </div>
+
+        <div class="relative w-full px-2 mb-3">
+          <input
+            type="time"
+            placeholder="Time Received"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="time"
+          />
+          <label class="floating-label">Time Received</label>
+        </div>
+
+        <div class="relative w-full px-2 mb-3">
+          <input
+            type="number"
+            placeholder="Bags Count"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="bagscount"
+          />
+          <label class="floating-label">Bags Count</label>
+        </div>
+
+        <div class="relative w-full px-2 mb-3">
+          <input
+            type="text"
+            placeholder="Railway Station"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="railwaystation"
+          />
+          <label class="floating-label">Railway Station</label>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+          <select
+            class="peer select select-bordered w-full bg-white focus:outline-none"
+            formControlName="employee"
+          >
+            <option disabled [ngValue]="null">Employee</option>
+
+            @for (employee of employees; track employees) {
+              <option [ngValue]="employee.id">{{employee.fullname}}</option>
+            }
+          </select>
+          <label class="floating-labels-select">Employee</label>
+        </div>
+
+        <hr/>
+
+        <div class="border-y-4  py-4 mb-3">
+
+          <form [formGroup]="innerForm">
+
+            <div class="relative w-full mb-3 px-2">
+              <select
+                class="peer select select-bordered w-full bg-white focus:outline-none"
+                formControlName="product"
+              >
+                <option disabled [ngValue]="null">Product</option>
+
+                @for (product of products; track products) {
+                  <option [ngValue]="product">{{product.name}}</option>
+                }
+              </select>
+              <label class="floating-labels-select">Product</label>
+            </div>
+
+
+            <div class="flex px-2 mb-3">
+              <div class="relative mr-2">
+                <input
+                  type="number"
+                  placeholder="Quentity"
+                  class="peer input input-bordered w-full focus:outline-none"
+                  formControlName="quentity"
+                />
+                <label class="floating-label">Quentity</label>
+              </div>
+
+              <div>
+                <button class="btn bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="addToTable()">Add</button>
+              </div>
+            </div>
+
+            <div>
+              <table class="text-left p-4 table mb-4">
+                <thead>
+                <tr class="text-black bold">
+                  <th>Product Name</th>
+                  <th>Quentity</th>
+                  <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                  @for (indata of innerdata; track innerdata) {
+                    <tr>
+                      <td>{{ indata.product.name }}</td>
+                      <td>{{ indata.quentity }}</td>
+                      <td>
+                        <button (click)="deleteRow(indata)">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                               stroke="currentColor" className="size-6" class="w-6 h-6 text-error">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
+                          </svg>
+
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+          </form>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+          <select
+            class="peer select select-bordered w-full bg-white focus:outline-none"
+            formControlName="grnstatus"
+          >
+            <option disabled [ngValue]="null">GRN Status</option>
+
+            @for (grnstatus of grnstatuses; track grnstatuses) {
+              <option [ngValue]="grnstatus.id">{{grnstatus.name}}</option>
+            }
+          </select>
+          <label class="floating-labels-select">GRN Status</label>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+            <textarea
+              class="peer textarea textarea-bordered w-full h-36 focus:outline-none"
+              placeholder="Description"
+              formControlName="description"
+            ></textarea>
+          <label class="floating-label">Description</label>
+        </div>
+
+        <div class="flex flex-row mt-3 max-w-[98%] px-2 pb-5">
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="add()" [disabled]="!enaadd">
+            Add
+          </button>
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(currentGrn)"
+                  [disabled]="!enaupd">Update
+          </button>
+          <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900" (click)="delete(currentGrn)"
+                  [disabled]="!hasDeleteAuthority || !enadel ">Delete
+          </button>
+          <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="clearForm()">Clear</button>
+        </div>
+
+      </form>
+
+    </div>
+
+  </mat-grid-tile>
+
+  <mat-grid-tile [colspan]="7" [rowspan]="10">
+
+    <div class="w-full h-full bg-white mt-4 ml-2 mr-2 rounded-md shadow-md overflow-auto">
+      <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">
+        <span class="ml-5 text-white text-lg ">Data List</span>
+      </div>
+
+      <div class="overflow-auto p-4 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
+        @if (!isFailed && !isLoading && grns.length !== 0) {
+          <table class="text-left p-4 table">
+            <thead>
+            <tr class="text-black bold">
+              <th>Code</th>
+              <th>Date</th>
+              <th>Bags Count</th>
+              <th>Employee</th>
+              <th>Grn Status</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+
+              @for (grn of data | async; track grns) {
+
+                <tr>
+                  <td>
+                    {{ grn.code }}
+                  </td>
+
+                  <td>
+                    {{ grn.date }}
+                  </td>
+
+                  <td>
+                    {{ grn.bagscount }}
+                  </td>
+
+                  <td>
+                    {{ grn.employee.callingname }}
+                  </td>
+
+                  <td>
+                    <div class="flex items-center">
+                      <div
+                        class="badge badge-xs mr-1.5 {{grn.grnstatus.name === 'Partially Received'? 'bg-warning border-white' : grn.grnstatus.name === 'Fully Received' ? 'bg-success border-white' :'bg-error border-white'}}"></div>
+                      {{ grn.grnstatus.name }}
+                    </div>
+                  </td>
+
+                  <th>
+                    <div>
+                      <button
+                        class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                        (click)="fillForm(grn)"
+                        [disabled]="!hasUpdateAuthority"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          data-slot="icon"
+                          class="w-5 h-5 mr-3"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                          />
+                        </svg>
+                      </button>
+
+                    </div>
+                  </th>
+
+                </tr>
+              }
+            </tbody>
+          </table>
+          <mat-paginator [length]="20" [pageSize]="5" [pageSizeOptions]="[3,5,10,20]"></mat-paginator>
+        }
+
+        @if (isLoading) {
+          <app-page-loading/>
+        }
+
+        @if (isFailed) {
+          <app-page-error/>
+        }
+      </div>
+    </div>
+
+  </mat-grid-tile>
+
+</mat-grid-list>

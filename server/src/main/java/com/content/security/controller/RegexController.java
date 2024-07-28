@@ -64,5 +64,10 @@ public class RegexController {
         return RegexProvider.get(new ChildRecordDTO());
     }
 
+    @GetMapping(path = "/grn")
+    public HashMap<String, HashMap<String,String>> grn(){
+        return RegexProvider.get(new GrnDTO());
+    }
+
 }
 

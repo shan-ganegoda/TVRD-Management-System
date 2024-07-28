@@ -65,4 +65,5 @@ public class UserController {
                 new StandardResponse(200,"Deleted",message), HttpStatus.OK
         );
     }
+
 }

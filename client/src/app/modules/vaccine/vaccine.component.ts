@@ -22,13 +22,12 @@ import {VaccinestatusService} from "../../core/service/vaccine/vaccinestatus.ser
 import {DoseService} from "../../core/service/vaccine/dose.service";
 import {EmployeeService} from "../../core/service/employee/employee.service";
 import {RegexService} from "../../core/service/regexes/regex.service";
-import {ProductOrderProducts} from "../../core/entity/productorderproducts";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
-import {ProductOrder} from "../../core/entity/productorder";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
+import {ToastService} from "../../core/util/toast/toast.service";
 
 @Component({
   selector: 'app-vaccine',
@@ -94,7 +93,8 @@ export class VaccineComponent implements OnInit{
               private es:EmployeeService,
               private rs:RegexService,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar
+              private snackBar: MatSnackBar,
+              private tst:ToastService
   ) {
 
     this.vaccineSearchForm = this.fb.group({
@@ -380,12 +380,12 @@ export class VaccineComponent implements OnInit{
           if (res) {
             this.vs.save(vaccine).subscribe({
               next: () => {
-                this.handleResult('success');
+                this.tst.handleResult('success',"Vaccine Saved Successfully");
                 this.loadTable("");
                 this.clearForm();
               },
               error: (err: any) => {
-                this.handleResult('failed');
+                this.tst.handleResult('failed',err.error.data.message);
               }
             });
           }

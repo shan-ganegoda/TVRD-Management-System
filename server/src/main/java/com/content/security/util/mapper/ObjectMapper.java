@@ -124,4 +124,10 @@ public interface ObjectMapper {
     Childrecord childRecordDtoToChildRecord(ChildRecordDTO childRecordDTO);
 
     List<HealthStatusDTO> healthStatusListToDtoList(List<Healthstatus> healthStatusList);
+
+    List<GrnDTO> grnListToDtoList(List<Grn> grns);
+
+    Grn grnDtoToGrn(GrnDTO grnDTO);
+
+    List<GrnStatusDTO> GrnStatusListToDtoList(List<Grnstatus> grnStatusList);
 }
