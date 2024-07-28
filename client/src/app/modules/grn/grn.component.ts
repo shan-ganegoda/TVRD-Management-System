@@ -151,7 +151,7 @@ export class GrnComponent implements OnInit{
   }
 
   loadTable(query:string){
-    this.gs.getAll("").subscribe({
+    this.gs.getAll(query).subscribe({
       next: data => {
         this.grns = data;
         this.dataSource = new MatTableDataSource(this.grns);
@@ -477,19 +477,65 @@ export class GrnComponent implements OnInit{
   }
 
   delete(currentGrn: Grn) {
+    const operation = "Delete GRN ";
+    //console.log(operation);
 
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe((res:boolean) => {
+      if(res && currentGrn.id){
+        this.gs.delete(currentGrn.id).subscribe({
+          next: () => {
+            this.loadTable("");
+            this.tst.handleResult("success","GRN Successfully Deleted");
+            this.clearForm();
+          },
+
+          error: (err:any) => {
+            this.tst.handleResult("failed",err.error.data.message);
+          }
+        });
+      }
+    });
   }
 
   clearForm() {
+    this.grnForm.reset();
+    this.grnForm.controls['employee'].setValue(null);
+    this.grnForm.controls['grnstatus'].setValue(null);
+    this.grnForm.controls['productorder'].setValue(null);
+    this.innerdata = [];
 
+    this.enableButtons(true,false,false);
   }
 
   handleSearch() {
+    const sscode  = this.grnSearchForm.controls['sscode'].value;
+    const ssdate  = this.grnSearchForm.controls['ssdate'].value;
+    const ssgrnstatus  = this.grnSearchForm.controls['ssgrnstatus'].value;
 
+    let query = ""
+
+    if(ssdate != null && ssdate.trim() !="") query = query + "&date=" + ssdate;
+    if(sscode != null && sscode.trim() !="") query = query + "&code=" + sscode;
+    if(ssgrnstatus != '') query = query + "&grnstatusid=" + parseInt(ssgrnstatus);
+
+    if(query != "") query = query.replace(/^./, "?")
+    this.loadTable(query);
   }
 
   clearSearch() {
+    const operation = "Clear Search";
 
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.grnSearchForm.reset();
+        this.grnSearchForm.controls['ssgrnstatus'].setValue('');
+        this.loadTable("");
+      }
+    });
   }
 
 }

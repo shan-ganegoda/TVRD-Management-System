@@ -481,12 +481,12 @@ export class VaccineComponent implements OnInit{
         this.vs.delete(currentVaccine.id).subscribe({
           next: () => {
             this.loadTable("");
-            this.handleResult("success");
+            this.tst.handleResult("success","Vaccine Deleted Successfully");
             this.clearForm();
           },
 
-          error: () => {
-            this.handleResult("failed");
+          error: (err:any) => {
+            this.tst.handleResult("failed",err.error.data.message);
           }
         });
       }
@@ -495,21 +495,12 @@ export class VaccineComponent implements OnInit{
 
   clearForm() {
 
-    const operation = "Clear Search";
-
-    this.dialog.open(ConfirmDialogComponent,{data:operation})
-      .afterClosed().subscribe(res => {
-      if(!res){
-        return;
-      }else{
         this.vaccineForm.reset();
         this.vaccineForm.controls['employee'].setValue(null);
         this.vaccineForm.controls['vaccinestatus'].setValue(null);
         this.innerdata = [];
-      }
-    });
 
-    this.enableButtons(true,false,false);
+        this.enableButtons(true,false,false);
   }
 
   handleSearch() {
@@ -544,24 +535,4 @@ export class VaccineComponent implements OnInit{
     });
   }
 
-  handleResult(status: string) {
-
-    if (status === "success") {
-      this.snackBar.openFromComponent(NotificationComponent, {
-        data: {message: status, icon: "done_all"},
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['success-snackbar'],
-      });
-    } else {
-      this.snackBar.openFromComponent(NotificationComponent, {
-        data: {message: status, icon: "report"},
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['failure-snackbar'],
-      });
-    }
-  }
 }
