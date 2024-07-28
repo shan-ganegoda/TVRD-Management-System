@@ -119,22 +119,22 @@
           <div class="relative w-full">
             <input
               type="text"
-              placeholder="Capacity"
+              placeholder="Capacity (CC)"
               class="peer input input-bordered w-full max-w-xs focus:outline-none"
               formControlName="capacity"
             />
-            <label class="floating-label">Capacity</label>
+            <label class="floating-label">Capacity (CC)</label>
           </div>
         </div>
 
         <div class="relative w-full mb-3 px-2">
           <input
             type="text"
-            placeholder="Current Meter Reading"
+            placeholder="Current Meter Reading (KM)"
             class="peer input input-bordered w-full focus:outline-none"
             formControlName="currentmeterreading"
           />
-          <label class="floating-label">Current Meter Reading</label>
+          <label class="floating-label">Current Meter Reading (KM)</label>
         </div>
 
         <div class="relative w-full mb-3 px-2">
@@ -210,7 +210,7 @@
         </div>
 
         <div class="flex flex-row mt-3 max-w-[97%] px-2 pb-5">
-          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="add()" [disabled]="!enaadd">Add</button>
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="add()" [disabled]="!enaadd || !hasWriteAuthority">Add</button>
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(currentVehicle)" [disabled]="!enaupd">Update</button>
           <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900" (click)="delete(currentVehicle)"
                   [disabled]="!hasDeleteAuthority || !enadel " >Delete</button>

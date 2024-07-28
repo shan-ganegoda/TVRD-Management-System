@@ -55,7 +55,6 @@ public class VehicleServiceIMPL implements VehicleService {
 
     @Override
     public VehicleDTO saveVehicle(VehicleDTO vehicleDTO) {
-        System.out.println(vehicleDTO.getNumber());
         Optional<Vehicle> vehicle = vehicleRepository.findByNumber(vehicleDTO.getNumber());
         if(!vehicle.isPresent()){
             Vehicle vh = objectMapper.vehicleDtoToVehicle(vehicleDTO);
@@ -71,14 +70,16 @@ public class VehicleServiceIMPL implements VehicleService {
         Vehicle vh = vehicleRepository.findById(vehicleDTO.getId()).orElseThrow(null);
 
         if(vh!=null){
-
-            Vehicle vh1 = vehicleRepository.findByNumber(vehicleDTO.getNumber()).orElseThrow(null);
-            if(vh1==null){
+            if(vh.getNumber().equals(vehicleDTO.getNumber())){
+                Vehicle vehicle = objectMapper.vehicleDtoToVehicle(vehicleDTO);
+                vehicleRepository.save(vehicle);
+                return vehicleDTO;
+            }else if(!vehicleRepository.existsByNumber(vehicleDTO.getNumber())){
                 Vehicle vehicle = objectMapper.vehicleDtoToVehicle(vehicleDTO);
                 vehicleRepository.save(vehicle);
                 return vehicleDTO;
             }else{
-                throw new ResourceAlreadyExistException("Vehicle with this Number Already Exist!");
+                throw new ResourceAlreadyExistException("Vehicle Already Exist!");
             }
         }else{
             throw new ResourceNotFountException("Vehicle Not Found!");

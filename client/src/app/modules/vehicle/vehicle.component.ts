@@ -24,6 +24,8 @@ import {VehicleModel} from "../../core/entity/vehiclemodel";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
+import {ToastService} from "../../core/util/toast/toast.service";
+import {AuthorizationService} from "../../core/service/auth/authorization.service";
 
 
 @Component({
@@ -68,8 +70,9 @@ export class VehicleComponent implements OnInit{
   currentVehicle!: Vehicle;
   oldVehicle!: Vehicle;
 
-  hasUpdateAuthority = true;
-  hasDeleteAuthority = true;
+  hasUpdateAuthority = this.authorizationService.hasAuthority("Vehicle-Update");
+  hasDeleteAuthority = this.authorizationService.hasAuthority("Vehicle-Delete");
+  hasWriteAuthority = this.authorizationService.hasAuthority("Vehicle-Write");
 
   enaadd:boolean = false;
   enaupd:boolean = false;
@@ -80,12 +83,13 @@ export class VehicleComponent implements OnInit{
               private ms : MohService,
               private rs:RegexService,
               private dialog:MatDialog,
-              private snackBar:MatSnackBar,
+              private authorizationService:AuthorizationService,
               private cdr:ChangeDetectorRef,
               private vss : VehiclestatusService,
               private vts : VehicletypeService,
               private vms : VehiclemodelService,
-              private fb : FormBuilder
+              private fb : FormBuilder,
+              private tst:ToastService
   ) {
 
     this.vehicleSearchForm = this.fb.group({
@@ -130,7 +134,11 @@ export class VehicleComponent implements OnInit{
     });
 
     this.ms.getAllMohsList().subscribe({
-      next:data => this.mohs = data
+      next:data => {
+        this.mohs = data;
+        // @ts-ignore
+        this.mohs.sort((a,b) => a.name.localeCompare(b.name))
+      }
     });
 
     this.rs.getRegexes('vehicle').subscribe({
@@ -155,7 +163,7 @@ export class VehicleComponent implements OnInit{
   }
 
   createForm(){
-    this.vehicleForm.controls['number'].setValidators([Validators.required]);
+    this.vehicleForm.controls['number'].setValidators([Validators.required,Validators.pattern(this.regexes['number']['regex'])]);
     this.vehicleForm.controls['doattached'].setValidators([Validators.required]);
     this.vehicleForm.controls['yom'].setValidators([Validators.required]);
     this.vehicleForm.controls['capacity'].setValidators([Validators.required]);
@@ -255,7 +263,7 @@ export class VehicleComponent implements OnInit{
 
     if(errors != ""){
       this.dialog.open(WarningDialogComponent,{
-        data:{heading:"Errors - Vehicle Add ",message: "You Have Following Errors <br/> " + errors}
+        data:{heading:"Errors - Vehicle Add ",message: "You Have Following Errors <br> " + errors}
       }).afterClosed().subscribe(res => {
         if(!res){
           return;
@@ -289,12 +297,12 @@ export class VehicleComponent implements OnInit{
               if(res) {
                 this.vs.save(vehicle).subscribe({
                   next:() => {
-                    this.handleResult('success');
+                    this.tst.handleResult('success',"Vehicle Saved Successfully");
                     this.loadTable("");
                     this.clearForm();
                   },
                   error:(err:any) => {
-                    this.handleResult('failed');
+                    this.tst.handleResult('failed',err.error.data.message);
                   }
                 });
               }
@@ -354,12 +362,12 @@ export class VehicleComponent implements OnInit{
                     if(res) {
                       this.vs.update(vehicle).subscribe({
                         next:() => {
-                          this.handleResult('success');
+                          this.tst.handleResult('success',"Vehicle Updated Successfully");
                           this.loadTable("");
                           this.clearForm();
                         },
                         error:(err:any) => {
-                          this.handleResult('failed');
+                          this.tst.handleResult('failed',err.error.data.message);
                         }
                       });
                     }
@@ -392,16 +400,14 @@ export class VehicleComponent implements OnInit{
           this.vs.delete(currentVehicle.id).subscribe({
             next: () => {
               this.loadTable("");
-              this.handleResult('success');
+              this.tst.handleResult('success',"Vehicle Deleted Successfully");
               this.clearForm();
             },
             error: (err:any) => {
-              this.handleResult('failed');
+              this.tst.handleResult('failed',err.error.data.message);
               console.log(err);
             },
           });
-        } else {
-          this.handleResult('failed');
         }
       }
     })
@@ -448,29 +454,5 @@ export class VehicleComponent implements OnInit{
       }
     });
   }
-
-
-
-
-handleResult(status:string){
-
-  if(status === "success"){
-    this.snackBar.openFromComponent(NotificationComponent,{
-      data:{ message: status,icon: "done_all" },
-      horizontalPosition: "end",
-      verticalPosition: "top",
-      duration: 5000,
-      panelClass: ['success-snackbar'],
-    });
-  }else{
-    this.snackBar.openFromComponent(NotificationComponent,{
-      data:{ message: status,icon: "report" },
-      horizontalPosition: "end",
-      verticalPosition: "top",
-      duration: 5000,
-      panelClass: ['failure-snackbar'],
-    });
-  }
-}
 
 }
