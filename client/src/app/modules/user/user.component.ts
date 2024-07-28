@@ -225,17 +225,26 @@ export class UserComponent implements OnInit{
   addRoleToList(){
     const roleId = this.userForm.controls['role'].value;
 
+    if(roleId == null){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Role Add ",message: "Select a Role<br> "}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
 
-    //add table validation
-
+    }else{
       const role = this.roles.filter(r =>  r.id === parseInt(roleId))[0];
 
       if (!this.userRoleList.some(r => r.name === role.name)) {
         this.userRoleList = [...this.userRoleList, role];
       }
 
-    this.userForm.controls["userroles"].clearValidators();
-    this.userForm.controls["userroles"].updateValueAndValidity();
+      this.userForm.controls["userroles"].clearValidators();
+      this.userForm.controls["userroles"].updateValueAndValidity();
+    }
+
     //this.userForm.controls['role'].setValue(null);
 
   }
