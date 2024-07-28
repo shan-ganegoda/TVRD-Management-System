@@ -137,7 +137,7 @@ export class PrivilageComponent implements OnInit{
 
           if (this.oldAuthority != undefined && control.valid) {
             // @ts-ignore
-            if (value === this.privilegeForm[controlName]) {
+            if (value === this.currentAuthority[controlName]) {
               control.markAsPristine();
             } else {
               control.markAsDirty();
@@ -192,11 +192,7 @@ export class PrivilageComponent implements OnInit{
     for(const controlName in this.privilegeForm.controls){
       const control = this.privilegeForm.controls[controlName];
       if(control.errors){
-        if(this.regexes[controlName] != undefined){
-          errors = errors + "<br>" + this.regexes[controlName]['message'];
-        }else{
           errors = errors + "<br>Invalid " + controlName;
-        }
       }
     }
     return errors;
@@ -207,7 +203,7 @@ export class PrivilageComponent implements OnInit{
 
     if(errors != ""){
       this.dialog.open(WarningDialogComponent,{
-        data:{heading:"Errors - Privilege Add ",message: "You Have Following Errors <br/> " + errors}
+        data:{heading:"Errors - Privilege Add ",message: "You Have Following Errors <br> " + errors}
       }).afterClosed().subscribe(res => {
         if(!res){
           return;
@@ -235,7 +231,7 @@ export class PrivilageComponent implements OnInit{
                 this.clearForm();
               },
               error:(err:any) => {
-                this.tst.handleResult('failed',err.error.data.message);
+                this.tst.handleResult('Failed',err.error.data.message);
               }
             });
           }
@@ -249,7 +245,7 @@ export class PrivilageComponent implements OnInit{
 
     if(errors != ""){
       this.dialog.open(WarningDialogComponent,{
-        data:{heading:"Errors - Privilege Update ",message: "You Have Following Errors <br/> " + errors}
+        data:{heading:"Errors - Privilege Update ",message: "You Have Following Errors <br> " + errors}
       }).afterClosed().subscribe(res => {
         if(!res){
           return;
@@ -288,7 +284,7 @@ export class PrivilageComponent implements OnInit{
                     this.clearForm();
                   },
                   error:(err:any) => {
-                    this.tst.handleResult('failed',err.error.data.message);
+                    this.tst.handleResult('Failed',err.error.data.message);
                   }
                 });
               }
@@ -321,11 +317,11 @@ export class PrivilageComponent implements OnInit{
             },
             error: (err:any) => {
               console.log(err);
-              this.tst.handleResult('failed',err.error.data.message);
+              this.tst.handleResult('Failed',err.error.data.message);
             },
           });
         } else {
-          this.tst.handleResult('failed'," Id Not Found");
+          this.tst.handleResult('Failed'," Id Not Found");
         }
       }
     });

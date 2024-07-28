@@ -324,6 +324,7 @@ export class UserComponent implements OnInit{
                   next:() => {
                     this.tst.handleResult('success'," User Added Successfully");
                     this.loadTable("");
+                    this.clearForm();
                     },
                   error:(err:any) => {
                     // console.log(err.error.data.message);
@@ -431,6 +432,7 @@ export class UserComponent implements OnInit{
             next: () => {
               this.loadTable("");
               this.tst.handleResult('success'," User Deleted Successfully");
+              this.clearForm();
             },
 
             error: (err:any) => {

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -70,9 +71,24 @@ public class AuthorityServiceIMPL implements AuthorityService{
     @Override
     public AuthorityDTO updateAuthority(AuthorityDTO authorityDTO) {
         if(authorityRepository.existsById(authorityDTO.getId())){
-            Authority authority = objectMapper.dtoToAuthority(authorityDTO);
-            authorityRepository.save(authority);
-            return authorityDTO;
+
+            Module module = objectMapper.moduleDtoToModule(authorityDTO.getModule());
+            Operation operation = objectMapper.operationDtoToOperation(authorityDTO.getOperation());
+
+            Authority autho = authorityRepository.findById(authorityDTO.getId()).orElseThrow(null);
+
+            if(Objects.equals(autho.getModule().getId(), module.getId()) && Objects.equals(autho.getOperation().getId(), operation.getId()) && Objects.equals(autho.getRole().getId(), authorityDTO.getRole().getId())){
+                Authority authority = objectMapper.dtoToAuthority(authorityDTO);
+                authorityRepository.save(authority);
+                return authorityDTO;
+            }else if(!authorityRepository.existsByRoleAndModuleAndOperation(authorityDTO.getRole(),module,operation)){
+                Authority authority = objectMapper.dtoToAuthority(authorityDTO);
+                authorityRepository.save(authority);
+                return authorityDTO;
+            }else{
+                throw new ResourceAlreadyExistException("Privilege Already Exists!");
+            }
+
         }else{
             throw new ResourceNotFountException("Authority Not Exist!");
         }
