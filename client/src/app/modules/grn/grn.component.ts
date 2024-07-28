@@ -129,7 +129,7 @@ export class GrnComponent implements OnInit{
       next: data => this.grnstatuses = data,
     });
 
-    this.es.getAllEmployeesList("").subscribe({
+    this.es.getAllEmployeesList("?designation=1").subscribe({
       next: data => this.employees = data,
     });
 
@@ -400,7 +400,80 @@ export class GrnComponent implements OnInit{
 
 
   update(currentGrn: Grn) {
+    let errors = this.getErrors();
 
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - GRN Update ",message: "You Have Following Errors <br> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+
+    }else{
+
+      let updates:string = this.getUpdates();
+
+      if(updates != ""){
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - GRN Update ",message: "You Have Following Updates <br> " + updates}
+        }).afterClosed().subscribe(res => {
+          if(!res){
+            return;
+          }else{
+
+            // @ts-ignore
+            this.innerdata.forEach((i)=> delete i.id);
+
+            const grn:Grn = {
+              code: this.grnForm.controls['code'].value,
+              date: this.grnForm.controls['date'].value,
+              time: this.grnForm.controls['time'].value,
+              description: this.grnForm.controls['description'].value,
+              bagscount: this.grnForm.controls['bagscount'].value,
+              railwaystation: this.grnForm.controls['railwaystation'].value,
+
+              grnproducts: this.innerdata,
+
+              grnstatus: {id: parseInt(this.grnForm.controls['grnstatus'].value)},
+              employee: {id: parseInt(this.grnForm.controls['employee'].value)},
+              // @ts-ignore
+              productorder: {id: parseInt(this.grnForm.controls['productorder'].value)},
+            }
+
+            grn.id = currentGrn.id;
+
+            this.currentOperation = "GRN Update ";
+
+            this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+              .afterClosed().subscribe(res => {
+              if(res) {
+                this.gs.update(grn).subscribe({
+                  next:() => {
+                    this.tst.handleResult('success',"GRN Successfully Updated");
+                    this.loadTable("");
+                    this.clearForm();
+                  },
+                  error:(err:any) => {
+                    this.tst.handleResult('failed',err.error.data.message);
+                    //console.log(err);
+                  }
+                });
+              }
+            })
+
+          }
+        });
+
+      }else{
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - GRN Update ",message: "No Fields Updated "}
+        }).afterClosed().subscribe(res =>{
+          if(res){return;}
+        })
+      }
+    }
   }
 
   delete(currentGrn: Grn) {

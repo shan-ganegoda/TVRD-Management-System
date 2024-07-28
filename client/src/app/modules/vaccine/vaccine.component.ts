@@ -446,12 +446,12 @@ export class VaccineComponent implements OnInit{
               if(res) {
                 this.vs.update(vaccine).subscribe({
                   next:() => {
-                    this.handleResult('success');
+                    this.tst.handleResult('success',"Vaccine Successfully Update");
                     this.loadTable("");
                     this.clearForm();
                   },
                   error:(err:any) => {
-                    this.handleResult('failed');
+                    this.tst.handleResult('failed',err.error.data.message);
                     //console.log(err);
                   }
                 });
