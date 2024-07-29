@@ -22,6 +22,7 @@ import {RoleService} from "../../core/service/user/role.service";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 import {ToastService} from "../../core/util/toast/toast.service";
+import {AuthorizationService} from "../../core/service/auth/authorization.service";
 
 @Component({
   selector: 'app-privilage',
@@ -63,8 +64,9 @@ export class PrivilageComponent implements OnInit{
 
   currentOperation = '';
 
-  hasUpdateAuthority = true;
-  hasDeleteAuthority = true;
+  hasUpdateAuthority = this.authorizationService.hasAuthority("Privilege-Update");
+  hasDeleteAuthority = this.authorizationService.hasAuthority("Privilege-Delete");
+  hasWriteAuthority = this.authorizationService.hasAuthority("Privilege-Write");
 
   enaadd:boolean = false;
   enaupd:boolean = false;
@@ -79,6 +81,7 @@ export class PrivilageComponent implements OnInit{
               private dialog:MatDialog,
               private tst:ToastService,
               private cdr:ChangeDetectorRef,
+              private authorizationService:AuthorizationService
   ) {
     this.privilegeSearchForm = this.fb.group({
       "ssmodule": new FormControl(""),

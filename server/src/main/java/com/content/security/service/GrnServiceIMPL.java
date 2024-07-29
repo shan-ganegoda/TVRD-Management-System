@@ -97,9 +97,8 @@ public class GrnServiceIMPL implements GrnService{
             if(grn != null){
                 grnRepository.delete(grn);
             }
-
         }else{
-            throw new ResourceNotFountException("Product Order Not Found");
+            throw new ResourceNotFountException("GRN Not Found");
         }
     }
 }

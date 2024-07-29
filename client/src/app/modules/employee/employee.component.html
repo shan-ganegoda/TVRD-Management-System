@@ -256,7 +256,7 @@
 
 
         <div class="flex flex-row mt-3 max-w-[99%] px-2 pb-5">
-          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" [disabled]="!enaadd" (click)="addEmployee()">Add</button>
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" [disabled]="!enaadd || !hasWriteAuthority" (click)="addEmployee()">Add</button>
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" [disabled]="!enaupd" (click)="updateEmployee(employee)">Update</button>
           <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="deleteEmployee(employee)"
                   [disabled]="!hasDeleteAuthority || !enadel" >Delete</button>

@@ -82,6 +82,7 @@ export class UserComponent implements OnInit{
 
   protected hasUpdateAuthority = this.authorizationService.hasAuthority("User-Update"); //need to be false
   protected hasDeleteAuthority = this.authorizationService.hasAuthority("User-Delete");
+  protected hasWriteAuthority = this.authorizationService.hasAuthority("User-Write");
 
   constructor(
     private us:UsersService,

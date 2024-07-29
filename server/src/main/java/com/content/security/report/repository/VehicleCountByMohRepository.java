@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface VehicleCountByMohRepository extends JpaRepository<VehicleCountByMoh, Integer> {
 
-    @Query("SELECT NEW VehicleCountByMoh(m.name, count (v.number)) FROM Vehicle v, Moh m WHERE v.moh.id = m.id GROUP BY v.id")
+    @Query("SELECT NEW VehicleCountByMoh(m.name, count (v.number)) FROM Vehicle v, Moh m WHERE v.moh.id = m.id GROUP BY m.id")
     List<VehicleCountByMoh> findVehicleCountByMoh();
 }

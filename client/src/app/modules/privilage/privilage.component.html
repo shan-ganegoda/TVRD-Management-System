@@ -121,7 +121,7 @@
 
         <div class="flex flex-row mt-3 max-w-[97%] px-2 pb-5">
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
-                  (click)="add()" [disabled]="!enaadd">Add</button>
+                  (click)="add()" [disabled]="!enaadd || !hasWriteAuthority">Add</button>
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
                   (click)="update(currentAuthority)" [disabled]="!enaupd">Update</button>
           <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900"

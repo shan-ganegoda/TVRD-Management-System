@@ -130,4 +130,8 @@ public interface ObjectMapper {
     Grn grnDtoToGrn(GrnDTO grnDTO);
 
     List<GrnStatusDTO> GrnStatusListToDtoList(List<Grnstatus> grnStatusList);
+
+    List<DistributionDTO> distributionListToDtoList(List<Distribution> distributions);
+
+    Distribution distributionDtoToDistribution(DistributionDTO distributionDTO);
 }
