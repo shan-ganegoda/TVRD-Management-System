@@ -431,12 +431,12 @@ export class ProducorderComponent implements OnInit {
           if (res) {
             this.pos.savePorder(porder).subscribe({
               next: () => {
-                this.handleResult('success');
+                this.tst.handleResult('success',"POrder Saved Successfully");
                 this.loadTable("");
                 this.clearForm();
               },
               error: (err: any) => {
-                this.handleResult('failed');
+                this.tst.handleResult('failed',err.error.data.message);
               }
             });
           }
@@ -495,12 +495,12 @@ export class ProducorderComponent implements OnInit {
               if(res) {
                 this.pos.updatePorder(porder).subscribe({
                   next:() => {
-                    this.handleResult('success');
+                    this.tst.handleResult('success',"POrder Updated Successfully");
                     this.loadTable("");
                     this.clearForm();
                   },
                   error:(err:any) => {
-                    this.handleResult('failed');
+                    this.tst.handleResult('failed',err.error.data.message);
                     //console.log(err);
                   }
                 });
@@ -530,12 +530,12 @@ export class ProducorderComponent implements OnInit {
         this.pos.deletePorder(porder.id).subscribe({
           next: () => {
             this.loadTable("");
-            this.handleResult("success");
+            this.tst.handleResult("success","POrder Deleted Successfully");
             this.clearForm();
           },
 
-          error: () => {
-            this.handleResult("failed");
+          error: (err:any) => {
+            this.tst.handleResult("Failed",err.error.data.message);
           }
         });
       }
@@ -585,27 +585,6 @@ export class ProducorderComponent implements OnInit {
         this.loadTable("");
       }
     });
-  }
-
-  handleResult(status: string) {
-
-    if (status === "success") {
-      this.snackBar.openFromComponent(NotificationComponent, {
-        data: {message: status, icon: "done_all"},
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['success-snackbar'],
-      });
-    } else {
-      this.snackBar.openFromComponent(NotificationComponent, {
-        data: {message: status, icon: "report"},
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['failure-snackbar'],
-      });
-    }
   }
 
 }
