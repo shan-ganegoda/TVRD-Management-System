@@ -2,15 +2,11 @@ import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import {MatTableDataSource} from "@angular/material/table";
-import {ProductOrder} from "../../core/entity/productorder";
 import {Observable} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {VaccineOrder} from "../../core/entity/vaccineorder";
 import {Moh} from "../../core/entity/moh";
 import {Employee} from "../../core/entity/employee";
-import {Product} from "../../core/entity/product";
-import {ProductOrderStatus} from "../../core/entity/productorderstatus";
-import {ProductOrderProducts} from "../../core/entity/productorderproducts";
 import {Vaccine} from "../../core/entity/vaccine";
 import {VaccineOrderStatus} from "../../core/entity/vaccineorderstatus";
 import {VaccineOrderVaccine} from "../../core/entity/vaccineordervaccine";
@@ -29,6 +25,8 @@ import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
+import {AuthorizationService} from "../../core/service/auth/authorization.service";
+import {ToastService} from "../../core/util/toast/toast.service";
 
 @Component({
   selector: 'app-vaccineorder',
@@ -61,8 +59,9 @@ export class VaccineorderComponent implements OnInit{
   data!: Observable<any>
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  hasUpdateAuthority = true;
-  hasDeleteAuthority = true;
+  protected hasUpdateAuthority = this.authorizationService.hasAuthority("Product Order-Update"); //need to be false
+  protected hasDeleteAuthority = this.authorizationService.hasAuthority("Product Order-Delete"); //need to be false
+  protected hasWriteAuthority = this.authorizationService.hasAuthority("Product Order-Write");
 
   vorders: VaccineOrder[] = [];
   mohs: Moh[] = [];
@@ -94,7 +93,9 @@ export class VaccineorderComponent implements OnInit{
               private vs: VaccineService,
               private rs: RegexService,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar
+              private snackBar: MatSnackBar,
+              private tst:ToastService,
+              private authorizationService:AuthorizationService
   ) {
 
     this.voSearchForm = this.fb.group({

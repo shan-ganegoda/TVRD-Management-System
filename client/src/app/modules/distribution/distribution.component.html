@@ -1,54 +1,39 @@
 <div class="px-4 py-3 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
-  <div class=" absolute mt-0 ml-3 mr-4 text-[1.7em] font-semibold pointer-events-none">Vaccine Order</div>
+  <div class=" absolute mt-0 ml-3 mr-4 text-[1.7em] font-semibold pointer-events-none">Thriposha Distribution</div>
   <div class="text-sm breadcrumbs absolute mt-5 ml-3">
     <ul>
       <li class="text-gray-500"><a routerLink="../home">Home</a></li>
-      <li>VaccineOrder</li>
+      <li>Distribution</li>
     </ul>
   </div>
 
-  <form [formGroup]="voSearchForm" class="flex flex-row animate animate-fade">
+  <form [formGroup]="distributionSearchForm" class="flex flex-row animate animate-fade">
     <div class="join ml-auto  scale-95">
 
-      <input
-        type="text"
-        placeholder="Date Requested"
-        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
-        formControlName="ssdorequested"
-        onfocus="(this.type='date')"
-      />
-
       <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
-              formControlName="ssmoh"
+              formControlName="ssmother"
       >
-        <option disabled value="">MOH</option>
-        @for(moh of mohs; track mohs){
-          <option value="{{moh.id}}">{{moh.name}}</option>
+        <option disabled value="">Mother</option>
+        @for(mother of mothers; track mothers){
+          <option value="{{mother.id}}">{{mother.mothername}}</option>
         }
       </select>
 
-      <input
-        type="text"
-        placeholder="Date Requested"
-        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
-        formControlName="ssdorequested"
-        onfocus="(this.type='date')"
-      />
-
-      <input
-        type="text"
-        placeholder="Date Required"
-        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
-        formControlName="ssdorequired"
-        onfocus="(this.type='date')"
-      />
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+              formControlName="ssclinic"
+      >
+        <option disabled value="">Clinic</option>
+        @for(clinic of clinics; track clinics){
+          <option value="{{clinic.id}}">{{clinic.divisionname}}</option>
+        }
+      </select>
 
       <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
-              formControlName="ssvorderstatus"
+              formControlName="ssproduct"
       >
-        <option disabled value="">Order Status</option>
-        @for(porderstatus of vostatuses; track vostatuses){
-          <option value="{{porderstatus.id}}">{{porderstatus.name}}</option>
+        <option disabled value="">Product</option>
+        @for(product of products; track products){
+          <option value="{{product.id}}">{{product.name}}</option>
         }
       </select>
 
@@ -84,82 +69,63 @@
         <span class="ml-5 text-white text-lg ">Data Form</span>
       </div>
 
-      <form [formGroup]="vorderForm" class="mt-5 animate animate-fade">
+      <form [formGroup]="distributionForm" class="mt-5 animate animate-fade">
 
-        <div class="mb-3 px-2">
+        <div class="relative w-full mb-3 px-2">
           <select
-            class="select select-bordered w-full bg-white focus:outline-none"
-            formControlName="moh"
+            class="peer select select-bordered w-full bg-white focus:outline-none"
+            formControlName="clinic"
           >
-            <option disabled [ngValue]="null">MOH</option>
+            <option disabled [ngValue]="null">Clinic</option>
 
-            @for (moh of mohs; track mohs) {
-              <option [ngValue]="moh.id">{{ moh.name }}</option>
+            @for (clinic of clinics; track clinics) {
+              <option [ngValue]="clinic.id">{{ clinic.divisionname }}</option>
             }
           </select>
+          <label class="floating-labels-select">Clinic</label>
         </div>
 
-        <div class="mb-3 px-2">
+        <div class="relative w-full mb-3 px-2">
           <select
-            class="select select-bordered w-full bg-white focus:outline-none"
-            formControlName="employee"
+            class="peer select select-bordered w-full bg-white focus:outline-none"
+            formControlName="mother"
           >
-            <option disabled [ngValue]="null">Employee</option>
+            <option disabled [ngValue]="null">Mother</option>
 
-            @for (employee of employees; track employees) {
-              <option [ngValue]="employee.id">{{ employee.fullname + " (" + employee.number + ")" }}</option>
+            @for (mother of mothers; track mothers) {
+              <option [ngValue]="mother.id">{{ mother.mothername }}</option>
             }
           </select>
+          <label class="floating-labels-select">Mother</label>
         </div>
 
         <div class="relative w-full px-2 mb-3">
           <input
             type="text"
-            placeholder="Code"
+            placeholder="Last Updated"
             class="peer input input-bordered w-full focus:outline-none"
-            formControlName="code"
-          />
-          <label class="floating-label">Code</label>
-        </div>
-
-        <div class="relative w-full px-2 mb-3">
-          <input
-            type="text"
-            placeholder="Date Reqested"
-            class="peer input input-bordered w-full focus:outline-none"
-            formControlName="dorequested"
+            formControlName="lastupdated"
             onfocus="(this.type='date')"
           />
-          <label class="floating-label">Date Reqested</label>
+          <label class="floating-label">Last Updated</label>
         </div>
 
-        <div class="relative w-full px-2 mb-3">
-          <input
-            type="text"
-            placeholder="Date Required"
-            class="peer input input-bordered w-full focus:outline-none"
-            formControlName="dorequired"
-            onfocus="(this.type='date')"
-          />
-          <label class="floating-label">Date Required</label>
-        </div>
-
-        <div>
+        <div class="border-y-4 py-4 mb-3">
 
           <form [formGroup]="innerForm">
 
-            <div class="mb-3 px-2">
+            <div class="relative w-full mb-3 px-2">
               <select
-                class="select select-bordered w-full bg-white focus:outline-none"
-                formControlName="vaccine"
+                class="peer select select-bordered w-full bg-white focus:outline-none"
+                formControlName="product"
               >
                 <option disabled [ngValue]="null">Product</option>
 
-                @for (vaccine of vaccines; track vaccines) {
-                  <option [ngValue]="vaccine">{{ vaccine.name }}</option>
+                @for (product of products; track products) {
+                  <option [ngValue]="product">{{product.name}}</option>
                 }
               </select>
-
+              <label class="floating-labels-select">Product</label>
             </div>
 
             <div class="flex px-2 mb-3">
@@ -173,25 +139,60 @@
                 <label class="floating-label">Quentity</label>
               </div>
 
-              <div>
-                <button class="btn bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="addToTable()">Add</button>
+              <div class="relative w-full px-2">
+                <select
+                  class="peer select select-bordered w-full bg-white focus:outline-none"
+                  formControlName="distributionproductstatus"
+                >
+                  <option disabled [ngValue]="null">Distribution Status</option>
+
+                  @for (dpstatus of dpstatuses; track dpstatuses) {
+                    <option [ngValue]="dpstatus">{{dpstatus.name}}</option>
+                  }
+                </select>
+                <label class="floating-labels-select">Distribution Status</label>
               </div>
+
+            </div>
+
+            <div class="relative w-full px-2 mb-3">
+              <input
+                type="text"
+                placeholder="Date Received"
+                class="peer input input-bordered w-full focus:outline-none"
+                formControlName="date"
+                onfocus="(this.type='date')"
+              />
+              <label class="floating-label">Date Received</label>
+            </div>
+
+            <div>
+              <button class="btn bg-gray-950 text-gray-300 hover:bg-gray-900 mx-2" (click)="addToTable()">Add</button>
             </div>
 
             <div>
               <table class="text-left p-4 table mb-4">
                 <thead>
                 <tr class="text-black bold">
-                  <th>Vaccine</th>
+                  <th>Product</th>
                   <th>Quentity</th>
+                  <th>Date</th>
+                  <th>Status</th>
                   <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                   @for (indata of innerdata; track innerdata) {
                     <tr>
-                      <td>{{ indata.vaccine.name }}</td>
+                      <td>{{ indata.product.name }}</td>
                       <td>{{ indata.quentity }}</td>
+                      <td>{{ indata.date }}</td>
+                      <td>
+                        <div class="flex items-center">
+                          <div class="badge badge-xs mr-1.5 {{indata.distributionproductstatus.name === 'Fully Received'? 'bg-success' : 'bg-error'}}"></div>
+                          {{indata.distributionproductstatus.name}}
+                        </div>
+                      </td>
                       <td>
                         <button (click)="deleteRow(indata)">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
@@ -211,20 +212,6 @@
           </form>
         </div>
 
-        <div class="mb-3 px-2">
-          <select
-            class="select select-bordered w-full bg-white focus:outline-none"
-            formControlName="vaccineorderstatus"
-          >
-            <option disabled [ngValue]="null">Vaccine Order Status</option>
-
-            @for (vostatus of vostatuses; track vostatuses) {
-              <option [ngValue]="vostatus.id">{{ vostatus.name }}</option>
-            }
-          </select>
-
-        </div>
-
         <div class="relative w-full mb-3 px-2">
             <textarea
               class="peer textarea textarea-bordered w-full h-36 focus:outline-none"
@@ -238,10 +225,10 @@
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="add()" [disabled]="!enaadd">
             Add
           </button>
-          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(vaccineOrder)"
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(currentDistribution)"
                   [disabled]="!enaupd">Update
           </button>
-          <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900" (click)="delete(vaccineOrder)"
+          <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900" (click)="delete(currentDistribution)"
                   [disabled]="!hasDeleteAuthority || !enadel ">Delete
           </button>
           <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="clearForm()">Clear</button>
@@ -260,52 +247,38 @@
       </div>
 
       <div class="overflow-auto p-4 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
-        @if (!isFailed && !isLoading && vorders.length !== 0) {
+        @if (!isFailed || !isLoading || distributions.length !== 0) {
           <table class="text-left p-4 table">
             <thead>
             <tr class="text-black bold">
-              <th>MOH</th>
-              <th>Date Requested</th>
-              <th>Code</th>
-              <th>Officer</th>
-              <th>Order Status</th>
+              <th>Clinic</th>
+              <th>Mother</th>
+              <th>Last Updated</th>
               <th>Actions</th>
             </tr>
             </thead>
             <tbody>
 
-              @for (vorder of data | async; track vorders) {
+              @for (dis of data | async; track distributions) {
 
                 <tr>
                   <td>
-                    {{ vorder.moh.name }}
+                    {{ dis.clinic.divisionname }}
                   </td>
 
                   <td>
-                    {{ vorder.dorequested }}
+                    {{ dis.mother.mothername }}
                   </td>
 
                   <td>
-                    {{ vorder.code }}
-                  </td>
-
-                  <td>
-                    {{ vorder.employee.callingname }}
-                  </td>
-
-                  <td>
-                    <div class="flex items-center">
-                      <div
-                        class="badge badge-xs mr-1.5 {{vorder.vaccineorderstatus.name === 'Pending'? 'bg-warning border-white' : vorder.vaccineorderstatus.name === 'Completed' ? 'bg-success border-white' :'bg-error border-white'}}"></div>
-                      {{ vorder.vaccineorderstatus.name }}
-                    </div>
+                    {{ dis.lastupdated }}
                   </td>
 
                   <th>
                     <div>
                       <button
                         class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
-                        (click)="fillForm(vorder)"
+                        (click)="fillForm(dis)"
                         [disabled]="!hasUpdateAuthority"
                       >
                         <svg

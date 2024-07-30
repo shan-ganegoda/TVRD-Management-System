@@ -2,6 +2,7 @@ package com.content.security.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -40,7 +41,7 @@ public class Distribution {
     @Column(name = "lastupdated")
     private LocalDate lastupdated;
 
-    @OneToMany(mappedBy = "distribution")
+    @OneToMany(mappedBy = "distribution", cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Distributionproduct> distributionproducts = new LinkedHashSet<>();
 
 }

@@ -62,7 +62,7 @@ public class DistributionServiceIMPL implements DistributionService{
                 for(Distributionproduct i : distribution.getDistributionproducts()){
                     i.setDistribution(distribution);
                 }
-
+                System.out.println(distribution);
                 distributionRepository.save(distribution);
                 return distributionDTO;
             }else{

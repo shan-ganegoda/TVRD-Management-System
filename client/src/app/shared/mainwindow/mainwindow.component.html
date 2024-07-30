@@ -302,6 +302,59 @@
       </div>
     }
     <!--PROGRAMMS-->
+    <!--DISTRIBUTION-START-->
+    <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu6=!togglemenu6">
+        <span class=" text-white flex mt-1 mx-2.5" >
+          DISTRIBUTION
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none" viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5 -mt-0.5 relative ml-[5.2rem] {{togglemenu6 ? 'rotate-180' : ''}}">
+         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+         </svg>
+        </span>
+
+    </div>
+    @if(togglemenu6){
+      <div class="animate-drop">
+        <ul class="mt-2">
+
+          <li class="mb-1 group active ml-7">
+            <a
+              routerLink="distribution"
+              class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
+              routerLinkActive="bg-blue-500"
+            >
+
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 relative bottom-0.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
+              </svg>
+
+              <span class="text-sm ml-7">Distribution</span>
+            </a>
+          </li>
+
+          <li class="mb-1 group active ml-7">
+            <a
+              routerLink="childrecord"
+              class="flex items-center py-2 px-4 mr-3 text-white hover:bg-blue-500 rounded-lg"
+              routerLinkActive="bg-blue-500"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m15 11.25 1.5 1.5.75-.75V8.758l2.276-.61a3 3 0 1 0-3.675-3.675l-.61 2.277H12l-.75.75 1.5 1.5M15 11.25l-8.47 8.47c-.34.34-.8.53-1.28.53s-.94.19-1.28.53l-.97.97-.75-.75.97-.97c.34-.34.53-.8.53-1.28s.19-.94.53-1.28L12.75 9M15 11.25 12.75 9" />
+              </svg>
+
+              <span class="text-sm ml-7">Vaccination</span>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+    }
+    <!--DISTRIBUTION-END-->
     <!--REGISTRATION-START-->
     <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu4=!togglemenu4">
         <span class=" text-white flex mt-1 mx-2.5" >

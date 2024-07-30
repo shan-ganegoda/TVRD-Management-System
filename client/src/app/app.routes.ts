@@ -25,6 +25,7 @@ import {PrivilageComponent} from "./modules/privilage/privilage.component";
 import {CountbyvorderComponent} from "./core/report/view/countbyvorder/countbyvorder.component";
 import {ChildrecordComponent} from "./modules/childrecord/childrecord.component";
 import {GrnComponent} from "./modules/grn/grn.component";
+import {DistributionComponent} from "./modules/distribution/distribution.component";
 
 export const routes: Routes = [
   { path: "login", component: AuthComponent },
@@ -48,6 +49,7 @@ export const routes: Routes = [
       {path: "motherregistration", component: MotherregistrationComponent, title: "Mother Registration"},
       {path: "childrecord", component: ChildrecordComponent, title: "Child Record"},
       {path: "grn", component: GrnComponent, title: "GRN"},
+      {path: "distribution", component: DistributionComponent, title: "Distribution"},
 
       {path: "profile", component: ProfileComponent, title: "Profile"},
 

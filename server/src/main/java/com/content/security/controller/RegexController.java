@@ -69,5 +69,10 @@ public class RegexController {
         return RegexProvider.get(new GrnDTO());
     }
 
+    @GetMapping(path = "/distribution")
+    public HashMap<String, HashMap<String,String>> distribution(){
+        return RegexProvider.get(new DistributionDTO());
+    }
+
 }
 

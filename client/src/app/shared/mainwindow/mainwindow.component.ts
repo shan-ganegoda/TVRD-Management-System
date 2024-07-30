@@ -48,6 +48,7 @@ export class MainwindowComponent implements OnInit{
   togglemenu3:boolean = false;
   togglemenu4:boolean = false;
   togglemenu5:boolean = false;
+  togglemenu6:boolean = false;
 
   opened: boolean = true;
   hidden = false;
