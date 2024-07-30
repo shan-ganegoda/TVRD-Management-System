@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DistributionRepository extends JpaRepository<Distribution, Integer> {
 
-    boolean existsByMotherAndClinic(Mother mother, Clinic clinic);
+    boolean existsByMother(Mother mother);
 }

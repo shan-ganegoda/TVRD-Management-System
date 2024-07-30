@@ -10,7 +10,6 @@ import com.content.security.util.mapper.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -58,11 +57,11 @@ public class DistributionServiceIMPL implements DistributionService{
 
             Distribution distribution = objectMapper.distributionDtoToDistribution(distributionDTO);
 
-            if(!distributionRepository.existsByMotherAndClinic(distributionDTO.getMother(),distributionDTO.getClinic())){
+            if(!distributionRepository.existsByMother(distributionDTO.getMother())){
                 for(Distributionproduct i : distribution.getDistributionproducts()){
                     i.setDistribution(distribution);
                 }
-                System.out.println(distribution);
+
                 distributionRepository.save(distribution);
                 return distributionDTO;
             }else{
@@ -89,7 +88,7 @@ public class DistributionServiceIMPL implements DistributionService{
                     distributionRepository.save(distribution);
                 }catch(Exception e){System.out.println(e);}
                 return distributionDTO;
-            } else if(!distributionRepository.existsByMotherAndClinic(distribution.getMother(),distribution.getClinic())){
+            } else if(!distributionRepository.existsByMother(distribution.getMother())){
                 try{
                     distribution.getDistributionproducts().forEach(dis -> dis.setDistribution(distribution));
                     distributionRepository.save(distribution);

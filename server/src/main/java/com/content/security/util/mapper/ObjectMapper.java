@@ -136,4 +136,12 @@ public interface ObjectMapper {
     Distribution distributionDtoToDistribution(DistributionDTO distributionDTO);
 
     List<DistributionProductStatusDTO> dpstatusListToDtoList(List<Distributionproductstatus> statusList);
+
+    List<VaccinationDTO> vaccinationListToDtoList(List<Vaccination> vaccinations);
+
+    Vaccination vaccinationDtoToVaccination(VaccinationDTO vaccinationDTO);
+
+    List<VaccinationProgressDTO> vaccinationProgressListToDtoList(List<Vaccinationprogress> vaccinationprogressList);
+
+    List<VaccinationStatusDTO> vaccinationstatusListToDtoList(List<Vaccinationstatus> vaccinationStatusList);
 }
