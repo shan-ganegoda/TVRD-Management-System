@@ -26,6 +26,8 @@ import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
+import {AuthorizationService} from "../../core/service/auth/authorization.service";
+import {ToastService} from "../../core/util/toast/toast.service";
 
 @Component({
   selector: 'app-producorder',
@@ -70,12 +72,15 @@ export class ProducorderComponent implements OnInit {
   data!: Observable<any>
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  hasUpdateAuthority = true;
-  hasDeleteAuthority = true;
+  protected hasUpdateAuthority = this.authorizationService.hasAuthority("Product Order-Update"); //need to be false
+  protected hasDeleteAuthority = this.authorizationService.hasAuthority("Product Order-Delete"); //need to be false
+  protected hasWriteAuthority = this.authorizationService.hasAuthority("Product Order-Write");
 
   poSearchForm!: FormGroup;
   porderForm!: FormGroup;
   innerForm!: FormGroup;
+
+  isInnerDataUpdated:boolean = false;
 
   enaadd: boolean = false;
   enaupd: boolean = false;
@@ -93,7 +98,9 @@ export class ProducorderComponent implements OnInit {
     private ps: ProductService,
     private rs: RegexService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private tst: ToastService,
+    private authorizationService:AuthorizationService,
   ) {
     this.porderForm = this.fb.group({
       "dorequired": new FormControl('', [Validators.required]),
@@ -276,28 +283,40 @@ export class ProducorderComponent implements OnInit {
 
     this.inndata = this.innerForm.getRawValue();
 
-    if (this.inndata != null) {
+    if (this.inndata.product == null || this.inndata.quentity == "") {
+      this.dialog.open(WarningDialogComponent, {
+        data: {heading: "Errors - Product Order Add ", message: "Please Add Required Details"}
+      }).afterClosed().subscribe(res => {
+        if (!res) {
+          return;
+        }
+      });
+    } else {
 
-      this.calculateLineTotal(this.inndata.product.cost, this.inndata.quentity)
+      if (this.inndata != null) {
 
-      let orderp = new ProductOrderProducts(this.id, this.inndata.product, this.inndata.quentity, this.linetotal);
+        this.calculateLineTotal(this.inndata.product.cost, this.inndata.quentity)
 
-      let tem: ProductOrderProducts[] = [];
-      if (this.innerdata != null) this.innerdata.forEach((i) => tem.push(i));
+        let orderp = new ProductOrderProducts(this.id, this.inndata.product, this.inndata.quentity, this.linetotal);
 
-      this.innerdata = [];
-      tem.forEach((t) => this.innerdata.push(t));
+        let tem: ProductOrderProducts[] = [];
+        if (this.innerdata != null) this.innerdata.forEach((i) => tem.push(i));
 
-      this.innerdata.push(orderp);
+        this.innerdata = [];
+        tem.forEach((t) => this.innerdata.push(t));
 
-      this.id++;
+        this.innerdata.push(orderp);
 
-      this.calculateGrandTotal();
-      this.innerForm.reset();
+        this.id++;
 
-      for (const controlName in this.innerForm.controls) {
-        this.innerForm.controls[controlName].clearValidators();
-        this.innerForm.controls[controlName].updateValueAndValidity();
+        this.calculateGrandTotal();
+        this.innerForm.reset();
+        this.isInnerDataUpdated = true;
+
+        for (const controlName in this.innerForm.controls) {
+          this.innerForm.controls[controlName].clearValidators();
+          this.innerForm.controls[controlName].updateValueAndValidity();
+        }
       }
     }
 
@@ -321,16 +340,23 @@ export class ProducorderComponent implements OnInit {
 
     let datasources = this.innerdata;
 
-    const index = datasources.findIndex(item => item.id === x.id);
+    this.dialog.open(ConfirmDialogComponent, {data: "Delete Product Quentity"})
+      .afterClosed().subscribe(res => {
+      if (res) {
 
-    if (index > -1) {
-      datasources.splice(index, 1);
-    }
+        const index = datasources.findIndex(item => item.id === x.id);
 
-    this.innerdata = datasources;
-    this.calculateGrandTotal();
+        if (index > -1) {
+          datasources.splice(index, 1);
+        }
 
+        this.innerdata = datasources;
+        this.calculateGrandTotal();
+        this.isInnerDataUpdated = true;
+      }
+    });
   }
+
 
   getUpdates(): string {
     let updates: string = "";
@@ -339,6 +365,9 @@ export class ProducorderComponent implements OnInit {
       if (control.dirty) {
         updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1) + " Changed";
       }
+    }
+    if(this.isInnerDataUpdated){
+      updates = updates + "<br>" + "Product Quentity Changed";
     }
     return updates;
   }
@@ -356,6 +385,9 @@ export class ProducorderComponent implements OnInit {
           errors = errors + "<br>Invalid " + controlName;
         }
       }
+    }
+    if(this.innerdata.length == 0) {
+      errors = errors + "<br>Invalid Product Quentity";
     }
     return errors;
   }
@@ -516,6 +548,7 @@ export class ProducorderComponent implements OnInit {
     this.porderForm.controls['employee'].setValue(null);
     this.porderForm.controls['productorderstatus'].setValue(null);
     this.innerdata = [];
+    this.isInnerDataUpdated = false;
 
     this.enableButtons(true,false,false);
 

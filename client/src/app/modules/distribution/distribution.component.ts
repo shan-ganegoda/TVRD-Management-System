@@ -1,6 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {VaccineOrder} from "../../core/entity/vaccineorder";
 import {Observable} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {AuthorizationService} from "../../core/service/auth/authorization.service";
@@ -9,12 +8,10 @@ import {DistributionProductStatus} from "../../core/entity/distributionproductst
 import {Mother} from "../../core/entity/mother";
 import {Clinic} from "../../core/entity/clinic";
 import {Distribution} from "../../core/entity/distribution";
-import {VaccineOrderVaccine} from "../../core/entity/vaccineordervaccine";
 import {DistributionProduct} from "../../core/entity/distributionproduct";
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {RegexService} from "../../core/service/regexes/regex.service";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ToastService} from "../../core/util/toast/toast.service";
 import {ClinicService} from "../../core/service/clinic/clinic.service";
 import {MotherService} from "../../core/service/motherregistration/mother.service";
@@ -26,9 +23,7 @@ import {AsyncPipe} from "@angular/common";
 import {PageErrorComponent} from "../../shared/page-error/page-error.component";
 import {PageLoadingComponent} from "../../shared/page-loading/page-loading.component";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
-import {GrnProduct} from "../../core/entity/grnproduct";
 import {DistributionproductstatusService} from "../../core/service/distribution/distributionproductstatus.service";
-import {Grn} from "../../core/entity/grn";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 
 @Component({
@@ -261,7 +256,6 @@ export class DistributionComponent implements OnInit{
   addToTable() {
 
     this.inndata = this.innerForm.getRawValue();
-    console.log(this.inndata);
 
     if (this.inndata.product == null || this.inndata.quentity == "" || this.inndata.distributionproductstatus == null || this.inndata.date == "") {
       this.dialog.open(WarningDialogComponent, {
@@ -299,14 +293,20 @@ export class DistributionComponent implements OnInit{
   deleteRow(indata: DistributionProduct) {
     let datasources = this.innerdata;
 
-    const index = datasources.findIndex(item => item.id === indata.id);
+    this.dialog.open(ConfirmDialogComponent, {data: "Distribution Details"})
+      .afterClosed().subscribe(res => {
+      if (res) {
 
-    if (index > -1) {
-      datasources.splice(index, 1);
-    }
+        const index = datasources.findIndex(item => item.id === indata.id);
 
-    this.innerdata = datasources;
-    this.isInnerDataUpdated = true;
+        if (index > -1) {
+          datasources.splice(index, 1);
+        }
+
+        this.innerdata = datasources;
+        this.isInnerDataUpdated = true;
+      }
+  });
   }
 
   getUpdates(): string {
@@ -496,6 +496,7 @@ export class DistributionComponent implements OnInit{
     this.distributionForm.controls['clinic'].setValue(null);
     this.distributionForm.controls['mother'].setValue(null);
     this.innerdata = [];
+    this.isInnerDataUpdated = false;
 
     this.enableButtons(true,false,false);
   }
