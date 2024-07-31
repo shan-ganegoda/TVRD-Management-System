@@ -5,7 +5,7 @@ import {VaccinationRecord} from "./vaccinationrecord";
 
 export interface Vaccination{
 
-  id: number;
+  id?: number;
   clinic?:Clinic;
   childrecords?:ChildRecord;
   vaccinationprogress?:VaccinationProgress;

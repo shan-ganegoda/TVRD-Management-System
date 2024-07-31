@@ -28,6 +28,10 @@ import {PageErrorComponent} from "../../shared/page-error/page-error.component";
 import {PageLoadingComponent} from "../../shared/page-loading/page-loading.component";
 import {VaccinationRecord} from "../../core/entity/vaccinationrecord";
 import {RegexService} from "../../core/service/regexes/regex.service";
+import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
+import {DistributionProduct} from "../../core/entity/distributionproduct";
+import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
+import {Distribution} from "../../core/entity/distribution";
 
 @Component({
   selector: 'app-vaccination',
@@ -110,10 +114,10 @@ export class VaccinationComponent implements OnInit{
     },{updateOn:"change"});
 
     this.vaccinationForm = this.fb.group({
-      "lastupdated": new FormControl('',[Validators.required]),
-      "description": new FormControl('',[Validators.required]),
       "clinic": new FormControl(null,[Validators.required]),
       "childrecords": new FormControl(null,[Validators.required]),
+      "lastupdated": new FormControl('',[Validators.required]),
+      "description": new FormControl('',[Validators.required]),
       "vaccinationprogress": new FormControl(null,[Validators.required]),
     },{updateOn:"change"});
 
@@ -131,11 +135,19 @@ export class VaccinationComponent implements OnInit{
     this.loadTable("");
 
     this.cs.getAllList().subscribe({
-      next:data => this.clinics = data,
+      next:data => {
+        this.clinics = data;
+        // @ts-ignore
+        this.clinics.sort((a,b) => a.divisionname.localeCompare(b.divisionname));
+      }
     });
 
     this.crs.getAll("").subscribe({
-      next:data => this.childs = data,
+      next:data => {
+        this.childs = data;
+        // @ts-ignore
+        this.childs.sort((a,b) => a.fullname.localeCompare(b.fullname));
+      }
     });
 
     this.vps.getAll().subscribe({
@@ -147,7 +159,11 @@ export class VaccinationComponent implements OnInit{
     });
 
     this.vos.getAll().subscribe({
-      next:data => this.vofferings = data,
+      next:data => {
+        this.vofferings = data;
+        // @ts-ignore
+        this.vofferings.sort((a,b) => a.title.localeCompare(b.title));
+      },
     });
 
     this.rs.getRegexes('vaccination').subscribe({
@@ -261,23 +277,247 @@ export class VaccinationComponent implements OnInit{
     }
   }
 
+  id= 0;
+
   addToTable() {
+
+    this.inndata = this.innerForm.getRawValue();
+
+    if (this.inndata.vaccineoffering == null || this.inndata.vaccinationstatus == null || this.inndata.date == "") {
+      this.dialog.open(WarningDialogComponent, {
+        data: {heading: "Errors - Vaccination Record Add ", message: "Please Add Required Details"}
+      }).afterClosed().subscribe(res => {
+        if (!res) {
+          return;
+        }
+      });
+    } else {
+
+      let vac = new VaccinationRecord(this.id,this.inndata.vaccineoffering,this.inndata.date,this.inndata.vaccinationstatus);
+
+      let tem: VaccinationRecord[] = [];
+      if (this.innerdata != null) this.innerdata.forEach((i) => tem.push(i));
+
+      this.innerdata = [];
+      tem.forEach((t) => this.innerdata.push(t));
+
+      this.innerdata.push(vac);
+
+      this.id++;
+
+      this.isInnerDataUpdated = true;
+      this.innerForm.reset();
+
+      for (const controlName in this.innerForm.controls) {
+        this.innerForm.controls[controlName].clearValidators();
+        this.innerForm.controls[controlName].updateValueAndValidity();
+      }
+    }
 
   }
 
   deleteRow(indata: VaccinationRecord) {
+    let datasources = this.innerdata;
 
+    this.dialog.open(ConfirmDialogComponent, {data: "Vaccination Records"})
+      .afterClosed().subscribe(res => {
+      if (res) {
+
+        const index = datasources.findIndex(item => item.id === indata.id);
+
+        if (index > -1) {
+          datasources.splice(index, 1);
+        }
+
+        this.innerdata = datasources;
+        this.isInnerDataUpdated = true;
+      }
+    });
+  }
+
+  getUpdates(): string {
+    let updates: string = "";
+    for (const controlName in this.vaccinationForm.controls) {
+      const control = this.vaccinationForm.controls[controlName];
+      if (control.dirty) {
+        updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1) + " Changed";
+      }
+    }
+    if(this.isInnerDataUpdated){
+      updates = updates + "<br>" + "Vaccination Record Changed";
+    }
+    return updates;
+  }
+
+  getErrors() {
+
+    let errors: string = "";
+
+    for (const controlName in this.vaccinationForm.controls) {
+      const control = this.vaccinationForm.controls[controlName];
+      if (control.errors) {
+        if (this.regexes[controlName] != undefined) {
+          errors = errors + "<br>" + this.regexes[controlName]['message'];
+        } else {
+          errors = errors + "<br>Invalid " + controlName;
+        }
+      }
+    }
+    if(this.innerdata.length == 0) {
+      errors = errors + "<br>Invalid Vaccination Record";
+    }
+    return errors;
   }
 
   add() {
+    let errors = this.getErrors();
+    //console.log(this.innerdata);
 
+    if (errors != "") {
+      this.dialog.open(WarningDialogComponent, {
+        data: {heading: "Errors - Vaccination Add ", message: "You Have Following Errors " + errors}
+      }).afterClosed().subscribe(res => {
+        if (!res) {
+          return;
+        }
+      });
+    } else {
+
+      if (this.vaccinationForm.valid) {
+
+        // @ts-ignore
+        this.innerdata.forEach((i)=> delete i.id);
+
+
+        const vaccination:Vaccination = {
+          lastupdated: this.vaccinationForm.controls['lastupdated'].value,
+          description: this.vaccinationForm.controls['description'].value,
+
+          vaccinationrecords: this.innerdata,
+
+          clinic: {id: parseInt(this.vaccinationForm.controls['clinic'].value)},
+          vaccinationprogress: {id: parseInt(this.vaccinationForm.controls['vaccinationprogress'].value)},
+          childrecords: {id: parseInt(this.vaccinationForm.controls['childrecords'].value),dobirth:''},
+        }
+
+        //console.log(porder);
+        this.currentOperation = "Add Distribution ";
+
+        this.dialog.open(ConfirmDialogComponent, {data: this.currentOperation})
+          .afterClosed().subscribe(res => {
+          if (res) {
+            this.vs.save(vaccination).subscribe({
+              next: () => {
+                this.tst.handleResult('success',"Vaccination Saved Successfully");
+                this.loadTable("");
+                this.clearForm();
+              },
+              error: (err: any) => {
+                this.tst.handleResult('Failed',err.error.data.message);
+              }
+            });
+          }
+        })
+      }
+
+    }
   }
 
   update(currentVaccination: Vaccination) {
+    let errors = this.getErrors();
 
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Vaccination Update ",message: "You Have Following Errors <br> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+
+    }else{
+
+      let updates:string = this.getUpdates();
+
+      if(updates != ""){
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Vaccination Update ",message: "You Have Following Updates <br> " + updates}
+        }).afterClosed().subscribe(res => {
+          if(!res){
+            return;
+          }else{
+
+            // @ts-ignore
+            this.innerdata.forEach((i)=> delete i.id);
+
+            const vaccination:Vaccination = {
+              lastupdated: this.vaccinationForm.controls['lastupdated'].value,
+              description: this.vaccinationForm.controls['description'].value,
+
+              vaccinationrecords: this.innerdata,
+
+              clinic: {id: parseInt(this.vaccinationForm.controls['clinic'].value)},
+              vaccinationprogress: {id: parseInt(this.vaccinationForm.controls['vaccinationprogress'].value)},
+              childrecords: {id: parseInt(this.vaccinationForm.controls['childrecords'].value),dobirth:''},
+            }
+
+            vaccination.id = currentVaccination.id;
+
+            //console.log(distribution);
+
+            this.currentOperation = "Vaccination Update ";
+
+            this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+              .afterClosed().subscribe(res => {
+              if(res) {
+                this.vs.update(vaccination).subscribe({
+                  next:() => {
+                    this.tst.handleResult('success',"Vaccination Successfully Updated");
+                    this.loadTable("");
+                    this.clearForm();
+                  },
+                  error:(err:any) => {
+                    this.tst.handleResult('Failed',err.error.data.message);
+                    //console.log(err);
+                  }
+                });
+              }
+            })
+
+          }
+        });
+
+      }else{
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Vaccination Update ",message: "No Fields Updated "}
+        }).afterClosed().subscribe(res =>{
+          if(res){return;}
+        })
+      }
+    }
   }
 
   delete(currentVaccination: Vaccination) {
+
+    const operation = "Delete Vaccination ";
+    //console.log(operation);
+
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe((res:boolean) => {
+      if(res && currentVaccination.id){
+        this.vs.delete(currentVaccination.id).subscribe({
+          next: () => {
+            this.loadTable("");
+            this.tst.handleResult("success","Vaccination Successfully Deleted");
+            this.clearForm();
+          },
+
+          error: (err:any) => {
+            this.tst.handleResult("Failed",err.error.data.message);
+          }
+        });
+      }
+    });
 
   }
 
@@ -293,11 +533,37 @@ export class VaccinationComponent implements OnInit{
   }
 
   handleSearch() {
+    const ssclinic  = this.vaccinationSearchForm.controls['ssclinic'].value;
+    const ssvaccinationprogress  = this.vaccinationSearchForm.controls['ssvaccinationprogress'].value;
+    const sschildrecords  = this.vaccinationSearchForm.controls['sschildrecords'].value;
+    const ssvaccineoffering  = this.vaccinationSearchForm.controls['ssvaccineoffering'].value;
 
+    let query = ""
+
+    if(ssclinic != "") query = query + "&clinicid=" + parseInt(ssclinic);
+    if(ssvaccinationprogress != "") query = query + "&vaccinationprogressid=" + parseInt(ssvaccinationprogress);
+    if(sschildrecords != "") query = query + "&childrecordid=" + parseInt(sschildrecords);
+    if(ssvaccineoffering != "") query = query + "&vaccineofferingid=" + parseInt(ssvaccineoffering);
+
+    if(query != "") query = query.replace(/^./, "?")
+    this.loadTable(query);
   }
 
   clearSearch() {
+    const operation = "Clear Search";
 
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.vaccinationSearchForm.controls['ssclinic'].setValue('');
+        this.vaccinationSearchForm.controls['ssvaccinationprogress'].setValue('');
+        this.vaccinationSearchForm.controls['sschildrecords'].setValue('');
+        this.vaccinationSearchForm.controls['ssvaccineoffering'].setValue('');
+        this.loadTable("");
+      }
+    });
   }
 
 

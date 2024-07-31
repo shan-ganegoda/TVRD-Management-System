@@ -75,7 +75,7 @@ public class VaccinationServiceIMPL implements VaccinationService{
 
     @Override
     public VaccinationDTO update(VaccinationDTO vaccinationDTO) {
-        Vaccination vaccinationrec = vaccinationRepository.findById(vaccinationDTO.getId()).orElseThrow(null);
+        Vaccination vaccinationrec = vaccinationRepository.findById(vaccinationDTO.getId()).orElseThrow(() -> new ResourceNotFountException("Vaccination Not Found"));
 
         if(vaccinationrec != null){
 
@@ -103,7 +103,8 @@ public class VaccinationServiceIMPL implements VaccinationService{
 
     @Override
     public String delete(Integer id) {
-        Vaccination vaccination = vaccinationRepository.findById(id).orElseThrow(null);
+        Vaccination vaccination = vaccinationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFountException("Vaccination Not Found"));
 
         if(vaccination != null){
             vaccinationRepository.delete(vaccination);

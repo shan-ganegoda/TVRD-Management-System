@@ -345,7 +345,7 @@ export class DistributionComponent implements OnInit{
 
   add() {
     let errors = this.getErrors();
-    console.log(this.innerdata);
+    //console.log(this.innerdata);
 
     if (errors != "") {
       this.dialog.open(WarningDialogComponent, {
@@ -470,7 +470,7 @@ export class DistributionComponent implements OnInit{
   }
 
   delete(currentDistribution: Distribution) {
-    const operation = "Delete GRN ";
+    const operation = "Delete Distribution ";
     //console.log(operation);
 
     this.dialog.open(ConfirmDialogComponent,{data:operation})

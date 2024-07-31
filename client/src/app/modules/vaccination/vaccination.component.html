@@ -212,6 +212,20 @@
         </div>
 
         <div class="relative w-full mb-3 px-2">
+          <select
+            class="peer select select-bordered w-full bg-white focus:outline-none"
+            formControlName="vaccinationprogress"
+          >
+            <option disabled [ngValue]="null">Vaccination Progress</option>
+
+            @for (vaccinationprogress of vaccinationprogresses; track vaccinationprogresses) {
+              <option [ngValue]="vaccinationprogress.id">{{vaccinationprogress.name}}</option>
+            }
+          </select>
+          <label class="floating-labels-select">Vaccination Progress</label>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
             <textarea
               class="peer textarea textarea-bordered w-full h-36 focus:outline-none"
               placeholder="Description"
