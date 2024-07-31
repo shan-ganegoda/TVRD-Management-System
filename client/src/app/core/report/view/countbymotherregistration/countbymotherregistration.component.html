@@ -1,0 +1,97 @@
+<div class="px-4 py-3 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg h-20">
+  <div class=" absolute mt-1 ml-3 mr-4 text-[1.7em] font-semibold pointer-events-none">Product Order Report</div>
+  <div class="text-sm breadcrumbs absolute mt-6 ml-3">
+    <ul>
+      <li class="text-gray-500"><a routerLink="../home">Home</a></li>
+      <li>Report</li>
+      <li>ProductOrderReport</li>
+    </ul>
+  </div>
+</div>
+
+<mat-grid-list [cols]="1" rowHeight="12rem">
+
+  <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Interative Panel</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full">
+        <form [formGroup]="search">
+          <div class="flex flex-row mt-6 w-1/2" >
+            <div class="relative mr-2 w-full">
+              <input
+                type="text"
+                placeholder="Start Date"
+                class="peer input input-bordered w-full focus:outline-none"
+                formControlName="startDate"
+                onfocus="(this.type='date')"
+              />
+              <label class="floating-label">Start Date</label>
+            </div>
+            <div class="relative mr-2 w-full">
+              <input
+                type="text"
+                placeholder="End Date"
+                class="peer input input-bordered w-full focus:outline-none"
+                formControlName="endDate"
+                onfocus="(this.type='date')"
+              />
+              <label class="floating-label">End Date</label>
+            </div>
+            <button class="btn text-white bg-gray-950 hover:bg-gray-900" (click)="handleSearch()">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 13.5V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 9.75V10.5" />
+              </svg>
+              Filter
+            </button>
+            <button class="btn text-white bg-gray-950 hover:bg-gray-900 ml-2" (click)="clearSearch()">
+              Clear
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+
+
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Table View</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full">
+        <mat-table [dataSource]="data">
+          <!--          @for(column of columns;track columns){}-->
+          <ng-container *ngFor="let column of columns; let i = index;" [matColumnDef]="column">
+            <mat-header-cell *matHeaderCellDef> {{ headers[i] }} </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element[binders[i]] }} </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+        </mat-table>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Bar Chart</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full"><div #barchart></div></mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+
+
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+
+    <mat-card class="w-fit h-full justify-center ml-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Pie Chat View</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full">
+        <div #piechart></div>
+      </mat-card-content>
+    </mat-card>
+
+
+    <mat-card class="w-full h-full ml-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Line Chart View</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full"><div #linechart></div></mat-card-content>
+    </mat-card>
+
+  </mat-grid-tile>
+
+</mat-grid-list>
+

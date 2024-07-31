@@ -10,6 +10,7 @@ import com.content.security.util.mapper.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,6 +73,7 @@ public class ClinicServiceIMPL implements ClinicService {
     public ClinicDTO create(ClinicDTO clinicDTO) {
         if(!clinicRepository.existsByDivisionno(clinicDTO.getDivisionno())){
             Clinic clinic = objectMapper.clinicDtoToClinic(clinicDTO);
+            clinic.setLastupdated(LocalDate.now());
             clinicRepository.save(clinic);
             return clinicDTO;
         }else{
@@ -85,6 +87,7 @@ public class ClinicServiceIMPL implements ClinicService {
         Clinic clinicRecord = clinicRepository.findById(clinicDTO.getId()).orElse(null);
         if(clinicRecord != null){
             Clinic clinic = objectMapper.clinicDtoToClinic(clinicDTO);
+            clinic.setLastupdated(LocalDate.now());
             if(clinicRecord.getDivisionno().equals(clinicDTO.getDivisionno())){
                 clinicRepository.save(clinic);
                 return clinicDTO;

@@ -8,6 +8,7 @@ import {CountByDesignation} from "../entity/countByDesignation";
 import {VehicleCountByMoh} from "../entity/vehiclecountbymoh";
 import {CountByVOrders} from "../entity/countbyvorders";
 import {ProductOrdersByProduct} from "../entity/productordersbyproduct";
+import {CountByMotherRegistration} from "../entity/countbymotherregistration";
 
 const API_URL = environment.apiUrl + '/admin/reports';
 
@@ -40,5 +41,9 @@ export class ReportService {
 
   productOrdersByProduct(query:string){
     return this.http.get<ProductOrdersByProduct[]>(API_URL + "/countbyproductorderdateandproduct"+ query);
+  }
+
+  getMotherRegistrationCount(query:string){
+    return this.http.get<CountByMotherRegistration[]>(API_URL+"/countbymotherregister"+query);
   }
 }

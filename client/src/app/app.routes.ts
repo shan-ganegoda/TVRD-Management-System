@@ -27,6 +27,9 @@ import {ChildrecordComponent} from "./modules/childrecord/childrecord.component"
 import {GrnComponent} from "./modules/grn/grn.component";
 import {DistributionComponent} from "./modules/distribution/distribution.component";
 import {VaccinationComponent} from "./modules/vaccination/vaccination.component";
+import {
+  CountbymotherregistrationComponent
+} from "./core/report/view/countbymotherregistration/countbymotherregistration.component";
 
 export const routes: Routes = [
   { path: "login", component: AuthComponent },
@@ -60,6 +63,7 @@ export const routes: Routes = [
       {path: "employeereport", component: EmployeebydesignationComponent,title: "Employee Report"},
       {path: "vehiclereport", component: VehiclecountbymohComponent,title: "Vehicle Report"},
       {path: "vorderreport", component: CountbyvorderComponent,title: "VOrder Report"},
+      {path: "motherreport", component: CountbymotherregistrationComponent,title: "Mother Report"},
       {path:"**", component:NotfoundpageComponent}
 
     ]

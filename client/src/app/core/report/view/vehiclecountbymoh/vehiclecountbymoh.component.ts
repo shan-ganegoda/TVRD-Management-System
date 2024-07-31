@@ -111,7 +111,8 @@ export class VehiclecountbymohComponent implements OnInit{
     const pieOptions = {
       title: 'Vehicle Count (Pie Chart)',
       height: 400,
-      width: 550
+      width: 550,
+      pieHole: 0.4
     };
 
     const lineOptions = {
