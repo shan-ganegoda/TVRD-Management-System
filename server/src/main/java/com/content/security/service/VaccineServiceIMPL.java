@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -76,27 +77,42 @@ public class VaccineServiceIMPL implements VaccineService{
 
     @Override
     public VaccineDTO updateVaccine(VaccineDTO vaccineDTO) {
-        if(vaccineRepository.existsById(vaccineDTO.getId())){
-            try{
-                Vaccine vaccine = objectMapper.vaccineDtoToVaccine(vaccineDTO);
-                vaccine.getVaccineofferings().forEach(vo -> vo.setVaccine(vaccine));
-                vaccineRepository.save(vaccine);
+        Vaccine vaccinerec = vaccineRepository.findById(vaccineDTO.getId()).orElseThrow(() ->  new ResourceNotFountException("Vaccine Not Found"));
 
-            }catch(Exception e){
-                System.out.println(e);
+        if(vaccinerec != null) {
+            Vaccine vaccine = objectMapper.vaccineDtoToVaccine(vaccineDTO);
+
+            if (Objects.equals(vaccinerec.getCode(), vaccine.getCode())) {
+                try {
+                    vaccine.getVaccineofferings().forEach(vo -> vo.setVaccine(vaccine));
+                    vaccineRepository.save(vaccine);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                return vaccineDTO;
+
+            } else if (!vaccineRepository.existsByCode(vaccine.getCode())) {
+                try {
+                    vaccine.getVaccineofferings().forEach(vo -> vo.setVaccine(vaccine));
+                    vaccineRepository.save(vaccine);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                return vaccineDTO;
+            } else {
+                throw new ResourceAlreadyExistException("Vaccine Already Exist!");
             }
-
-            return vaccineDTO;
         }else{
             throw new ResourceNotFountException("Vaccine Not Found");
         }
+
     }
 
     @Override
     public void deleteVaccine(Integer id) {
         if(vaccineRepository.existsById(id)){
 
-            Vaccine vaccine = vaccineRepository.findById(id).orElseThrow(null);
+            Vaccine vaccine = vaccineRepository.findById(id).orElseThrow(() ->  new ResourceNotFountException("Vaccine Not Found"));
 
             if(vaccine != null){
                 vaccineRepository.delete(vaccine);

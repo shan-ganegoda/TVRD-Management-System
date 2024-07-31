@@ -28,6 +28,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 import {ToastService} from "../../core/util/toast/toast.service";
+import {AuthorizationService} from "../../core/service/auth/authorization.service";
 
 @Component({
   selector: 'app-vaccine',
@@ -57,8 +58,10 @@ export class VaccineComponent implements OnInit{
   data!: Observable<any>
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  hasUpdateAuthority = true;
-  hasDeleteAuthority = true;
+  hasUpdateAuthority = this.am.hasAuthority("Vaccine-Update");
+  hasDeleteAuthority = this.am.hasAuthority("Vaccine-Delete");
+  hasReadAuthority = this.am.hasAuthority("Vaccine-Read");
+  hasWriteAuthority = this.am.hasAuthority("Vaccine-Write");
 
   vaccineSearchForm!: FormGroup;
   vaccineForm!: FormGroup;
@@ -77,6 +80,8 @@ export class VaccineComponent implements OnInit{
   innerdata: VaccineOffering[] = [];
   employees: Employee[] = [];
 
+  isInnerDataUpdated:boolean = false;
+
   enaadd: boolean = false;
   enaupd: boolean = false;
   enadel: boolean = false;
@@ -93,7 +98,7 @@ export class VaccineComponent implements OnInit{
               private es:EmployeeService,
               private rs:RegexService,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar,
+              private am: AuthorizationService,
               private tst:ToastService
   ) {
 
@@ -276,7 +281,15 @@ export class VaccineComponent implements OnInit{
 
     this.inndata = this.innerForm.getRawValue();
 
-    if (this.inndata != null) {
+    if (this.inndata.dose == null || this.inndata.vaccinationstage == null || this.inndata.year == "" || this.inndata.month == "") {
+      this.dialog.open(WarningDialogComponent, {
+        data: {heading: "Errors - Vaccine Add ", message: "Please Add Required Details"}
+      }).afterClosed().subscribe(res => {
+        if (!res) {
+          return;
+        }
+      });
+    } else {
 
       if(this.vaccineForm.controls['name'].value != ""){
         this.title = this.vaccineForm.controls['name'].value + " " + this.inndata.dose.id;
@@ -293,6 +306,7 @@ export class VaccineComponent implements OnInit{
 
       this.id++;
 
+      this.isInnerDataUpdated = true;
       this.innerForm.reset();
 
       for (const controlName in this.innerForm.controls) {
@@ -306,13 +320,21 @@ export class VaccineComponent implements OnInit{
   deleteRow(indata: VaccineOffering) {
     let datasources = this.innerdata;
 
-    const index = datasources.findIndex(item => item.id === indata.id);
+    this.dialog.open(ConfirmDialogComponent, {data: "Vaccine Offering Details Delete"})
+      .afterClosed().subscribe(res => {
+      if (res) {
 
-    if (index > -1) {
-      datasources.splice(index, 1);
-    }
+        const index = datasources.findIndex(item => item.id === indata.id);
 
-    this.innerdata = datasources;
+        if (index > -1) {
+          datasources.splice(index, 1);
+        }
+
+        this.isInnerDataUpdated = true;
+        this.innerdata = datasources;
+      }
+
+    });
   }
 
   getUpdates(): string {
@@ -322,6 +344,9 @@ export class VaccineComponent implements OnInit{
       if (control.dirty) {
         updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1) + " Changed";
       }
+    }
+    if(this.isInnerDataUpdated){
+      updates = updates + "<br>" + "Vaccine Offering Changed";
     }
     return updates;
   }
@@ -339,6 +364,9 @@ export class VaccineComponent implements OnInit{
           errors = errors + "<br>Invalid " + controlName;
         }
       }
+    }
+    if(this.innerdata.length == 0) {
+      errors = errors + "<br>Invalid Vaccine Offering";
     }
     return errors;
   }
@@ -503,6 +531,7 @@ export class VaccineComponent implements OnInit{
         this.vaccineForm.controls['vaccinestatus'].setValue(null);
         this.innerdata = [];
 
+        this.isInnerDataUpdated = false;
         this.enableButtons(true,false,false);
   }
 

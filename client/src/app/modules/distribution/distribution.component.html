@@ -226,7 +226,7 @@
             Add
           </button>
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(currentDistribution)"
-                  [disabled]="!enaupd">Update
+                  [disabled]="!enaupd || !hasUpdateAuthority ">Update
           </button>
           <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900" (click)="delete(currentDistribution)"
                   [disabled]="!hasDeleteAuthority || !enadel ">Delete
@@ -277,9 +277,9 @@
                   <th>
                     <div>
                       <button
-                        class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                        class=" join-item {{hasReadAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
                         (click)="fillForm(dis)"
-                        [disabled]="!hasUpdateAuthority"
+                        [disabled]="!hasReadAuthority"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

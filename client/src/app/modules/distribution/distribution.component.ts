@@ -82,6 +82,7 @@ export class DistributionComponent implements OnInit{
   protected hasUpdateAuthority = this.authorizationService.hasAuthority("Distribution-Update"); //need to be false
   protected hasDeleteAuthority = this.authorizationService.hasAuthority("Distribution-Delete"); //need to be false
   protected hasWriteAuthority = this.authorizationService.hasAuthority("Distribution-Write");
+  protected hasReadAuthority = this.authorizationService.hasAuthority("Distribution-Read");
 
   constructor(
               private authorizationService:AuthorizationService,
