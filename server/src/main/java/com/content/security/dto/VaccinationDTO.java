@@ -6,6 +6,7 @@ import com.content.security.entity.Vaccinationprogress;
 import com.content.security.entity.Vaccinationrecord;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class VaccinationDTO {
     private Childrecord childrecords;
     private Vaccinationprogress vaccinationprogress;
     private LocalDate lastupdated;
+    @Pattern(regexp = "^.*$", message = "Invalid Description")
     private String description;
     private Set<Vaccinationrecord> vaccinationrecords;
 }
