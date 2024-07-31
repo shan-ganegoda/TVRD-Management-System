@@ -26,6 +26,7 @@ import {CountbyvorderComponent} from "./core/report/view/countbyvorder/countbyvo
 import {ChildrecordComponent} from "./modules/childrecord/childrecord.component";
 import {GrnComponent} from "./modules/grn/grn.component";
 import {DistributionComponent} from "./modules/distribution/distribution.component";
+import {VaccinationComponent} from "./modules/vaccination/vaccination.component";
 
 export const routes: Routes = [
   { path: "login", component: AuthComponent },
@@ -50,6 +51,7 @@ export const routes: Routes = [
       {path: "childrecord", component: ChildrecordComponent, title: "Child Record"},
       {path: "grn", component: GrnComponent, title: "GRN"},
       {path: "distribution", component: DistributionComponent, title: "Distribution"},
+      {path: "vaccination", component: VaccinationComponent, title: "Vaccination"},
 
       {path: "profile", component: ProfileComponent, title: "Profile"},
 

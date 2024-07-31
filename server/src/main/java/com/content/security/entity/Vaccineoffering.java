@@ -38,4 +38,7 @@ public class Vaccineoffering {
     @Column(name = "month")
     private Integer month;
 
+    @Column(name = "title")
+    private String title;
+
 }

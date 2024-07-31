@@ -22,10 +22,9 @@ import {PageErrorComponent} from "../../shared/page-error/page-error.component";
 import {PageLoadingComponent} from "../../shared/page-loading/page-loading.component";
 import {GrnProduct} from "../../core/entity/grnproduct";
 import {RegexService} from "../../core/service/regexes/regex.service";
-import {VaccineOffering} from "../../core/entity/vaccineoffering";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
-import {Vaccine} from "../../core/entity/vaccine";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
+import {AuthorizationService} from "../../core/service/auth/authorization.service";
 
 @Component({
   selector: 'app-grn',
@@ -64,8 +63,10 @@ export class GrnComponent implements OnInit{
   data!: Observable<any>
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  hasUpdateAuthority = true;
-  hasDeleteAuthority = true;
+  hasUpdateAuthority = this.am.hasAuthority("Grn-Update");
+  hasDeleteAuthority = this.am.hasAuthority("Grn-Delete");
+  hasWriteAuthority = this.am.hasAuthority("Grn-Write");
+  hasReadAuthority = this.am.hasAuthority("Grn-Read");
 
   enaadd: boolean = false;
   enaupd: boolean = false;
@@ -92,7 +93,8 @@ export class GrnComponent implements OnInit{
               private ps:ProductService,
               private tst:ToastService,
               private dialog:MatDialog,
-              private rs:RegexService
+              private rs:RegexService,
+              private am:AuthorizationService
   ) {
     this.grnSearchForm = this.fb.group({
       "sscode": new FormControl(''),

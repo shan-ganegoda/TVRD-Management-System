@@ -270,6 +270,7 @@ export class VaccineComponent implements OnInit{
   }
 
   id= 0;
+  title = "";
 
   addToTable() {
 
@@ -277,8 +278,10 @@ export class VaccineComponent implements OnInit{
 
     if (this.inndata != null) {
 
-
-      let vaccineof = new VaccineOffering(this.id, this.inndata.dose, this.inndata.vaccinationstage, this.inndata.year,this.inndata.month);
+      if(this.vaccineForm.controls['name'].value != ""){
+        this.title = this.vaccineForm.controls['name'].value + " " + this.inndata.dose.id;
+      }
+      let vaccineof = new VaccineOffering(this.id, this.inndata.dose, this.inndata.vaccinationstage, this.inndata.year,this.inndata.month,this.title);
 
       let tem: VaccineOffering[] = [];
       if (this.innerdata != null) this.innerdata.forEach((i) => tem.push(i));

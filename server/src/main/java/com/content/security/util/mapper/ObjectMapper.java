@@ -144,4 +144,6 @@ public interface ObjectMapper {
     List<VaccinationProgressDTO> vaccinationProgressListToDtoList(List<Vaccinationprogress> vaccinationprogressList);
 
     List<VaccinationStatusDTO> vaccinationstatusListToDtoList(List<Vaccinationstatus> vaccinationStatusList);
+
+    List<VaccineOfferingDTO> vaccineOfferingListToDtoList(List<Vaccineoffering> vaccineOfferingList);
 }
