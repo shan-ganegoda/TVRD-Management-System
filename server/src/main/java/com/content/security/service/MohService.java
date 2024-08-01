@@ -13,7 +13,7 @@ public interface MohService {
 
     String deleteMoh(Integer id);
 
-    String updateMoh(MohDTO mohDTO);
+    MohDTO updateMoh(MohDTO mohDTO);
 
     MohDTO getMohById(Integer id);
 

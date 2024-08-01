@@ -74,6 +74,7 @@ export class GrnComponent implements OnInit{
 
   regexes: any;
 
+  isInnerDataUpdated:boolean = false;
 
   employees:Employee[] = [];
   grns:Grn[] = [];
@@ -268,7 +269,6 @@ export class GrnComponent implements OnInit{
   addToTable() {
 
     this.inndata = this.innerForm.getRawValue();
-    console.log(this.inndata.product);
 
     if (this.inndata.product == null) {
       this.dialog.open(WarningDialogComponent, {
@@ -293,6 +293,7 @@ export class GrnComponent implements OnInit{
       this.id++;
 
       this.innerForm.reset();
+      this.isInnerDataUpdated = true;
 
       for (const controlName in this.innerForm.controls) {
         this.innerForm.controls[controlName].clearValidators();
@@ -305,15 +306,22 @@ export class GrnComponent implements OnInit{
   deleteRow(indata: GrnProduct) {
     let datasources = this.innerdata;
 
-    const index = datasources.findIndex(item => item.id === indata.id);
+    this.dialog.open(ConfirmDialogComponent, {data: "Delete GRN Quentity"})
+      .afterClosed().subscribe(res => {
+      if (res) {
 
-    if (index > -1) {
-      datasources.splice(index, 1);
+        const index = datasources.findIndex(item => item.id === indata.id);
+
+        if (index > -1) {
+          datasources.splice(index, 1);
+        }
+
+        this.innerdata = datasources;
+        this.isInnerDataUpdated = true;
+      }
+      });
     }
-
-    this.innerdata = datasources;
-  }
-
+    
   getUpdates(): string {
     let updates: string = "";
     for (const controlName in this.grnForm.controls) {
@@ -321,6 +329,9 @@ export class GrnComponent implements OnInit{
       if (control.dirty) {
         updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1) + " Changed";
       }
+    }
+    if(this.isInnerDataUpdated){
+      updates = updates + "<br>" + "GRN Quentity Changed";
     }
     return updates;
   }
@@ -338,6 +349,9 @@ export class GrnComponent implements OnInit{
           errors = errors + "<br>Invalid " + controlName;
         }
       }
+    }
+    if(this.innerdata.length == 0) {
+      errors = errors + "<br>Invalid GRN Quentity";
     }
     return errors;
   }

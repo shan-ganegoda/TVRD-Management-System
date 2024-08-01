@@ -19,21 +19,21 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class ProductOrderServiceIMPL implements ProductOrderService{
+public class ProductOrderServiceIMPL implements ProductOrderService {
 
     private final ProductOrderRepository productOrderRepository;
     private final ObjectMapper objectMapper;
 
     @Override
-    public List<ProductOrderDTO> getProductOrders(HashMap<String,String> params) {
+    public List<ProductOrderDTO> getProductOrders(HashMap<String, String> params) {
 
         List<Productorder> productOrders = productOrderRepository.findAll();
 
-        if(!productOrders.isEmpty()){
+        if (!productOrders.isEmpty()) {
             List<ProductOrderDTO> productOrderDTOList = objectMapper.productOrderToDtoList(productOrders);
-            if(params.isEmpty()){
+            if (params.isEmpty()) {
                 return productOrderDTOList;
-            }else{
+            } else {
                 String dorequired = params.get("dorequired");
                 String dorequested = params.get("dorequested");
                 String mohid = params.get("mohid");
@@ -41,71 +41,73 @@ public class ProductOrderServiceIMPL implements ProductOrderService{
 
                 Stream<ProductOrderDTO> postream = productOrderDTOList.stream();
 
-                if(mohid!=null) postream = postream.filter(e-> e.getMoh().getId()==Integer.parseInt(mohid));
-                if(postatusid!=null) postream = postream.filter(e-> e.getProductorderstatus().getId()==Integer.parseInt(postatusid));
-                if(dorequired!=null) postream = postream.filter(e-> e.getDorequired().equals(LocalDate.parse(dorequired)));
-                if(dorequested!=null) postream = postream.filter(e-> e.getDorequested().equals(LocalDate.parse(dorequested)));
+                if (mohid != null) postream = postream.filter(e -> e.getMoh().getId() == Integer.parseInt(mohid));
+                if (postatusid != null)
+                    postream = postream.filter(e -> e.getProductorderstatus().getId() == Integer.parseInt(postatusid));
+                if (dorequired != null)
+                    postream = postream.filter(e -> e.getDorequired().equals(LocalDate.parse(dorequired)));
+                if (dorequested != null)
+                    postream = postream.filter(e -> e.getDorequested().equals(LocalDate.parse(dorequested)));
 
 
                 return postream.collect(Collectors.toList());
             }
-        }else{
+        } else {
             throw new ResourceNotFountException("Product Orders Not Found");
         }
-        
+
     }
 
     @Override
     public ProductOrderDTO saveProductOrder(ProductOrderDTO productOrderDTO) {
-        if(productOrderDTO != null){
+        if (productOrderDTO != null) {
+
+            if (productOrderRepository.existsByCode(productOrderDTO.getCode())) {
+                throw new ResourceAlreadyExistException("Code Already Exist!");
+            }
+
             Productorder porder = objectMapper.productOrderDtoToProductOrder(productOrderDTO);
 
-            if(!productOrderRepository.existsByCode(porder.getCode())){
-                for(Productorderproduct i : porder.getProductorderproducts()){
+                for (Productorderproduct i : porder.getProductorderproducts()) {
                     i.setProductorder(porder);
                 }
 
                 productOrderRepository.save(porder);
                 return productOrderDTO;
-            }else{
-                throw new ResourceAlreadyExistException("Product Order Already Exist!");
-            }
         }else{
-            throw new ResourceNotFountException("Product Order Not Found");
+            throw new ResourceNotFountException("ProductOrder Data Not Found");
         }
     }
 
     @Override
     public ProductOrderDTO updateProductOrder(ProductOrderDTO productOrderDTO) {
 
-        if(productOrderRepository.existsById(productOrderDTO.getId())){
-            try{
-                Productorder porder = objectMapper.productOrderDtoToProductOrder(productOrderDTO);
-                porder.getProductorderproducts().forEach(poproducts -> poproducts.setProductorder(porder));
-                productOrderRepository.save(porder);
+        Productorder po = productOrderRepository.findById(productOrderDTO.getId()).orElseThrow(() -> new ResourceNotFountException("Product Order Not Found"));
 
-            }catch(Exception e){
-                System.out.println(e);
-            }
-
-            return productOrderDTO;
-        }else{
-            throw new ResourceNotFountException("Product Order Not Found");
+        if (!po.getCode().equals(productOrderDTO.getCode()) && productOrderRepository.existsByCode(productOrderDTO.getCode())) {
+            throw new ResourceAlreadyExistException("Code Already Exist!");
         }
+
+        try {
+            Productorder porder = objectMapper.productOrderDtoToProductOrder(productOrderDTO);
+            porder.getProductorderproducts().forEach(poproducts -> poproducts.setProductorder(porder));
+            productOrderRepository.save(porder);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return productOrderDTO;
     }
 
     @Override
     public void deleteProductOrder(Integer id) {
 
-        if(productOrderRepository.existsById(id)){
+        if (productOrderRepository.existsById(id)) {
 
-            Productorder porder = productOrderRepository.findById(id).orElseThrow(null);
-
-            if(porder != null){
-                productOrderRepository.delete(porder);
-            }
-
-        }else{
+            Productorder porder = productOrderRepository.findById(id).orElseThrow(() -> new ResourceNotFountException("Product Order Not Found"));
+            productOrderRepository.delete(porder);
+        } else {
             throw new ResourceNotFountException("Product Order Not Found");
         }
     }

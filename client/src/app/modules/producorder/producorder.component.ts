@@ -75,6 +75,7 @@ export class ProducorderComponent implements OnInit {
   protected hasUpdateAuthority = this.authorizationService.hasAuthority("Product Order-Update"); //need to be false
   protected hasDeleteAuthority = this.authorizationService.hasAuthority("Product Order-Delete"); //need to be false
   protected hasWriteAuthority = this.authorizationService.hasAuthority("Product Order-Write");
+  protected hasReadAuthority = this.authorizationService.hasAuthority("Product Order-Read");
 
   poSearchForm!: FormGroup;
   porderForm!: FormGroup;
@@ -98,7 +99,6 @@ export class ProducorderComponent implements OnInit {
     private ps: ProductService,
     private rs: RegexService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar,
     private tst: ToastService,
     private authorizationService:AuthorizationService,
   ) {
@@ -182,7 +182,7 @@ export class ProducorderComponent implements OnInit {
 
   createForm() {
     this.porderForm.controls['dorequired'].setValidators([Validators.required]);
-    this.porderForm.controls['code'].setValidators([Validators.required]);
+    this.porderForm.controls['code'].setValidators([Validators.required, Validators.pattern(this.regexes['code']['regex'])]);
     this.porderForm.controls['dorequested'].setValidators([Validators.required]);
     this.porderForm.controls['description'].setValidators([Validators.required]);
     this.porderForm.controls['moh'].setValidators([Validators.required]);
@@ -353,6 +353,16 @@ export class ProducorderComponent implements OnInit {
         this.innerdata = datasources;
         this.calculateGrandTotal();
         this.isInnerDataUpdated = true;
+      }
+    });
+  }
+
+  filterEmployee(event:any){
+    let mohid = event.target.value;
+    this.ms.getMohById(parseInt(mohid)).subscribe({
+      next: data => {
+        const moh = data;
+        this.porderForm.controls['employee'].setValue(moh.employee?.id);
       }
     });
   }

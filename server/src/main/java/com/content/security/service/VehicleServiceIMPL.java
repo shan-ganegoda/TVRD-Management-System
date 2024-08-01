@@ -27,12 +27,12 @@ public class VehicleServiceIMPL implements VehicleService {
     public List<VehicleDTO> getVehicles(HashMap<String, String> params) {
         List<Vehicle> vehicles = vehicleRepository.findAll();
 
-        if(!vehicles.isEmpty()){
+        if (!vehicles.isEmpty()) {
             List<VehicleDTO> vehicleDTOList = objectMapper.vehicleListToDtoList(vehicles);
 
-            if(params.isEmpty()){
+            if (params.isEmpty()) {
                 return vehicleDTOList;
-            }else{
+            } else {
                 String number = params.get("number");
                 String mohid = params.get("mohid");
                 String vehiclestatusid = params.get("vehiclestatusid");
@@ -40,57 +40,57 @@ public class VehicleServiceIMPL implements VehicleService {
 
                 Stream<VehicleDTO> vstreame = vehicleDTOList.stream();
 
-                if(mohid!=null) vstreame = vstreame.filter(e-> e.getMoh().getId()==Integer.parseInt(mohid));
-                if(vehiclestatusid!=null) vstreame = vstreame.filter(e-> e.getVehiclestatus().getId()==Integer.parseInt(vehiclestatusid));
-                if(vehicletypeid!=null) vstreame = vstreame.filter(e-> e.getVehicletype().getId()==Integer.parseInt(vehicletypeid));
-                if(number!=null) vstreame = vstreame.filter(e-> e.getNumber().equals(number));
+                if (mohid != null) vstreame = vstreame.filter(e -> e.getMoh().getId() == Integer.parseInt(mohid));
+                if (vehiclestatusid != null)
+                    vstreame = vstreame.filter(e -> e.getVehiclestatus().getId() == Integer.parseInt(vehiclestatusid));
+                if (vehicletypeid != null)
+                    vstreame = vstreame.filter(e -> e.getVehicletype().getId() == Integer.parseInt(vehicletypeid));
+                if (number != null) vstreame = vstreame.filter(e -> e.getNumber().equals(number));
 
 
                 return vstreame.collect(Collectors.toList());
             }
-        }else{
+        } else {
             throw new ResourceNotFountException("Vehicles Not Found");
         }
     }
 
     @Override
     public VehicleDTO saveVehicle(VehicleDTO vehicleDTO) {
-        Optional<Vehicle> vehicle = vehicleRepository.findByNumber(vehicleDTO.getNumber());
-        if(!vehicle.isPresent()){
+
+        if (vehicleDTO != null) {
+
+            if (vehicleRepository.existsByNumber(vehicleDTO.getNumber())) {
+                throw new ResourceAlreadyExistException("Number Already Exist!");
+            }
+
             Vehicle vh = objectMapper.vehicleDtoToVehicle(vehicleDTO);
             vehicleRepository.save(vh);
             return vehicleDTO;
-        }else{
-            throw new ResourceAlreadyExistException("Vehicle Already Exist!");
+        } else {
+            throw new ResourceNotFountException("Vehicle Data Not Found!");
         }
     }
 
     @Override
     public VehicleDTO updateVehicle(VehicleDTO vehicleDTO) {
-        Vehicle vh = vehicleRepository.findById(vehicleDTO.getId()).orElseThrow(null);
+        Vehicle vh = vehicleRepository.findById(vehicleDTO.getId()).orElseThrow(() -> new ResourceNotFountException("Vehicle Not Found!"));
 
-        if(vh!=null){
-            if(vh.getNumber().equals(vehicleDTO.getNumber())){
-                Vehicle vehicle = objectMapper.vehicleDtoToVehicle(vehicleDTO);
-                vehicleRepository.save(vehicle);
-                return vehicleDTO;
-            }else if(!vehicleRepository.existsByNumber(vehicleDTO.getNumber())){
-                Vehicle vehicle = objectMapper.vehicleDtoToVehicle(vehicleDTO);
-                vehicleRepository.save(vehicle);
-                return vehicleDTO;
-            }else{
-                throw new ResourceAlreadyExistException("Vehicle Already Exist!");
-            }
-        }else{
-            throw new ResourceNotFountException("Vehicle Not Found!");
+        if (!vh.getNumber().equals(vehicleDTO.getNumber()) && vehicleRepository.existsByNumber(vehicleDTO.getNumber())) {
+            throw new ResourceAlreadyExistException("Number Already Exist!");
         }
+
+        Vehicle vehicle = objectMapper.vehicleDtoToVehicle(vehicleDTO);
+        vehicleRepository.save(vehicle);
+        return vehicleDTO;
+
     }
 
     @Override
     public void deleteVehicle(Integer id) {
-        if(vehicleRepository.existsById(id)){
+        if (vehicleRepository.existsById(id)) {
             vehicleRepository.deleteById(id);
-        }else{
+        } else {
             throw new ResourceNotFountException("Vehicle Not Found!");
         }
     }

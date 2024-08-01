@@ -15,7 +15,6 @@ import {ClinicstatusService} from "../../core/service/clinic/clinicstatus.servic
 import {ClinictypeService} from "../../core/service/clinic/clinictype.service";
 import {RegexService} from "../../core/service/regexes/regex.service";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {RouterLink} from "@angular/router";
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {AsyncPipe} from "@angular/common";
@@ -23,8 +22,8 @@ import {PageErrorComponent} from "../../shared/page-error/page-error.component";
 import {PageLoadingComponent} from "../../shared/page-loading/page-loading.component";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
-import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 import {ToastService} from "../../core/util/toast/toast.service";
+import {AuthorizationService} from "../../core/service/auth/authorization.service";
 
 @Component({
   selector: 'app-clinic',
@@ -67,8 +66,10 @@ export class ClinicComponent implements OnInit{
 
   currentOperation = '';
 
-  hasUpdateAuthority = true;
-  hasDeleteAuthority = true;
+  protected hasUpdateAuthority = this.authorizationService.hasAuthority("Clinic-Update"); //need to be false
+  protected hasDeleteAuthority = this.authorizationService.hasAuthority("Clinic-Delete"); //need to be false
+  protected hasWriteAuthority = this.authorizationService.hasAuthority("Clinic-Write"); //need to be false
+  protected hasReadAuthority = this.authorizationService.hasAuthority("Clinic-Read"); //need to be false
 
   enaadd:boolean = false;
   enaupd:boolean = false;
@@ -84,7 +85,8 @@ export class ClinicComponent implements OnInit{
               private rs:RegexService,
               private dialog:MatDialog,
               private tst:ToastService,
-              private cdr:ChangeDetectorRef
+              private cdr:ChangeDetectorRef,
+              private authorizationService:AuthorizationService
   ) {
     this.clinicSearchForm = this.fb.group({
       "ssdivisionname": new FormControl(''),
@@ -171,7 +173,7 @@ export class ClinicComponent implements OnInit{
 
           if (this.oldClinic != undefined && control.valid) {
             // @ts-ignore
-            if (value === this.clinicForm[controlName]) {
+            if (value === this.currentClinic[controlName]) {
               control.markAsPristine();
             } else {
               control.markAsDirty();

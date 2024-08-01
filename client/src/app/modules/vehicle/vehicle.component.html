@@ -148,9 +148,9 @@
           <label class="floating-label">Last Registered Date</label>
         </div>
 
-        <div class="mb-3 px-2">
+        <div class="relative mb-3 px-2">
           <select
-            class="select select-bordered w-full bg-white focus:outline-none"
+            class="peer select select-bordered w-full bg-white focus:outline-none"
             formControlName="moh"
           >
             <option disabled [ngValue]="null">MOH</option>
@@ -159,11 +159,12 @@
               <option [ngValue]="moh.id">{{moh.name}}</option>
             }
           </select>
+          <label class="floating-labels-select">MOH</label>
         </div>
 
-        <div class="mb-3 px-2">
+        <div class="relative mb-3 px-2">
           <select
-            class="select select-bordered w-full bg-white focus:outline-none"
+            class="peer select select-bordered w-full bg-white focus:outline-none"
             formControlName="vehiclestatus"
           >
             <option disabled [ngValue]="null">Vehicle Status</option>
@@ -172,12 +173,13 @@
               <option [ngValue]="status.id">{{status.name}}</option>
             }
           </select>
+          <label class="floating-labels-select">Vehicle Status</label>
         </div>
 
-        <div class="mb-3 px-2">
-          <div class="flex flex-row">
+        <div class="flex flex-row items-center mb-3">
+          <div class="relative w-full px-2">
             <select
-              class="select select-bordered w-full bg-white focus:outline-none mr-2"
+              class="peer select select-bordered w-full bg-white focus:outline-none mr-2"
               formControlName="vehicletype"
             >
               <option disabled [ngValue]="null">Vehicle Type</option>
@@ -186,9 +188,12 @@
                 <option value="{{vehicletype.id}}">{{vehicletype.name}}</option>
               }
             </select>
+            <label class="floating-labels-select">Vehicle Type</label>
+          </div>
 
+          <div class="relative w-full px-2">
             <select
-              class="select select-bordered w-full bg-white focus:outline-none"
+              class="peer select select-bordered w-full bg-white focus:outline-none"
               formControlName="vehiclemodel"
             >
               <option disabled [ngValue]="null">Vehicle Model</option>
@@ -197,6 +202,7 @@
                 <option [ngValue]="vehiclemodel.id">{{vehiclemodel.name}}</option>
               }
             </select>
+            <label class="floating-labels-select">Vehicle Model</label>
           </div>
         </div>
 
@@ -211,7 +217,7 @@
 
         <div class="flex flex-row mt-3 max-w-[97%] px-2 pb-5">
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="add()" [disabled]="!enaadd || !hasWriteAuthority">Add</button>
-          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(currentVehicle)" [disabled]="!enaupd">Update</button>
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(currentVehicle)" [disabled]="!enaupd || !hasUpdateAuthority">Update</button>
           <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900" (click)="delete(currentVehicle)"
                   [disabled]="!hasDeleteAuthority || !enadel " >Delete</button>
           <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="clearForm()">Clear</button>
@@ -229,7 +235,7 @@
       </div>
 
       <div class="overflow-auto p-4 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
-        @if(!isFailed && !isLoading && vehicles.length !== 0){
+        @if(!isFailed || !isLoading || vehicles.length !== 0){
           <table class="text-left p-4 table">
             <thead>
             <tr class="text-black bold">
@@ -272,9 +278,9 @@
                   <th>
                     <div class="join">
                       <button
-                        class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                        class=" join-item {{hasReadAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
                         (click) = "fillForm(vehicle)"
-                        [disabled]="!hasUpdateAuthority"
+                        [disabled]="!hasReadAuthority"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

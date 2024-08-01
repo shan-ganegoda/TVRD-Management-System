@@ -257,7 +257,7 @@
 
         <div class="flex flex-row mt-3 max-w-[99%] px-2 pb-5">
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" [disabled]="!enaadd || !hasWriteAuthority" (click)="addEmployee()">Add</button>
-          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" [disabled]="!enaupd" (click)="updateEmployee(employee)">Update</button>
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" [disabled]="!enaupd || !hasUpdateAuthority" (click)="updateEmployee(employee)">Update</button>
           <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="deleteEmployee(employee)"
                   [disabled]="!hasDeleteAuthority || !enadel" >Delete</button>
           <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="clearForm()">Clear</button>
@@ -275,7 +275,7 @@
         <span class="ml-5 text-white text-lg ">Data List</span>
       </div>
       <div class="overflow-visible p-4 mt-2 flex flex-col bg-white rounded-lg">
-              @if(!isFailed && !isLoading && employees.length !== 0){
+              @if(!isFailed || !isLoading || employees.length !== 0){
                 <table class="text-left p-4 table" >
                   <thead>
                   <tr class="text-black bold">
@@ -366,8 +366,9 @@
                         <th>
                           <div class="join">
                             <button
-                              class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                              class=" join-item {{hasReadAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
                               (click) = "fillForm(employee)"
+                              [disabled]="!hasReadAuthority"
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"

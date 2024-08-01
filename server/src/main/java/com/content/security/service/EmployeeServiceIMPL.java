@@ -55,27 +55,35 @@ public class EmployeeServiceIMPL implements EmployeeService{
     @Override
     public EmployeeDTO getEmployeeById(Integer id) {
 
-        Employee employee = employeeRepository.getReferenceById(id);
+        Employee employee = employeeRepository.findById(id).orElseThrow(()->new ResourceNotFountException("Employee Not Found!"));
 
-        if(employee != null){
-            EmployeeDTO employeeDTO = objectMapper.employeeToEmployeeDTO(employee);
-            return employeeDTO;
-        }else{
-            throw new ResourceNotFountException("Employee Not Found");
-        }
+        return objectMapper.employeeToEmployeeDTO(employee);
 
     }
 
     @Override
     public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
 
-        if(!employeeRepository.existsByEmailAndNumberAndNicAndMobileAndLand(employeeDTO.getEmail(),employeeDTO.getNumber(),employeeDTO.getNic(),employeeDTO.getMobile(),employeeDTO.getLand())){
+        if(employeeRepository.existsByEmail(employeeDTO.getEmail())){
+            throw new ResourceAlreadyExistException("Email Already Exist!");
+        }
+        if(employeeRepository.existsByNumber(employeeDTO.getNumber())){
+            throw new ResourceAlreadyExistException("Number Already Exist!");
+        }
+        if(employeeRepository.existsByNic(employeeDTO.getNic())){
+            throw new ResourceAlreadyExistException("Nic Already Exist!");
+        }
+        if(employeeRepository.existsByMobile(employeeDTO.getMobile())){
+            throw new ResourceAlreadyExistException("Mobile Already Exist!");
+        }
+        if(employeeRepository.existsByLand(employeeDTO.getLand())){
+            throw new ResourceAlreadyExistException("Land Already Exist!");
+        }
+
             Employee employeeRecord = objectMapper.employeeDTOTOEmployee(employeeDTO);
             employeeRepository.save(employeeRecord);
             return employeeDTO;
-        }else{
-            throw new ResourceAlreadyExistException("Employee Already Exist");
-        }
+
     }
 
     @Override
@@ -95,25 +103,26 @@ public class EmployeeServiceIMPL implements EmployeeService{
 
         Employee employee = employeeRepository.findById(employeeUpdateDTO.getId()).orElseThrow(()->new ResourceNotFountException("Employee Not Found!"));
 
-        if(employee != null){
-            if(employee.getNic().equals(employeeUpdateDTO.getNic()) && employee.getNumber().equals(employeeUpdateDTO.getNumber()) && employee.getMobile().equals(employeeUpdateDTO.getMobile()) && employee.getLand().equals(employeeUpdateDTO.getLand()) && employee.getEmail().equals(employeeUpdateDTO.getEmail())){
-                Employee employee1 = objectMapper.employeeUpdateDtoToEmployee(employeeUpdateDTO);
-                employeeRepository.save(employee1);
-                return employeeUpdateDTO.getFullname() + " Successfully Updated!";
-            }else{
-
-                if(employeeRepository.existsByEmailAndNumberAndNicAndMobileAndLand(employeeUpdateDTO.getEmail(),employeeUpdateDTO.getNumber(),employeeUpdateDTO.getNic(),employeeUpdateDTO.getMobile(),employeeUpdateDTO.getLand())){
-                    Employee employee1 = objectMapper.employeeUpdateDtoToEmployee(employeeUpdateDTO);
-                    employeeRepository.save(employee1);
-                    return employeeUpdateDTO.getFullname() + " Successfully Updated!";
-                }else{
-                    throw new ResourceAlreadyExistException("Employee Already Exist");
-                }
-            }
-
-        }else{
-            throw new ResourceNotFountException("Employee Not Found!");
+        if(!employee.getEmail().equals(employeeUpdateDTO.getEmail()) && employeeRepository.existsByEmail(employeeUpdateDTO.getEmail())){
+            throw new ResourceAlreadyExistException("Email Already Exist!");
         }
+        if(!employee.getNumber().equals(employeeUpdateDTO.getNumber()) && employeeRepository.existsByNumber(employeeUpdateDTO.getNumber())){
+            throw new ResourceAlreadyExistException("Number No Already Exist!");
+        }
+        if(!employee.getNic().equals(employeeUpdateDTO.getNic()) && employeeRepository.existsByNic(employeeUpdateDTO.getNic())){
+            throw new ResourceAlreadyExistException("Nic Already Exist!");
+        }
+        if(!employee.getMobile().equals(employeeUpdateDTO.getMobile()) && employeeRepository.existsByMobile(employeeUpdateDTO.getMobile())){
+            throw new ResourceAlreadyExistException("Mobile Already Exist!");
+        }
+        if(!employee.getLand().equals(employeeUpdateDTO.getLand()) && employeeRepository.existsByLand(employeeUpdateDTO.getLand())){
+            throw new ResourceAlreadyExistException("Land Already Exist!");
+        }
+
+        Employee employee1 = objectMapper.employeeUpdateDtoToEmployee(employeeUpdateDTO);
+        employeeRepository.save(employee1);
+        return employeeUpdateDTO.getFullname() + " Successfully Updated!";
+
     }
 
     @Override

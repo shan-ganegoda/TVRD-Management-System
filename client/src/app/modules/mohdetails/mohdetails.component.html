@@ -143,9 +143,9 @@
             <label class="floating-label">Date of Established</label>
           </div>
 
-          <div class="mb-3 px-2">
+          <div class="relative mb-3 px-2">
           <select
-            class="select select-bordered w-full bg-white focus:outline-none"
+            class="peer select select-bordered w-full bg-white focus:outline-none"
             formControlName="employee"
           >
             <option disabled [ngValue]="null">MOH Officer</option>
@@ -154,12 +154,13 @@
               <option [ngValue]="employee.id">{{employee.fullname  + " (" + employee.number + ")"}}</option>
             }
           </select>
+            <label class="floating-labels-select">MOH Officer</label>
           </div>
 
-          <div class="mb-3 px-2">
-            <div class="flex flex-row">
+          <div class="flex flex-row items-center mb-3">
+            <div class="relative w-full px-2">
               <select
-                class="select select-bordered w-full bg-white focus:outline-none mr-2"
+                class="peer select select-bordered w-full bg-white focus:outline-none mr-2"
                 formControlName="rdh"
               >
                 <option disabled [ngValue]="null">RDH</option>
@@ -168,9 +169,12 @@
                   <option value="{{district.id}}">{{district.name}}</option>
                 }
               </select>
+              <label class="floating-labels-select">RDH</label>
+            </div>
 
+              <div class="relative w-full px-2">
               <select
-                class="select select-bordered w-full bg-white focus:outline-none"
+                class="peer select select-bordered w-full bg-white focus:outline-none"
                 formControlName="mohstatus"
               >
                 <option disabled [ngValue]="null">MohStatus</option>
@@ -179,14 +183,15 @@
                   <option [ngValue]="mohstatus.id">{{mohstatus.name}}</option>
                 }
               </select>
+                <label class="floating-labels-select">MohStatus</label>
+              </div>
             </div>
-          </div>
 
           <div class="flex flex-row mt-3 max-w-[97%] px-2 pb-5">
             <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
-                    (click)="add()" [disabled]="!enaadd">Add</button>
+                    (click)="add()" [disabled]="!enaadd || !hasWriteAuthority">Add</button>
             <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
-                    (click)="update(currentMoh)" [disabled]="!enaupd">Update</button>
+                    (click)="update(currentMoh)" [disabled]="!enaupd || !hasUpdateAuthority">Update</button>
             <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900"
                     (click)="deleteUser(currentMoh)"
                     [disabled]="!hasDeleteAuthority || !enadel " >Delete</button>
@@ -206,7 +211,7 @@
       </div>
 
     <div class="overflow-auto p-4 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
-      @if(!isFailed && !isLoading && mohs.length !== 0){
+      @if(!isFailed || !isLoading || mohs.length !== 0){
         <table class="text-left p-4 table">
           <thead>
           <tr class="text-black bold">
@@ -250,9 +255,9 @@
                 <th>
                   <div class="join">
                     <button
-                      class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                      class=" join-item {{hasReadAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
                       (click) = "fillForm(moh)"
-                      [disabled]="!hasUpdateAuthority"
+                      [disabled]="!hasReadAuthority"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

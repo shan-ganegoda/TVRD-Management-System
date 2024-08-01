@@ -83,6 +83,7 @@ export class UserComponent implements OnInit{
   protected hasUpdateAuthority = this.authorizationService.hasAuthority("User-Update"); //need to be false
   protected hasDeleteAuthority = this.authorizationService.hasAuthority("User-Delete");
   protected hasWriteAuthority = this.authorizationService.hasAuthority("User-Write");
+  protected hasReadAuthority = this.authorizationService.hasAuthority("User-Read");
 
   constructor(
     private us:UsersService,
@@ -105,14 +106,14 @@ export class UserComponent implements OnInit{
     });
 
     this.userForm = this.fb.group({
+      "employee": new FormControl(null,[Validators.required]),
       "email": new FormControl('',[Validators.required]),
       "password": new FormControl('',[Validators.required]),
-      "description": new FormControl('',[Validators.required]),
       "usertype": new FormControl(null,[Validators.required]),
       "userstatus": new FormControl(null,[Validators.required]),
-      "employee": new FormControl(null,[Validators.required]),
       "role": new FormControl(null),
       "userroles": new FormControl(null),
+      "description": new FormControl('',[Validators.required]),
     },{updateOn:'change'});
   }
 
@@ -216,6 +217,7 @@ export class UserComponent implements OnInit{
     });
 
     this.userForm.get('email')?.disable();
+    this.userForm.get('employee')?.disable();
 
     this.userRoleList = this.user.roles;
     this.userForm.markAsPristine();
@@ -244,6 +246,8 @@ export class UserComponent implements OnInit{
 
       this.userForm.controls["userroles"].clearValidators();
       this.userForm.controls["userroles"].updateValueAndValidity();
+
+      this.userForm.controls['role'].reset();
     }
 
     //this.userForm.controls['role'].setValue(null);
@@ -252,6 +256,16 @@ export class UserComponent implements OnInit{
   removeFromRoleList(id:number | undefined) {
     this.userRoleList = this.userRoleList.filter(r => r.id !== id);
     this.userForm.controls["userroles"].updateValueAndValidity();
+  }
+
+  filterEmployee(event:any){
+    let employeeid = event.target.value;
+    this.es.getEmployeeById(parseInt(employeeid)).subscribe({
+      next: data => {
+        const email = data.email;
+        this.userForm.controls['email'].setValue(email);
+      }
+    });
   }
 
   getUpdates():string {
@@ -453,6 +467,9 @@ export class UserComponent implements OnInit{
     this.userRoleList.splice(0,this.userRoleList.length);
 
     this.enableButtons(true,false,false);
+
+    this.userForm.get('email')?.enable();
+    this.userForm.get('employee')?.enable();
 
   }
 

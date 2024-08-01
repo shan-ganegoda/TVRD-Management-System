@@ -5,6 +5,7 @@ import com.content.security.entity.Moh;
 import com.content.security.entity.Vaccineorderstatus;
 import com.content.security.entity.Vaccineordervaccine;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.Set;
 public class VaccineOrderDTO {
 
     private Integer id;
+    @Pattern(regexp = "^VO[A-Z]{3}\\d{8}$", message = "Invalid Code")
     private String code;
     private LocalDate dorequired;
     private LocalDate dorequested;

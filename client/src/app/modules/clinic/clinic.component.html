@@ -102,7 +102,7 @@
 
           <div class="relative w-full mb-3 px-2">
             <select
-              class="select select-bordered w-full bg-white focus:outline-none"
+              class="peer select select-bordered w-full bg-white focus:outline-none"
               formControlName="moh"
             >
               <option disabled [ngValue]="null">MOH</option>
@@ -111,6 +111,7 @@
                 <option [ngValue]="moh.id">{{moh.name}}</option>
               }
             </select>
+            <label class="floating-labels-select">MOH</label>
           </div>
 
           <div class="relative w-full mb-3 px-2">
@@ -156,7 +157,7 @@
 
           <div class="relative w-full mb-3 px-2">
             <select
-              class="select select-bordered w-full bg-white focus:outline-none"
+              class="peer select select-bordered w-full bg-white focus:outline-none"
               formControlName="employee"
             >
               <option disabled [ngValue]="null">PHN Officer</option>
@@ -165,11 +166,12 @@
                 <option [ngValue]="employee.id">{{employee.fullname  + " (" + employee.number + ")"}}</option>
               }
             </select>
+            <label class="floating-labels-select">PHN Officer</label>
           </div>
 
           <div class="relative w-full mb-3 px-2">
             <select
-              class="select select-bordered w-full bg-white focus:outline-none"
+              class="peer select select-bordered w-full bg-white focus:outline-none"
               formControlName="clinictype"
             >
               <option disabled [ngValue]="null">Clinic Type</option>
@@ -178,11 +180,12 @@
                 <option [ngValue]="clinictype.id">{{clinictype.name}}</option>
               }
             </select>
+            <label class="floating-labels-select">Clinic Type</label>
           </div>
 
           <div class="relative w-full mb-3 px-2">
             <select
-              class="select select-bordered w-full bg-white focus:outline-none"
+              class="peer select select-bordered w-full bg-white focus:outline-none"
               formControlName="clinicstatus"
             >
               <option disabled [ngValue]="null">Clinic Status</option>
@@ -191,6 +194,7 @@
                 <option [ngValue]="clinicstatus.id">{{clinicstatus.name}}</option>
               }
             </select>
+            <label class="floating-labels-select">Clinic Status</label>
           </div>
 
           <div class="relative w-full mb-3 px-2">
@@ -204,9 +208,9 @@
 
         <div class="flex flex-row mt-3 max-w-[97%] px-2 pb-5">
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
-                  (click)="add()" [disabled]="!enaadd">Add</button>
+                  (click)="add()" [disabled]="!enaadd || !hasWriteAuthority">Add</button>
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
-                  (click)="update(currentClinic)" [disabled]="!enaupd">Update</button>
+                  (click)="update(currentClinic)" [disabled]="!enaupd || !hasUpdateAuthority">Update</button>
           <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900"
                   (click)="delete(currentClinic)"
                   [disabled]="!hasDeleteAuthority || !enadel " >Delete</button>
@@ -277,9 +281,9 @@
                   <th>
                     <div class="join">
                       <button
-                        class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                        class=" join-item {{hasReadAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
                         (click) = "fillForm(clinic)"
-                        [disabled]="!hasUpdateAuthority"
+                        [disabled]="!hasReadAuthority"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

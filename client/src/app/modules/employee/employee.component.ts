@@ -81,6 +81,7 @@ export class EmployeeComponent implements OnInit{
   protected hasUpdateAuthority = this.authorizationService.hasAuthority("Employee-Update"); //need to be false
   protected hasDeleteAuthority = this.authorizationService.hasAuthority("Employee-Delete"); //need to be false
   protected hasWriteAuthority = this.authorizationService.hasAuthority("Employee-Write"); //need to be false
+  protected hasReadAuthority = this.authorizationService.hasAuthority("Employee-Read"); //need to be false
 
   employeeSearchForm:FormGroup;
   employeeForm!:FormGroup;

@@ -17,8 +17,7 @@ public class Vaccineordervaccine {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Size(max = 45)
-    @Column(name = "quentity", length = 45)
+    @Column(name = "quentity")
     private Integer quentity;
 
     @JsonIgnore

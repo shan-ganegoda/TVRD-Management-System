@@ -16,14 +16,12 @@ import {VehicleService} from "../../core/service/vehicle/vehicle.service";
 import {MohService} from "../../core/service/moh/moh.service";
 import {RegexService} from "../../core/service/regexes/regex.service";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {VehiclestatusService} from "../../core/service/vehicle/vehiclestatus.service";
 import {VehicletypeService} from "../../core/service/vehicle/vehicletype.service";
 import {VehiclemodelService} from "../../core/service/vehicle/vehiclemodel.service";
 import {VehicleModel} from "../../core/entity/vehiclemodel";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
-import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 import {ToastService} from "../../core/util/toast/toast.service";
 import {AuthorizationService} from "../../core/service/auth/authorization.service";
 
@@ -73,6 +71,7 @@ export class VehicleComponent implements OnInit{
   hasUpdateAuthority = this.authorizationService.hasAuthority("Vehicle-Update");
   hasDeleteAuthority = this.authorizationService.hasAuthority("Vehicle-Delete");
   hasWriteAuthority = this.authorizationService.hasAuthority("Vehicle-Write");
+  hasReadAuthority = this.authorizationService.hasAuthority("Vehicle-Read");
 
   enaadd:boolean = false;
   enaupd:boolean = false;
@@ -174,6 +173,8 @@ export class VehicleComponent implements OnInit{
     this.vehicleForm.controls['vehicletype'].setValidators([Validators.required]);
     this.vehicleForm.controls['vehiclemodel'].setValidators([Validators.required]);
     this.vehicleForm.controls['moh'].setValidators([Validators.required]);
+
+    Object.values(this.vehicleForm.controls).forEach( control => { control.markAsTouched(); } );
 
     for (const controlName in this.vehicleForm.controls) {
       const control = this.vehicleForm.controls[controlName];

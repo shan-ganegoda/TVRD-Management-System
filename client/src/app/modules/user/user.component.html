@@ -78,6 +78,21 @@
 
       <form class="mt-5" [formGroup]="userForm" autocomplete="off">
 
+
+        <div class="relative w-full px-2">
+          <select
+            class="peer select select-bordered w-full mb-3 px-2 focus:outline-none"
+            formControlName="employee"
+            (change)="filterEmployee($event)"
+          >
+            <option disabled [ngValue]="null">Employee</option>
+            @for (employee of employees; track employees) {
+              <option value="{{employee.id}}">{{employee.callingname + " ("+employee.number+")"}}</option>
+            }
+          </select>
+          <label class="floating-labels-select">Employee</label>
+        </div>
+
         <div class="relative w-full px-2 mb-3">
           <input
             type="text"
@@ -99,7 +114,8 @@
         </div>
 
         <div class="flex flex-row items-center mb-3">
-          <select class=" select select-bordered w-full mx-2 focus:outline-none"
+          <div class="relative w-full px-2">
+          <select class="peer select select-bordered w-full focus:outline-none"
                   formControlName="usertype"
           >
             <option disabled [ngValue]="null">UserType</option>
@@ -108,8 +124,11 @@
               <option value="{{type.id}}">{{type.name}}</option>
             }
           </select>
+            <label class="floating-labels-select">UserType</label>
+          </div>
 
-          <select class=" select select-bordered w-full mx-2 focus:outline-none"
+          <div class="relative w-full px-2">
+          <select class="peer select select-bordered w-full focus:outline-none"
                   formControlName="userstatus"
           >
             <option disabled [ngValue]="null">UserStatus</option>
@@ -118,20 +137,9 @@
               <option value="{{status.id}}">{{status.name}}</option>
             }
           </select>
+            <label class="floating-labels-select">UserStatus</label>
+          </div>
         </div>
-
-        <div class="px-2">
-                  <select
-                    class="select select-bordered w-full mb-3 px-2 focus:outline-none"
-                    formControlName="employee"
-                  >
-                    <option disabled [ngValue]="null">Employee</option>
-                    @for (employee of employees; track employees) {
-                      <option value="{{employee.id}}">{{employee.callingname + " ("+employee.number+")"}}</option>
-                    }
-                  </select>
-                  </div>
-
 
         <div class="flex mb-3 px-2 justify-center items-center">
           <div class="flex">
@@ -258,8 +266,9 @@
                 <th>
                   <div class="join">
                     <button
-                      class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                      class=" join-item {{hasReadAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
                       (click) = "fillForm(user)"
+                      [disabled]="!hasReadAuthority"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

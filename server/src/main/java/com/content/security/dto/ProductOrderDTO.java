@@ -23,6 +23,7 @@ import java.util.Set;
 public class ProductOrderDTO {
 
         private Integer id;
+        @Pattern(regexp = "^O[A-Z]{3}\\d{8}$", message = "Invalid Code")
         private String code;
         private LocalDate dorequired;
         private BigDecimal grandtotal;

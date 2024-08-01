@@ -49,7 +49,7 @@ public class Vaccineorder {
     @JoinColumn(name = "moh_id", nullable = false)
     private Moh moh;
 
-    @OneToMany(mappedBy = "vaccineorder")
+    @OneToMany(mappedBy = "vaccineorder", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Vaccineordervaccine> vaccineordervaccines = new LinkedHashSet<>();
 
 }

@@ -241,11 +241,11 @@
         </div>
 
         <div class="flex flex-row mt-3 max-w-[98%] px-2 pb-5">
-          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="add()" [disabled]="!enaadd">
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="add()" [disabled]="!enaadd || !hasWriteAuthority">
             Add
           </button>
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(currentGrn)"
-                  [disabled]="!enaupd">Update
+                  [disabled]="!enaupd || !hasUpdateAuthority">Update
           </button>
           <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900" (click)="delete(currentGrn)"
                   [disabled]="!hasDeleteAuthority || !enadel ">Delete
@@ -311,9 +311,9 @@
                   <th>
                     <div>
                       <button
-                        class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                        class=" join-item {{hasReadAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
                         (click)="fillForm(grn)"
-                        [disabled]="!hasUpdateAuthority"
+                        [disabled]="!hasReadAuthority"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

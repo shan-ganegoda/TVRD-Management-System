@@ -13,7 +13,6 @@ import {Employee} from "../../core/entity/employee";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
-import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {
@@ -29,6 +28,8 @@ import {Observable} from "rxjs";
 import {RouterLink} from "@angular/router";
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {RegexService} from "../../core/service/regexes/regex.service";
+import {ToastService} from "../../core/util/toast/toast.service";
+import {AuthorizationService} from "../../core/service/auth/authorization.service";
 
 @Component({
   selector: 'app-mohdetails-list',
@@ -77,8 +78,10 @@ export class MohdetailsComponent implements OnInit{
 
   currentOperation = '';
 
-  hasUpdateAuthority = true;
-  hasDeleteAuthority = true;
+  hasUpdateAuthority = this.authorizationService.hasAuthority("MOH-Update");
+  hasDeleteAuthority = this.authorizationService.hasAuthority("MOH-Delete");
+  hasWriteAuthority = this.authorizationService.hasAuthority("MOH-Write");
+  hasReadAuthority = this.authorizationService.hasAuthority("MOH-Read");
 
   enaadd:boolean = false;
   enaupd:boolean = false;
@@ -92,8 +95,9 @@ export class MohdetailsComponent implements OnInit{
     private fb:FormBuilder,
     private rs:RegexService,
     private dialog:MatDialog,
-    private snackBar:MatSnackBar,
-    private cdr:ChangeDetectorRef
+    private authorizationService:AuthorizationService,
+    private cdr:ChangeDetectorRef,
+    private tst:ToastService
   ) {
     this.mohSearchForm = this.fb.group({
       ssname:[null,[Validators.pattern(/^[a-zA-Z]{3,}$/)]],
@@ -289,12 +293,12 @@ export class MohdetailsComponent implements OnInit{
               if(res) {
                 this.ms.saveMoh(moh).subscribe({
                   next:() => {
-                    this.handleResult('success');
+                    this.tst.handleResult('success',"MOH Saved Successfully");
                     this.loadTable("");
                     this.clearForm();
                     },
                   error:(err:any) => {
-                    this.handleResult('failed');
+                    this.tst.handleResult('Failed',err.error.data.message);
                   }
                 });
               }
@@ -311,7 +315,7 @@ export class MohdetailsComponent implements OnInit{
 
     if(errors != ""){
       this.dialog.open(WarningDialogComponent,{
-        data:{heading:"Errors - MOH Update ",message: "You Have Following Errors <br/> " + errors}
+        data:{heading:"Errors - MOH Update ",message: "You Have Following Errors <br> " + errors}
       }).afterClosed().subscribe(res => {
         if(!res){
           return;
@@ -350,6 +354,8 @@ export class MohdetailsComponent implements OnInit{
 
                   moh.id = currentmoh.id;
 
+                  console.log(moh);
+
                   this.currentOperation = "Update MOH " + currentmoh.name;
 
                   this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
@@ -357,12 +363,12 @@ export class MohdetailsComponent implements OnInit{
                     if(res) {
                       this.ms.updateMoh(moh).subscribe({
                         next:() => {
-                          this.handleResult('success');
+                          this.tst.handleResult('success',"MOH Updated Successfully");
                           this.loadTable("");
                           this.clearForm();
                           },
                         error:(err:any) => {
-                          this.handleResult('failed');
+                          this.tst.handleResult('Failed',err.error.data.message);
                         }
                       });
                     }
@@ -397,16 +403,14 @@ export class MohdetailsComponent implements OnInit{
           this.ms.deleteMoh(moh.id).subscribe({
             next: () => {
               this.loadTable("");
-              this.handleResult('success');
+              this.tst.handleResult('success',"MOH Deleted Successfully");
               this.clearForm();
             },
             error: (err:any) => {
-              this.handleResult('failed');
+              this.tst.handleResult('Failed',err.error.data.message);
               console.log(err);
             },
           });
-        } else {
-          this.handleResult('failed');
         }
       }
     })
@@ -452,24 +456,4 @@ export class MohdetailsComponent implements OnInit{
     });
   }
 
-  handleResult(status:string){
-
-    if(status === "success"){
-      this.snackBar.openFromComponent(NotificationComponent,{
-        data:{ message: status,icon: "done_all" },
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['success-snackbar'],
-      });
-    }else{
-      this.snackBar.openFromComponent(NotificationComponent,{
-        data:{ message: status,icon: "report" },
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['failure-snackbar'],
-      });
-    }
-  }
 }

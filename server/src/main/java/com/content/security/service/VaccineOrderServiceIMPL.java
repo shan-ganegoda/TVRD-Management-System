@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class VaccineOrderServiceIMPL implements VaccineOrderService{
+public class VaccineOrderServiceIMPL implements VaccineOrderService {
 
     private final VaccineOrderRepository vaccineOrderRepository;
     private final ObjectMapper objectMapper;
@@ -32,11 +32,11 @@ public class VaccineOrderServiceIMPL implements VaccineOrderService{
 
         List<Vaccineorder> vaccineorders = vaccineOrderRepository.findAll();
 
-        if(!vaccineorders.isEmpty()){
+        if (!vaccineorders.isEmpty()) {
             List<VaccineOrderDTO> vaccineOrderDTOS = objectMapper.vaccineOrderListToDtoList(vaccineorders);
-            if(params.isEmpty()){
+            if (params.isEmpty()) {
                 return vaccineOrderDTOS;
-            }else{
+            } else {
                 String dorequired = params.get("dorequired");
                 String dorequested = params.get("dorequested");
                 String mohid = params.get("mohid");
@@ -45,69 +45,75 @@ public class VaccineOrderServiceIMPL implements VaccineOrderService{
 
                 Stream<VaccineOrderDTO> vostream = vaccineOrderDTOS.stream();
 
-                if(mohid!=null) vostream = vostream.filter(e-> e.getMoh().getId()==Integer.parseInt(mohid));
-                if(code!=null) vostream = vostream.filter(e-> e.getCode().equals(code));
-                if(vostatusid!=null) vostream = vostream.filter(e-> e.getVaccineorderstatus().getId()==Integer.parseInt(vostatusid));
-                if(dorequired!=null) vostream = vostream.filter(e-> e.getDorequired().equals(LocalDate.parse(dorequired)));
-                if(dorequested!=null) vostream = vostream.filter(e-> e.getDorequested().equals(LocalDate.parse(dorequested)));
+                if (mohid != null) vostream = vostream.filter(e -> e.getMoh().getId() == Integer.parseInt(mohid));
+                if (code != null) vostream = vostream.filter(e -> e.getCode().equals(code));
+                if (vostatusid != null)
+                    vostream = vostream.filter(e -> e.getVaccineorderstatus().getId() == Integer.parseInt(vostatusid));
+                if (dorequired != null)
+                    vostream = vostream.filter(e -> e.getDorequired().equals(LocalDate.parse(dorequired)));
+                if (dorequested != null)
+                    vostream = vostream.filter(e -> e.getDorequested().equals(LocalDate.parse(dorequested)));
 
 
                 return vostream.collect(Collectors.toList());
             }
-        }else{
+        } else {
             throw new ResourceNotFountException("No VaccineOrder found");
         }
     }
 
     @Override
     public VaccineOrderDTO create(VaccineOrderDTO vaccineOrderDTO) {
-        if(vaccineOrderDTO != null){
+        if (vaccineOrderDTO != null) {
+
+            if (vaccineOrderRepository.existsByCode(vaccineOrderDTO.getCode())) {
+                throw new ResourceAlreadyExistException("Code Already Exist!");
+            }
+
             Vaccineorder vorder = objectMapper.vaccineOrderDtoToVaccineOrder(vaccineOrderDTO);
 
-            if(!vaccineOrderRepository.existsByCode(vorder.getCode())){
-                for(Vaccineordervaccine i : vorder.getVaccineordervaccines()){
-                    i.setVaccineorder(vorder);
-                }
-
-                vaccineOrderRepository.save(vorder);
-                return vaccineOrderDTO;
-            }else{
-                throw new ResourceAlreadyExistException("Vaccine Order Already Exist!");
+            for (Vaccineordervaccine i : vorder.getVaccineordervaccines()) {
+                i.setVaccineorder(vorder);
             }
-        }else{
+
+            vaccineOrderRepository.save(vorder);
+            return vaccineOrderDTO;
+
+        } else {
             throw new ResourceNotFountException("Vaccine Order Not Found");
         }
     }
 
     @Override
     public VaccineOrderDTO update(VaccineOrderDTO vaccineOrderDTO) {
-        if(vaccineOrderRepository.existsById(vaccineOrderDTO.getId())){
-            try{
-                Vaccineorder vorder = objectMapper.vaccineOrderDtoToVaccineOrder(vaccineOrderDTO);
-                vorder.getVaccineordervaccines().forEach(vovaccines -> vovaccines.setVaccineorder(vorder));
-                vaccineOrderRepository.save(vorder);
 
-            }catch(Exception e){
-                System.out.println(e);
-            }
+        Vaccineorder vo = vaccineOrderRepository.findById(vaccineOrderDTO.getId()).orElseThrow(() -> new ResourceNotFountException("VaccineOrder Not Found"));
 
-            return vaccineOrderDTO;
-        }else{
-            throw new ResourceNotFountException("Vaccine Order Not Found");
+        if (!vo.getCode().equals(vaccineOrderDTO.getCode()) && vaccineOrderRepository.existsByCode(vaccineOrderDTO.getCode())) {
+            throw new ResourceAlreadyExistException("Code Already Exist!");
         }
+
+        try {
+            Vaccineorder vorder = objectMapper.vaccineOrderDtoToVaccineOrder(vaccineOrderDTO);
+            vorder.getVaccineordervaccines().forEach(vovaccines -> vovaccines.setVaccineorder(vorder));
+            vaccineOrderRepository.save(vorder);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return vaccineOrderDTO;
+
     }
 
     @Override
     public void delete(Integer id) {
-        if(vaccineOrderRepository.existsById(id)){
+        if (vaccineOrderRepository.existsById(id)) {
 
-            Vaccineorder vorder = vaccineOrderRepository.findById(id).orElseThrow(null);
+            Vaccineorder vorder = vaccineOrderRepository.findById(id).orElseThrow(() -> new ResourceNotFountException("Vaccine Order Not Found"));
 
-            if(vorder != null){
-                vaccineOrderRepository.delete(vorder);
-            }
+            vaccineOrderRepository.delete(vorder);
 
-        }else{
+
+        } else {
             throw new ResourceNotFountException("Vaccine Order Not Found");
         }
     }

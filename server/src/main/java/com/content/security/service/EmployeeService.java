@@ -21,4 +21,5 @@ public interface EmployeeService {
     EmployeeDTO getEmployeeByNumber(String number);
 
     List<EmployeeDTO> getEmployees(HashMap<String,String> params);
+
 }

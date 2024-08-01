@@ -62,6 +62,7 @@ export class VaccineorderComponent implements OnInit{
   protected hasUpdateAuthority = this.authorizationService.hasAuthority("Product Order-Update"); //need to be false
   protected hasDeleteAuthority = this.authorizationService.hasAuthority("Product Order-Delete"); //need to be false
   protected hasWriteAuthority = this.authorizationService.hasAuthority("Product Order-Write");
+  protected hasReadAuthority = this.authorizationService.hasAuthority("Product Order-Read");
 
   vorders: VaccineOrder[] = [];
   mohs: Moh[] = [];
@@ -69,6 +70,8 @@ export class VaccineorderComponent implements OnInit{
   vaccines: Vaccine[] = [];
   vostatuses: VaccineOrderStatus[] = [];
   innerdata: VaccineOrderVaccine[] = [];
+
+  isInnerDataUpdated:boolean = false;
 
   vaccineOrder!: VaccineOrder;
   oldVaccineOrder!: VaccineOrder;
@@ -93,7 +96,6 @@ export class VaccineorderComponent implements OnInit{
               private vs: VaccineService,
               private rs: RegexService,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar,
               private tst:ToastService,
               private authorizationService:AuthorizationService
   ) {
@@ -176,7 +178,7 @@ export class VaccineorderComponent implements OnInit{
 
   createForm() {
     this.vorderForm.controls['dorequired'].setValidators([Validators.required]);
-    this.vorderForm.controls['code'].setValidators([Validators.required]);
+    this.vorderForm.controls['code'].setValidators([Validators.required, Validators.pattern(this.regexes['code']['regex'])]);
     this.vorderForm.controls['dorequested'].setValidators([Validators.required]);
     this.vorderForm.controls['description'].setValidators([Validators.required]);
     this.vorderForm.controls['moh'].setValidators([Validators.required]);
@@ -274,25 +276,37 @@ export class VaccineorderComponent implements OnInit{
 
     this.inndata = this.innerForm.getRawValue();
 
-    if (this.inndata != null) {
+    if (this.inndata.vaccine == null || this.inndata.quentity == "") {
+      this.dialog.open(WarningDialogComponent, {
+        data: {heading: "Errors - Product Order Add ", message: "Please Add Required Details"}
+      }).afterClosed().subscribe(res => {
+        if (!res) {
+          return;
+        }
+      });
+    } else {
 
-      let orderv = new VaccineOrderVaccine(this.id, this.inndata.vaccine, this.inndata.quentity);
+      if (this.inndata != null) {
 
-      let tem: VaccineOrderVaccine[] = [];
-      if (this.innerdata != null) this.innerdata.forEach((i) => tem.push(i));
+        let orderv = new VaccineOrderVaccine(this.id, this.inndata.vaccine, this.inndata.quentity);
 
-      this.innerdata = [];
-      tem.forEach((t) => this.innerdata.push(t));
+        let tem: VaccineOrderVaccine[] = [];
+        if (this.innerdata != null) this.innerdata.forEach((i) => tem.push(i));
 
-      this.innerdata.push(orderv);
+        this.innerdata = [];
+        tem.forEach((t) => this.innerdata.push(t));
 
-      this.id++;
+        this.innerdata.push(orderv);
 
-      this.innerForm.reset();
+        this.id++;
 
-      for (const controlName in this.innerForm.controls) {
-        this.innerForm.controls[controlName].clearValidators();
-        this.innerForm.controls[controlName].updateValueAndValidity();
+        this.innerForm.reset();
+        this.isInnerDataUpdated = true;
+
+        for (const controlName in this.innerForm.controls) {
+          this.innerForm.controls[controlName].clearValidators();
+          this.innerForm.controls[controlName].updateValueAndValidity();
+        }
       }
     }
 
@@ -302,14 +316,30 @@ export class VaccineorderComponent implements OnInit{
 
     let datasources = this.innerdata;
 
-    const index = datasources.findIndex(item => item.id === x.id);
+    this.dialog.open(ConfirmDialogComponent, {data: "Delete Vaccine Quentity"})
+      .afterClosed().subscribe(res => {
+      if (res) {
 
-    if (index > -1) {
-      datasources.splice(index, 1);
-    }
+        const index = datasources.findIndex(item => item.id === x.id);
 
-    this.innerdata = datasources;
+        if (index > -1) {
+          datasources.splice(index, 1);
+        }
 
+        this.innerdata = datasources;
+        this.isInnerDataUpdated = true;
+      }
+    });
+  }
+
+  filterEmployee(event:any){
+    let mohid = event.target.value;
+    this.ms.getMohById(parseInt(mohid)).subscribe({
+      next: data => {
+        const moh = data;
+        this.vorderForm.controls['employee'].setValue(moh.employee?.id);
+      }
+    });
   }
 
   getUpdates(): string {
@@ -319,6 +349,9 @@ export class VaccineorderComponent implements OnInit{
       if (control.dirty) {
         updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1) + " Changed";
       }
+    }
+    if(this.isInnerDataUpdated){
+      updates = updates + "<br>" + "Vaccine Quentity Changed";
     }
     return updates;
   }
@@ -336,6 +369,9 @@ export class VaccineorderComponent implements OnInit{
           errors = errors + "<br>Invalid " + controlName;
         }
       }
+    }
+    if(this.innerdata.length == 0) {
+      errors = errors + "<br>Invalid Vaccine Quentity";
     }
     return errors;
   }
@@ -378,12 +414,12 @@ export class VaccineorderComponent implements OnInit{
           if (res) {
             this.vos.save(vorder).subscribe({
               next: () => {
-                this.handleResult('success');
+                this.tst.handleResult('success',"VaccineOrder Saved Successfully");
                 this.loadTable("");
                 this.clearForm();
               },
               error: (err: any) => {
-                this.handleResult('failed');
+                this.tst.handleResult('Failed',err.error.data.message);
               }
             });
           }
@@ -441,12 +477,12 @@ export class VaccineorderComponent implements OnInit{
               if(res) {
                 this.vos.update(vorder).subscribe({
                   next:() => {
-                    this.handleResult('success');
+                    this.tst.handleResult('success',"VaccineOrder Updated Successfully");
                     this.loadTable("");
                     this.clearForm();
                   },
                   error:(err:any) => {
-                    this.handleResult('failed');
+                    this.tst.handleResult('Failed',err.error.data.message);
                     //console.log(err);
                   }
                 });
@@ -476,12 +512,12 @@ export class VaccineorderComponent implements OnInit{
         this.vos.delete(vorder.id).subscribe({
           next: () => {
             this.loadTable("");
-            this.handleResult("success");
+            this.tst.handleResult("success","VaccineOrder Deleted Successfully");
             this.clearForm();
           },
 
-          error: () => {
-            this.handleResult("failed");
+          error: (err:any) => {
+            this.tst.handleResult("failed",err.error.data.message);
           }
         });
       }
@@ -526,43 +562,14 @@ export class VaccineorderComponent implements OnInit{
 
   clearForm() {
 
-    const operation = "Clear Form";
-
-    this.dialog.open(ConfirmDialogComponent,{data:operation})
-      .afterClosed().subscribe(res => {
-      if(!res){
-        return;
-      }else{
         this.vorderForm.reset();
         this.vorderForm.controls['moh'].setValue(null);
         this.vorderForm.controls['employee'].setValue(null);
         this.vorderForm.controls['vaccineorderstatus'].setValue(null);
         this.innerdata = [];
-      }
-    });
-
+        this.isInnerDataUpdated = false;
 
     this.enableButtons(true,false,false);
   }
 
-  handleResult(status: string) {
-
-    if (status === "success") {
-      this.snackBar.openFromComponent(NotificationComponent, {
-        data: {message: status, icon: "done_all"},
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['success-snackbar'],
-      });
-    } else {
-      this.snackBar.openFromComponent(NotificationComponent, {
-        data: {message: status, icon: "report"},
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['failure-snackbar'],
-      });
-    }
-  }
 }

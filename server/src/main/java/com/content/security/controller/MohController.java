@@ -48,10 +48,8 @@ public class MohController {
     }
 
     @PutMapping
-    public ResponseEntity<StandardResponse> updateMoh(@RequestBody MohDTO mohDTO){
+    public MohDTO updateMoh(@RequestBody MohDTO mohDTO){
 
-        return new ResponseEntity<StandardResponse>(
-                new StandardResponse(200,"Deleted", mohService.updateMoh(mohDTO)), HttpStatus.OK
-        );
+        return mohService.updateMoh(mohDTO);
     }
 }

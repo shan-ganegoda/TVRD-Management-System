@@ -81,6 +81,7 @@
           <select
             class="peer select select-bordered w-full bg-white focus:outline-none"
             formControlName="moh"
+            (change)="filterEmployee($event)"
           >
             <option disabled [ngValue]="null">MOH</option>
 
@@ -250,7 +251,7 @@
             Add
           </button>
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(productOrder)"
-                  [disabled]="!enaupd">Update
+                  [disabled]="!enaupd || !hasUpdateAuthority">Update
           </button>
           <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900" (click)="delete(productOrder)"
                   [disabled]="!hasDeleteAuthority || !enadel ">Delete
@@ -270,7 +271,7 @@
       </div>
 
       <div class="overflow-auto p-4 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
-        @if (!isFailed && !isLoading && porders.length !== 0) {
+        @if (!isFailed || !isLoading || porders.length !== 0) {
           <table class="text-left p-4 table">
             <thead>
             <tr class="text-black bold">
@@ -314,9 +315,9 @@
                   <th>
                     <div>
                       <button
-                        class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                        class=" join-item {{hasReadAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
                         (click)="fillForm(porder)"
-                        [disabled]="!hasUpdateAuthority"
+                        [disabled]="!hasReadAuthority"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

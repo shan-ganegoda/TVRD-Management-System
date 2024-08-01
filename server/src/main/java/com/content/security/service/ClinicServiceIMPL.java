@@ -27,11 +27,11 @@ public class ClinicServiceIMPL implements ClinicService {
     @Override
     public List<ClinicDTO> getAll(HashMap<String, String> params) {
         List<Clinic> clinics = clinicRepository.findAll();
-        if(!clinics.isEmpty()){
+        if (!clinics.isEmpty()) {
             List<ClinicDTO> clinicDTOList = objectMapper.clinicListToDtoList(clinics);
-            if(params.isEmpty()){
+            if (params.isEmpty()) {
                 return clinicDTOList;
-            }else{
+            } else {
 
                 String divisionname = params.get("divisionname");
                 String divisionno = params.get("divisionno");
@@ -40,14 +40,16 @@ public class ClinicServiceIMPL implements ClinicService {
 
                 Stream<ClinicDTO> cstreame = clinicDTOList.stream();
 
-                if(divisionname!=null) cstreame = cstreame.filter(c-> c.getDivisionname().equals(divisionname));
-                if(divisionno!=null) cstreame = cstreame.filter(c-> c.getDivisionno().equals(divisionno));
-                if(clinicstatusid!=null) cstreame = cstreame.filter(c-> c.getClinicstatus().getId() == Integer.parseInt(clinicstatusid));
-                if(clinictypeid!=null) cstreame = cstreame.filter(c-> c.getClinictype().getId() == Integer.parseInt(clinictypeid));
+                if (divisionname != null) cstreame = cstreame.filter(c -> c.getDivisionname().equals(divisionname));
+                if (divisionno != null) cstreame = cstreame.filter(c -> c.getDivisionno().equals(divisionno));
+                if (clinicstatusid != null)
+                    cstreame = cstreame.filter(c -> c.getClinicstatus().getId() == Integer.parseInt(clinicstatusid));
+                if (clinictypeid != null)
+                    cstreame = cstreame.filter(c -> c.getClinictype().getId() == Integer.parseInt(clinictypeid));
 
                 return cstreame.collect(Collectors.toList());
             }
-        }else{
+        } else {
             throw new ResourceNotFountException("Clinics Not Found!");
         }
     }
@@ -55,59 +57,60 @@ public class ClinicServiceIMPL implements ClinicService {
     @Override
     public List<ClinicDTO> getAllList() {
         List<Clinic> clinics = clinicRepository.findAll();
-        if(!clinics.isEmpty()){
+        if (!clinics.isEmpty()) {
             List<ClinicDTO> clinicDTOList = objectMapper.clinicListToDtoList(clinics);
-                return clinicDTOList.stream().map(
-                        clinicdto -> {
-                            ClinicDTO c = new ClinicDTO(clinicdto.getId(),clinicdto.getDivisionname(),clinicdto.getDivisionno());
-                            return c;
-                        }
-                ).collect(Collectors.toList());
-            }else{
-                throw new ResourceNotFountException("Clinics Not Found!");
-            }
+            return clinicDTOList.stream().map(
+                    clinicdto -> {
+                        ClinicDTO c = new ClinicDTO(clinicdto.getId(), clinicdto.getDivisionname(), clinicdto.getDivisionno());
+                        return c;
+                    }
+            ).collect(Collectors.toList());
+        } else {
+            throw new ResourceNotFountException("Clinics Not Found!");
+        }
     }
 
 
     @Override
     public ClinicDTO create(ClinicDTO clinicDTO) {
-        if(!clinicRepository.existsByDivisionno(clinicDTO.getDivisionno())){
+        if (clinicDTO != null) {
+
+            if (clinicRepository.existsByDivisionno(clinicDTO.getDivisionno())) {
+                throw new ResourceAlreadyExistException("Division No Already Exist!");
+            }
+
             Clinic clinic = objectMapper.clinicDtoToClinic(clinicDTO);
             clinic.setLastupdated(LocalDate.now());
             clinicRepository.save(clinic);
             return clinicDTO;
-        }else{
-            throw new ResourceAlreadyExistException("Clinic already exists!");
+
+        } else {
+            throw new ResourceNotFountException("Clinic Data Not Found!");
         }
     }
 
     @Override
     public ClinicDTO update(ClinicDTO clinicDTO) {
 
-        Clinic clinicRecord = clinicRepository.findById(clinicDTO.getId()).orElse(null);
-        if(clinicRecord != null){
-            Clinic clinic = objectMapper.clinicDtoToClinic(clinicDTO);
-            clinic.setLastupdated(LocalDate.now());
-            if(clinicRecord.getDivisionno().equals(clinicDTO.getDivisionno())){
-                clinicRepository.save(clinic);
-                return clinicDTO;
-            }else if(clinicRepository.existsByDivisionno(clinicDTO.getDivisionno())){
-                throw new ResourceAlreadyExistException("Clinic already exists!");
-            }else{
-                clinicRepository.save(clinic);
-                return clinicDTO;
-            }
+        Clinic clinicRecord = clinicRepository.findById(clinicDTO.getId()).orElseThrow(() -> new ResourceNotFountException("Clinic Not Found!"));
 
-        }else{
-            throw new ResourceNotFountException("Clinic Not Found!");
+        if (!clinicRecord.getDivisionno().equals(clinicDTO.getDivisionno()) && clinicRepository.existsByDivisionno(clinicDTO.getDivisionno())) {
+            throw new ResourceAlreadyExistException("Division No Already Exist!");
         }
+
+        Clinic clinic = objectMapper.clinicDtoToClinic(clinicDTO);
+        clinic.setLastupdated(LocalDate.now());
+
+        clinicRepository.save(clinic);
+        return clinicDTO;
+
     }
 
     @Override
     public void delete(Integer id) {
-        if(clinicRepository.existsById(id)){
+        if (clinicRepository.existsById(id)) {
             clinicRepository.findById(id).ifPresent(clinicRepository::delete);
-        }else{
+        } else {
             throw new ResourceNotFountException("Clinic Not Found!");
         }
     }
