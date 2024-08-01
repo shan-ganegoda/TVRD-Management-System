@@ -49,7 +49,7 @@ export class AuthComponent implements OnInit{
   ngOnInit() {
 
     if(this.storageService.isLoggedIn()){
-      window.alert("User Already Logged In,if you need to log in again please log Out First!");
+      //window.alert("User Already Logged In,if you need to log in again please log Out First!");
       this.router.navigateByUrl('/main/home');
     }
   }

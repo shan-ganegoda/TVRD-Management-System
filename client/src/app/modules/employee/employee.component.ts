@@ -472,7 +472,11 @@ export class EmployeeComponent implements OnInit{
   }
 
   generateRandomNumber(){
-    this.employeeForm.controls['number'].setValue('E' + ('' + Math.random()).substring(2,5));
+    const numbers = this.employees.map(n => parseInt(<string>n.number?.substring(1)));
+    const maxno = Math.max(...numbers);
+    const nextno = maxno + 1;
+    const formattedNextNumber = 'E' + nextno.toString().padStart(3, '0');
+    this.employeeForm.controls['number'].setValue(formattedNextNumber);
   }
 
   clearForm(){

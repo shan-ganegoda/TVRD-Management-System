@@ -69,10 +69,7 @@ public class EmployeeServiceIMPL implements EmployeeService{
     @Override
     public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
 
-        Employee employee = employeeRepository.findByNic(employeeDTO.getNic());
-        Employee employee1 = employeeRepository.findByNumber(employeeDTO.getNumber());
-
-        if(employee ==  null && employee1 == null){
+        if(!employeeRepository.existsByEmailAndNumberAndNicAndMobileAndLand(employeeDTO.getEmail(),employeeDTO.getNumber(),employeeDTO.getNic(),employeeDTO.getMobile(),employeeDTO.getLand())){
             Employee employeeRecord = objectMapper.employeeDTOTOEmployee(employeeDTO);
             employeeRepository.save(employeeRecord);
             return employeeDTO;
@@ -96,18 +93,16 @@ public class EmployeeServiceIMPL implements EmployeeService{
     @Override
     public String updateEmployee(EmployeeUpdateDTO employeeUpdateDTO) {
 
-        Employee employee = employeeRepository.findById(employeeUpdateDTO.getId()).orElseThrow(null);
+        Employee employee = employeeRepository.findById(employeeUpdateDTO.getId()).orElseThrow(()->new ResourceNotFountException("Employee Not Found!"));
 
         if(employee != null){
-            if(employee.getNic().equals(employeeUpdateDTO.getNic()) && employee.getNumber().equals(employeeUpdateDTO.getNumber())){
+            if(employee.getNic().equals(employeeUpdateDTO.getNic()) && employee.getNumber().equals(employeeUpdateDTO.getNumber()) && employee.getMobile().equals(employeeUpdateDTO.getMobile()) && employee.getLand().equals(employeeUpdateDTO.getLand()) && employee.getEmail().equals(employeeUpdateDTO.getEmail())){
                 Employee employee1 = objectMapper.employeeUpdateDtoToEmployee(employeeUpdateDTO);
                 employeeRepository.save(employee1);
                 return employeeUpdateDTO.getFullname() + " Successfully Updated!";
             }else{
-                Employee er1 = employeeRepository.findByNumber(employeeUpdateDTO.getNumber());
-                Employee er2 = employeeRepository.findByNic(employeeUpdateDTO.getNic());
 
-                if(er1 == null && er2 == null){
+                if(employeeRepository.existsByEmailAndNumberAndNicAndMobileAndLand(employeeUpdateDTO.getEmail(),employeeUpdateDTO.getNumber(),employeeUpdateDTO.getNic(),employeeUpdateDTO.getMobile(),employeeUpdateDTO.getLand())){
                     Employee employee1 = objectMapper.employeeUpdateDtoToEmployee(employeeUpdateDTO);
                     employeeRepository.save(employee1);
                     return employeeUpdateDTO.getFullname() + " Successfully Updated!";
@@ -128,7 +123,7 @@ public class EmployeeServiceIMPL implements EmployeeService{
             Employee employee = employeeRepository.findByNumber(number);
             return objectMapper.employeeToEmployeeDTO(employee);
         }else{
-            throw new ResourceNotFountException("No Employee Found");
+            throw new ResourceNotFountException("Employee Not Found");
         }
     }
 
@@ -159,7 +154,7 @@ public class EmployeeServiceIMPL implements EmployeeService{
                 return estreame.collect(Collectors.toList());
             }
         }else{
-            throw new ResourceNotFountException("No Employees Found");
+            throw new ResourceNotFountException("Employees Not Found");
         }
 
     }
