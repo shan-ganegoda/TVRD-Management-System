@@ -24,6 +24,8 @@ import {PageLoadingComponent} from "../../shared/page-loading/page-loading.compo
 import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
+import {AuthorizationService} from "../../core/service/auth/authorization.service";
+import {ToastService} from "../../core/util/toast/toast.service";
 
 @Component({
   selector: 'app-motherregistration',
@@ -67,8 +69,10 @@ export class MotherregistrationComponent implements OnInit{
 
   currentOperation = '';
 
-  hasUpdateAuthority = true;
-  hasDeleteAuthority = true;
+  hasUpdateAuthority = this.am.hasAuthority("Mother-Update");
+  hasDeleteAuthority = this.am.hasAuthority("Mother-Delete");
+  hasReadAuthority = this.am.hasAuthority("Mother-Read");
+  hasWriteAuthority = this.am.hasAuthority("Mother-Write");
 
   enaadd:boolean = false;
   enaupd:boolean = false;
@@ -84,7 +88,9 @@ export class MotherregistrationComponent implements OnInit{
               private dialog:MatDialog,
               private snackBar:MatSnackBar,
               private cdr:ChangeDetectorRef,
-              private fb:FormBuilder
+              private fb:FormBuilder,
+              private am: AuthorizationService,
+              private tst: ToastService
   ) {
 
     this.motherregSearchForm = this.fb.group({
@@ -295,12 +301,12 @@ export class MotherregistrationComponent implements OnInit{
           if(res) {
             this.ms.save(mother).subscribe({
               next:() => {
-                this.handleResult('success');
+                this.tst.handleResult('success',"Mother Saved Successfully");
                 this.loadTable("");
                 this.clearForm();
               },
               error:(err:any) => {
-                this.handleResult('failed');
+                this.tst.handleResult('Failed',err.error.data.message);
               }
             });
           }
@@ -359,12 +365,12 @@ export class MotherregistrationComponent implements OnInit{
               if(res) {
                 this.ms.update(mother).subscribe({
                   next:() => {
-                    this.handleResult('success');
+                    this.tst.handleResult('success',"Mother Updated Successfully");
                     this.loadTable("");
                     this.clearForm();
                   },
                   error:(err:any) => {
-                    this.handleResult('failed');
+                    this.tst.handleResult('Failed',err.error.data.message);
                   }
                 });
               }
@@ -392,16 +398,16 @@ export class MotherregistrationComponent implements OnInit{
           this.ms.delete(currentMother.id).subscribe({
             next: () => {
               this.loadTable("");
-              this.handleResult('success');
+              this.tst.handleResult('success',"Mother Delete Successfully");
               this.clearForm();
             },
             error: (err:any) => {
-              this.handleResult('failed');
+              this.tst.handleResult('Failed',err.error.data.message);
               console.log(err);
             },
           });
         } else {
-          this.handleResult('failed');
+          this.tst.handleResult('Failed'," Employee Id Not Found!");
         }
       }
     });
@@ -445,27 +451,6 @@ export class MotherregistrationComponent implements OnInit{
         this.loadTable("");
       }
     });
-  }
-
-  handleResult(status:string){
-
-    if(status === "success"){
-      this.snackBar.openFromComponent(NotificationComponent,{
-        data:{ message: status,icon: "done_all" },
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['success-snackbar'],
-      });
-    }else{
-      this.snackBar.openFromComponent(NotificationComponent,{
-        data:{ message: status,icon: "report" },
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 5000,
-        panelClass: ['failure-snackbar'],
-      });
-    }
   }
 
 }

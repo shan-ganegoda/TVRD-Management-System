@@ -146,4 +146,8 @@ public interface ObjectMapper {
     List<VaccinationStatusDTO> vaccinationstatusListToDtoList(List<Vaccinationstatus> vaccinationStatusList);
 
     List<VaccineOfferingDTO> vaccineOfferingListToDtoList(List<Vaccineoffering> vaccineOfferingList);
+
+    List<MbiReportDTO> reportListToDtoList(List<Mbireport> list);
+
+    Mbireport reportDtoToReport(MbiReportDTO mbiReportDTO);
 }

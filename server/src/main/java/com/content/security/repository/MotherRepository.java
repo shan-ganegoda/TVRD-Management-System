@@ -7,4 +7,5 @@ public interface MotherRepository extends JpaRepository<Mother, Integer> {
 
     boolean existsByRegisterno(String registerno);
     boolean existsByNic(String nic);
+    boolean existsByMobileno(String mobileno);
 }

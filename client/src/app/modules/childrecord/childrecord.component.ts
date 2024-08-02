@@ -7,7 +7,6 @@ import {BloodType} from "../../core/entity/bloodtype";
 import {Gender} from "../../core/entity/gender";
 import {InvolvementStatus} from "../../core/entity/involvementstatus";
 import {MatTableDataSource} from "@angular/material/table";
-import {Clinic} from "../../core/entity/clinic";
 import {Observable} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {GenderService} from "../../core/service/employee/gender.service";
@@ -18,7 +17,6 @@ import {BloodtypeService} from "../../core/service/motherregistration/bloodtype.
 import {ChildrecordService} from "../../core/service/childrecords/childrecord.service";
 import {RegexService} from "../../core/service/regexes/regex.service";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ToastService} from "../../core/util/toast/toast.service";
 import {RouterLink} from "@angular/router";
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
@@ -27,6 +25,7 @@ import {PageErrorComponent} from "../../shared/page-error/page-error.component";
 import {PageLoadingComponent} from "../../shared/page-loading/page-loading.component";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
+import {AuthorizationService} from "../../core/service/auth/authorization.service";
 
 @Component({
   selector: 'app-childrecord',
@@ -72,8 +71,10 @@ export class ChildrecordComponent implements OnInit{
 
   currentOperation = '';
 
-  hasUpdateAuthority = true;
-  hasDeleteAuthority = true;
+  hasUpdateAuthority = this.am.hasAuthority("Child Record-Update");
+  hasDeleteAuthority = this.am.hasAuthority("Child Record-Delete");
+  hasReadAuthority = this.am.hasAuthority("Child Record-Read");
+  hasWriteAuthority = this.am.hasAuthority("Child Record-Write");
 
   enaadd:boolean = false;
   enaupd:boolean = false;
@@ -90,7 +91,8 @@ export class ChildrecordComponent implements OnInit{
               private rs:RegexService,
               private dialog:MatDialog,
               private tst:ToastService,
-              private cdr:ChangeDetectorRef
+              private cdr:ChangeDetectorRef,
+              private am: AuthorizationService
   ) {
 
     const today = new Date();
@@ -193,7 +195,7 @@ export class ChildrecordComponent implements OnInit{
 
           if (this.oldChildRecord != undefined && control.valid) {
             // @ts-ignore
-            if (value === this.childRecordForm[controlName]) {
+            if (value === this.currentChildRecord[controlName]) {
               control.markAsPristine();
             } else {
               control.markAsDirty();

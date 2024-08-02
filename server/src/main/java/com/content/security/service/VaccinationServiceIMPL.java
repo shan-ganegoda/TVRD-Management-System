@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -58,18 +57,19 @@ public class VaccinationServiceIMPL implements VaccinationService{
 
             Vaccination vaccination = objectMapper.vaccinationDtoToVaccination(vaccinationDTO);
 
-            if(!vaccinationRepository.existsByChildrecords(vaccination.getChildrecords())){
+            if(vaccinationRepository.existsByChildrecords(vaccinationDTO.getChildrecords())){
+                throw new ResourceAlreadyExistException("Child Already Exist!");
+            }
+
                 for(Vaccinationrecord i : vaccination.getVaccinationrecords()){
                     i.setVaccination(vaccination);
                 }
 
                 vaccinationRepository.save(vaccination);
                 return vaccinationDTO;
-            }else{
-                throw new ResourceAlreadyExistException("Vaccination Already Exist!");
-            }
+
         }else{
-            throw new ResourceNotFountException("Vaccination Not Found");
+            throw new ResourceNotFountException("Vaccination Data Not Found");
         }
     }
 
@@ -77,28 +77,21 @@ public class VaccinationServiceIMPL implements VaccinationService{
     public VaccinationDTO update(VaccinationDTO vaccinationDTO) {
         Vaccination vaccinationrec = vaccinationRepository.findById(vaccinationDTO.getId()).orElseThrow(() -> new ResourceNotFountException("Vaccination Not Found"));
 
-        if(vaccinationrec != null){
+        if(!vaccinationrec.getChildrecords().getId().equals(vaccinationDTO.getChildrecords().getId()) && vaccinationRepository.existsByChildrecords(vaccinationDTO.getChildrecords())){
+            throw new ResourceAlreadyExistException("Child Already Exist!");
+        }
 
             Vaccination vaccination = objectMapper.vaccinationDtoToVaccination(vaccinationDTO);
 
-            if(Objects.equals(vaccinationrec.getClinic().getId(), vaccination.getClinic().getId()) && Objects.equals(vaccinationrec.getChildrecords().getId(), vaccination.getChildrecords().getId())){
                 try{
                     vaccination.getVaccinationrecords().forEach(dis -> dis.setVaccination(vaccination));
                     vaccinationRepository.save(vaccination);
-                }catch(Exception e){System.out.println(e);}
+                }catch(Exception e){
+                    System.out.println(e);
+                }
                 return vaccinationDTO;
-            } else if(!vaccinationRepository.existsByChildrecords(vaccination.getChildrecords())){
-                try{
-                    vaccination.getVaccinationrecords().forEach(dis -> dis.setVaccination(vaccination));
-                    vaccinationRepository.save(vaccination);
-                }catch(Exception e){System.out.println(e);}
-                return vaccinationDTO;
-            }else{
-                throw new ResourceAlreadyExistException("Vaccination Already Exist!");
-            }
-        }else{
-            throw new ResourceNotFountException("Vaccination Not Found");
-        }
+
+
     }
 
     @Override

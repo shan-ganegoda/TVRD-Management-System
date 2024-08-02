@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class ChildRecordServiceIMPL implements ChildRecordService{
+public class ChildRecordServiceIMPL implements ChildRecordService {
 
     private final ChildRecordRepository childRecordRepository;
     private final ObjectMapper objectMapper;
@@ -26,11 +26,11 @@ public class ChildRecordServiceIMPL implements ChildRecordService{
     @Override
     public List<ChildRecordDTO> getAll(HashMap<String, String> params) {
         List<Childrecord> childRecords = childRecordRepository.findAll();
-        if(!childRecords.isEmpty()){
+        if (!childRecords.isEmpty()) {
             List<ChildRecordDTO> childRecordDTOS = objectMapper.childRecordListToDtoList(childRecords);
-            if(params.isEmpty()){
+            if (params.isEmpty()) {
                 return childRecordDTOS;
-            }else{
+            } else {
                 String regno = params.get("regno");
                 String fullname = params.get("fullname");
                 String genderid = params.get("genderid");
@@ -38,57 +38,54 @@ public class ChildRecordServiceIMPL implements ChildRecordService{
 
                 Stream<ChildRecordDTO> cstreame = childRecordDTOS.stream();
 
-                if(regno !=null) cstreame = cstreame.filter(e -> e.getRegno().equals(regno));
-                if(fullname !=null) cstreame = cstreame.filter(e -> e.getFullname().contains(fullname));
-                if(genderid != null) cstreame = cstreame.filter(e -> e.getGender().getId()==Integer.parseInt(genderid));
-                if(healthstatusid != null) cstreame = cstreame.filter(e -> e.getHealthstatus().getId()==Integer.parseInt(healthstatusid));
+                if (regno != null) cstreame = cstreame.filter(e -> e.getRegno().equals(regno));
+                if (fullname != null) cstreame = cstreame.filter(e -> e.getFullname().contains(fullname));
+                if (genderid != null)
+                    cstreame = cstreame.filter(e -> e.getGender().getId() == Integer.parseInt(genderid));
+                if (healthstatusid != null)
+                    cstreame = cstreame.filter(e -> e.getHealthstatus().getId() == Integer.parseInt(healthstatusid));
 
                 return cstreame.collect(Collectors.toList());
             }
-        }else{
+        } else {
             throw new ResourceNotFountException("Child Records Not Found!");
         }
     }
 
     @Override
     public ChildRecordDTO update(ChildRecordDTO childRecordDTO) {
-        Childrecord childrecord = childRecordRepository.findById(childRecordDTO.getId()).orElseThrow(null);
-        if(childrecord != null){
-            if(childrecord.getRegno().equals(childRecordDTO.getRegno())){
-                Childrecord ch = objectMapper.childRecordDtoToChildRecord(childRecordDTO);
-                childRecordRepository.save(ch);
-                return childRecordDTO;
-            }else if(childRecordRepository.existsByRegno(childRecordDTO.getRegno())){
-                throw new ResourceAlreadyExistException("ChildRecord With Regno Already Exists");
-            }else{
-                Childrecord ch = objectMapper.childRecordDtoToChildRecord(childRecordDTO);
-                childRecordRepository.save(ch);
-                return childRecordDTO;
+        if (childRecordDTO != null) {
+            Childrecord childrecord = childRecordRepository.findById(childRecordDTO.getId()).orElseThrow(() -> new ResourceNotFountException("Child Records Not Found!"));
+
+            if (!childrecord.getRegno().equals(childRecordDTO.getRegno()) && childRecordRepository.existsByRegno(childRecordDTO.getRegno())) {
+                throw new ResourceAlreadyExistException("RegNo Already Exist!");
             }
-        }else{
-            throw new ResourceNotFountException("Child Records Not Found!");
+
+            Childrecord ch = objectMapper.childRecordDtoToChildRecord(childRecordDTO);
+            childRecordRepository.save(ch);
+            return childRecordDTO;
+        } else {
+            throw new ResourceNotFountException("ChildRecords Data Not Found!");
         }
+
     }
 
     @Override
     public String delete(Integer id) {
-            Childrecord ch = childRecordRepository.findById(id).orElseThrow(null);
-            if(ch != null){
-                childRecordRepository.delete(ch);
-                return "Child Record Successfully Deleted!";
-            }else{
-                throw new ResourceNotFountException("Child Records Not Found!");
-            }
+        Childrecord ch = childRecordRepository.findById(id).orElseThrow(() -> new ResourceNotFountException("Child Record Not Found!"));
+        childRecordRepository.delete(ch);
+        return "Child Record Successfully Deleted!";
+
     }
 
     @Override
     public ChildRecordDTO save(ChildRecordDTO childRecordDTO) {
-        if(!childRecordRepository.existsByRegno(childRecordDTO.getRegno())){
+        if (!childRecordRepository.existsByRegno(childRecordDTO.getRegno())) {
             Childrecord childrecord = objectMapper.childRecordDtoToChildRecord(childRecordDTO);
             childRecordRepository.save(childrecord);
             return childRecordDTO;
-        }else{
-            throw new ResourceAlreadyExistException("Child Already Registered With this Regno!");
+        } else {
+            throw new ResourceAlreadyExistException("RegNo Already Exist!");
         }
     }
 }
