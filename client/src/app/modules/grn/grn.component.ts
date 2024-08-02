@@ -321,7 +321,7 @@ export class GrnComponent implements OnInit{
       }
       });
     }
-    
+
   getUpdates(): string {
     let updates: string = "";
     for (const controlName in this.grnForm.controls) {
@@ -520,6 +520,7 @@ export class GrnComponent implements OnInit{
     this.grnForm.controls['grnstatus'].setValue(null);
     this.grnForm.controls['productorder'].setValue(null);
     this.innerdata = [];
+    this.isInnerDataUpdated=false;
 
     this.enableButtons(true,false,false);
   }

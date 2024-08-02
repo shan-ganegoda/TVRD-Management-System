@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class GrnServiceIMPL implements GrnService{
+public class GrnServiceIMPL implements GrnService {
 
     private final GrnRepository grnRepository;
     private final ObjectMapper objectMapper;
@@ -28,77 +28,73 @@ public class GrnServiceIMPL implements GrnService{
     @Override
     public List<GrnDTO> getAll(HashMap<String, String> params) {
         List<Grn> grns = grnRepository.findAll();
-        if(!grns.isEmpty()){
+        if (!grns.isEmpty()) {
             List<GrnDTO> grnDTOs = objectMapper.grnListToDtoList(grns);
-            if(params.isEmpty()){
+            if (params.isEmpty()) {
                 return grnDTOs;
-            }else{
+            } else {
                 String code = params.get("code");
                 String date = params.get("date");
                 String grnstatusid = params.get("grnstatusid");
 
                 Stream<GrnDTO> gstream = grnDTOs.stream();
 
-                if(code != null) gstream = gstream.filter(g -> g.getCode().equals(code));
-                if(date != null) gstream = gstream.filter(g-> g.getDate().equals(LocalDate.parse(date)));
-                if(grnstatusid != null) gstream = gstream.filter(g -> g.getGrnstatus().getId() == Integer.parseInt(grnstatusid));
+                if (code != null) gstream = gstream.filter(g -> g.getCode().equals(code));
+                if (date != null) gstream = gstream.filter(g -> g.getDate().equals(LocalDate.parse(date)));
+                if (grnstatusid != null)
+                    gstream = gstream.filter(g -> g.getGrnstatus().getId() == Integer.parseInt(grnstatusid));
 
                 return gstream.collect(Collectors.toList());
             }
-        }else{
+        } else {
             throw new ResourceNotFountException("GRNs Not Found!");
         }
     }
 
     @Override
     public GrnDTO save(GrnDTO grnDTO) {
-        if(grnDTO != null){
+        if (grnDTO != null) {
             Grn grn = objectMapper.grnDtoToGrn(grnDTO);
 
-            if(!grnRepository.existsByCode(grnDTO.getCode())){
-                for(Grnproduct i : grn.getGrnproducts()){
+            if (!grnRepository.existsByCode(grnDTO.getCode())) {
+                for (Grnproduct i : grn.getGrnproducts()) {
                     i.setGrn(grn);
                 }
 
                 grnRepository.save(grn);
                 return grnDTO;
-            }else{
+            } else {
                 throw new ResourceAlreadyExistException("GRN Already Exist!");
             }
-        }else{
+        } else {
             throw new ResourceNotFountException("GRN Not Found");
         }
     }
 
     @Override
     public GrnDTO update(GrnDTO grnDTO) {
-        if(grnRepository.existsById(grnDTO.getId())){
-            try{
-                Grn grn = objectMapper.grnDtoToGrn(grnDTO);
-                grn.getGrnproducts().forEach(grnroducts -> grnroducts.setGrn(grn));
-                grnRepository.save(grn);
 
-            }catch(Exception e){
-                System.out.println(e);
-            }
+        Grn grnrec = grnRepository.findById(grnDTO.getId()).orElseThrow(() -> new ResourceNotFountException("GRN Not Found"));
 
-            return grnDTO;
-        }else{
-            throw new ResourceNotFountException("GRN Not Found");
+        if (!grnrec.getCode().equals(grnDTO.getCode()) && grnRepository.existsByCode(grnDTO.getCode())) {
+            throw new ResourceAlreadyExistException("Code Already Exist!");
         }
+
+        try {
+            Grn grn = objectMapper.grnDtoToGrn(grnDTO);
+            grn.getGrnproducts().forEach(grnroducts -> grnroducts.setGrn(grn));
+            grnRepository.save(grn);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return grnDTO;
+
     }
 
     @Override
     public void delete(Integer id) {
-        if(grnRepository.existsById(id)){
-
-            Grn grn = grnRepository.findById(id).orElseThrow(null);
-
-            if(grn != null){
-                grnRepository.delete(grn);
-            }
-        }else{
-            throw new ResourceNotFountException("GRN Not Found");
-        }
+        Grn grn = grnRepository.findById(id).orElseThrow(() -> new ResourceNotFountException("GRN Not Found"));
+        grnRepository.delete(grn);
     }
 }
