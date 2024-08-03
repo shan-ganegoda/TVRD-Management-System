@@ -150,4 +150,8 @@ public interface ObjectMapper {
     List<MbiReportDTO> reportListToDtoList(List<Mbireport> list);
 
     Mbireport reportDtoToReport(MbiReportDTO mbiReportDTO);
+
+    List<ReviewStatusDTO> reviewStatusListToDtoList(List<Reviewstatus> reviewstatusList);
+
+    List<ReportCategoryDTO> reportCategoryListToDtoList(List<Reportcategory> reportCategories);
 }

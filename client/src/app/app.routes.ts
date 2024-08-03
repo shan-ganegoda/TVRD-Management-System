@@ -30,6 +30,7 @@ import {VaccinationComponent} from "./modules/vaccination/vaccination.component"
 import {
   CountbymotherregistrationComponent
 } from "./core/report/view/countbymotherregistration/countbymotherregistration.component";
+import {MbireportComponent} from "./modules/mbireport/mbireport.component";
 
 export const routes: Routes = [
   { path: "login", component: AuthComponent },
@@ -55,6 +56,7 @@ export const routes: Routes = [
       {path: "grn", component: GrnComponent, title: "GRN"},
       {path: "distribution", component: DistributionComponent, title: "Distribution"},
       {path: "vaccination", component: VaccinationComponent, title: "Vaccination"},
+      {path: "mbireport", component: MbireportComponent, title: "MBI Report"},
 
       {path: "profile", component: ProfileComponent, title: "Profile"},
 

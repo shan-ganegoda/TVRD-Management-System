@@ -17,6 +17,7 @@ import {Location} from "@angular/common";
 import {WarningDialogComponent} from "../dialog/warning-dialog/warning-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {LogoutDialogComponent} from "../dialog/logout-dialog/logout-dialog.component";
+import {AuthorizationService} from "../../core/service/auth/authorization.service";
 
 @Component({
   selector: 'app-mainwindow',
@@ -49,6 +50,13 @@ export class MainwindowComponent implements OnInit{
   togglemenu4:boolean = false;
   togglemenu5:boolean = false;
   togglemenu6:boolean = false;
+  togglemenu7:boolean = false;
+
+  protected Admin = this.am.hasRole("Admin");
+  protected MohOfficer = this.am.hasRole("MOH Officer");
+  protected PdOfficer = this.am.hasRole("PD Officer");
+  protected RdhOfficer = this.am.hasRole("RDH Officer");
+  protected PhnOfficer = this.am.hasRole("PHN Officer");
 
   opened: boolean = true;
   hidden = false;
@@ -57,7 +65,8 @@ export class MainwindowComponent implements OnInit{
     private storageService:StorageService,
     private authService:AuthService,
     private location:Location,
-    private dialog:MatDialog
+    private dialog:MatDialog,
+    private am:AuthorizationService
     ) {
   }
 
@@ -66,6 +75,8 @@ export class MainwindowComponent implements OnInit{
     const user = this.storageService.getUser();
 
     if(user.id) this.user = user;
+
+    console.log(this.Admin);
   }
 
   logout(){

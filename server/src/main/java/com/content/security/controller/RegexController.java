@@ -79,5 +79,10 @@ public class RegexController {
         return RegexProvider.get(new VaccinationDTO());
     }
 
+    @GetMapping(path = "/mbireport")
+    public HashMap<String, HashMap<String,String>> mbireport(){
+        return RegexProvider.get(new MbiReportDTO());
+    }
+
 }
 

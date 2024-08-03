@@ -24,6 +24,10 @@ export interface MbiReport{
   receivedpacketcount?:number;
   distributedpacketcount?:number;
   remainingpacketscount?:number;
+  totalregcount?:number;
+  totalattendacecount?:number;
+  totaldistributionscount?:number;
+  totalissuedpacketscount?:number;
   reviewstatus?:ReviewStatus;
   reportcategory?:ReportCategory;
   description?:string;

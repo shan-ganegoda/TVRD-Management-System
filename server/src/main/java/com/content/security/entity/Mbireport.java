@@ -94,4 +94,16 @@ public class Mbireport {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "totalregcount")
+    private Integer totalregcount;
+
+    @Column(name = "totalattendacecount")
+    private Integer totalattendacecount;
+
+    @Column(name = "totaldistributionscount")
+    private Integer totaldistributionscount;
+
+    @Column(name = "totalissuedpacketscount")
+    private Integer totalissuedpacketscount;
+
 }
