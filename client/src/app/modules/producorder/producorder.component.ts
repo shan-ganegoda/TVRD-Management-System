@@ -597,4 +597,32 @@ export class ProducorderComponent implements OnInit {
     });
   }
 
+  generateCode() {
+    let mohid = this.porderForm.controls['moh'].value;
+
+    if(mohid == null){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Generate Code ",message: "Please Select MOH First "}
+      }).afterClosed().subscribe(res =>{
+        if(res){return;}
+      })
+    }else{
+      this.ms.getMohById(parseInt(mohid)).subscribe({
+        next: data=> {
+          let moh = data;
+
+          const today = new Date();
+          const date = today.getDate();
+          const month = today.getMonth();
+          const year = today.getFullYear();
+
+          const formatteddate = (date < 10 ? '0' : '') + date;
+          const formattedmonth = (month < 10 ? '0' : '') + month;
+
+          this.porderForm.controls['code'].setValue(`O${moh.codename}${year}${formattedmonth}${formatteddate}`);
+        }
+      });
+    }
+
+  }
 }

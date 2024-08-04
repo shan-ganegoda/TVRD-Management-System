@@ -31,7 +31,7 @@
               formControlName="ssreviewstatus"
               data-tip="Review Status"
       >
-        <option disabled value="">MohStatus</option>
+        <option disabled value="">ReviewStatus</option>
 
         @for(reviewstatus of reviewstatuses; track reviewstatuses){
           <option value="{{reviewstatus.id}}">{{reviewstatus.name}}</option>
@@ -355,7 +355,7 @@
   </form>
 </div>
 
-<mat-grid-list cols="1">
+<mat-grid-list cols="1" rowHeight="34rem">
 <mat-grid-tile>
   <div class="w-full h-full bg-white mt-4 ml-2 mr-2 rounded-md shadow-md overflow-auto">
     <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">

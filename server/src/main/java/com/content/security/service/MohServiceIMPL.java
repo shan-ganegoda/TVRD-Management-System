@@ -60,6 +60,9 @@ public class MohServiceIMPL implements MohService {
             if ( mohRepository.existsByEmail(mohDTO.getEmail())) {
                 throw new ResourceAlreadyExistException("Email Already Exist!");
             }
+            if ( mohRepository.existsByCodename(mohDTO.getCodename())) {
+                throw new ResourceAlreadyExistException("Codename Already Exist!");
+            }
             if (mohRepository.existsByTele(mohDTO.getTele())) {
                 throw new ResourceAlreadyExistException("Telephone No Already Exist!");
             }
@@ -94,6 +97,9 @@ public class MohServiceIMPL implements MohService {
 
         if (!moh.getEmail().equals(mohDTO.getEmail()) && mohRepository.existsByEmail(mohDTO.getEmail())) {
             throw new ResourceAlreadyExistException("Email Already Exist!");
+        }
+        if (!moh.getCodename().equals(mohDTO.getCodename()) && mohRepository.existsByCodename(mohDTO.getCodename())) {
+            throw new ResourceAlreadyExistException("Codename Already Exist!");
         }
         if (!moh.getTele().equals(mohDTO.getTele()) && mohRepository.existsByTele(mohDTO.getTele())) {
             throw new ResourceAlreadyExistException("Telephone No Already Exist!");

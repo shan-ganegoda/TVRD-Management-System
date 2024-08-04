@@ -10,4 +10,5 @@ public interface MohRepository extends JpaRepository<Moh,Integer> {
     boolean existsByEmail(String email);
     boolean existsByTele(String tele);
     boolean existsByFaxno(String faxno);
+    boolean existsByCodename(String codename);
 }

@@ -13,7 +13,6 @@ import {Employee} from "../../core/entity/employee";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {
   MatCell, MatCellDef,
@@ -108,6 +107,7 @@ export class MohdetailsComponent implements OnInit{
 
     this.mohForm = this.fb.group({
       "name": new FormControl('',[Validators.required]),
+      "codename": new FormControl('',[Validators.required]),
       "tele": new FormControl('',[Validators.required]),
       "faxno": new FormControl('',[Validators.required]),
       "email": new FormControl('',[Validators.required]),
@@ -164,6 +164,7 @@ export class MohdetailsComponent implements OnInit{
     this.mohForm.controls['name'].setValidators([Validators.required,Validators.pattern(this.regexes['name']['regex'])]);
     this.mohForm.controls['tele'].setValidators([Validators.required,Validators.pattern(this.regexes['tele']['regex'])]);
     this.mohForm.controls['faxno'].setValidators([Validators.required,Validators.pattern(this.regexes['faxno']['regex'])]);
+    this.mohForm.controls['codename'].setValidators([Validators.required,Validators.pattern(this.regexes['codename']['regex'])]);
     this.mohForm.controls['email'].setValidators([Validators.required]);
     this.mohForm.controls['address'].setValidators([Validators.required]);
     this.mohForm.controls['doestablished'].setValidators([Validators.required]);
@@ -212,6 +213,7 @@ export class MohdetailsComponent implements OnInit{
       email: this.currentMoh.email,
       address: this.currentMoh.address,
       doestablished: this.currentMoh.doestablished,
+      codename: this.currentMoh.codename,
       // toclose: this.currentMoh.toclose,
 
       rdh: this.currentMoh.rdh?.id,
@@ -278,6 +280,7 @@ export class MohdetailsComponent implements OnInit{
               faxno: this.mohForm.controls['faxno'].value,
               address: this.mohForm.controls['address'].value,
               doestablished: this.mohForm.controls['doestablished'].value,
+              codename: this.mohForm.controls['codename'].value,
 
               rdh: {id: parseInt(this.mohForm.controls['rdh'].value)},
               mohstatus: {id: parseInt(this.mohForm.controls['mohstatus'].value)},
@@ -346,6 +349,7 @@ export class MohdetailsComponent implements OnInit{
                     faxno: this.mohForm.controls['faxno'].value,
                     address: this.mohForm.controls['address'].value,
                     doestablished: this.mohForm.controls['doestablished'].value,
+                    codename: this.mohForm.controls['codename'].value,
 
                     rdh: {id: parseInt(this.mohForm.controls['rdh'].value)},
                     mohstatus: {id: parseInt(this.mohForm.controls['mohstatus'].value)},

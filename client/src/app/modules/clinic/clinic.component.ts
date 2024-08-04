@@ -122,7 +122,11 @@ export class ClinicComponent implements OnInit{
     });
 
     this.ms.getAllMohsList().subscribe({
-      next: data => this.mohs = data,
+      next: data => {
+        this.mohs = data;
+        // @ts-ignore
+        this.mohs.sort((a,b) => a.name.localeCompare(b.name))
+      }
     });
 
     this.css.getAll().subscribe({

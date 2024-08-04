@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: center;
   background-color: #1E4263;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 
@@ -13,8 +13,8 @@
 mat-card{
   background-color: white;
   //#1F2937
-  height: 25rem;
-  width: 40rem;
+  height: 30rem;
+  width: 27rem;
   //27
   border-radius: 10px;
   padding: 1rem;
@@ -35,7 +35,7 @@ mat-card{
 
 
 mat-card-content{
-  margin-top: 1rem;
+  margin-top: 3rem;
   display: flex;
 }
 
@@ -65,6 +65,7 @@ form{
 .bar{
   margin-top: 1rem;
   display: flex;
+  flex-direction: row;
   color: black;
 }
 
@@ -77,8 +78,8 @@ form{
 
 .forgot{
   position: absolute;
-  //left: 14.5rem;
-  right: 18.5rem;
+  left: 17.5rem;
+  //right: 18.5rem;
   color: #2563EB;
 }
 

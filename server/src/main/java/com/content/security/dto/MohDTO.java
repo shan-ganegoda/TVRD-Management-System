@@ -34,6 +34,8 @@ public class MohDTO {
         private Employee employee;
         private Rdh rdh;
         private Mohstatus mohstatus;
+        @Pattern(regexp = "^([A-Z]{3})$", message = "Invalid Codename")
+        private String codename;
 
         public MohDTO(Integer id,String name){
                 this.id = id;

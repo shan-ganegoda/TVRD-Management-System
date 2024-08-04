@@ -142,11 +142,19 @@ export class MbireportComponent implements OnInit {
     });
 
     this.ms.getAllMohsList().subscribe({
-      next: data => this.mohs = data,
+      next: data => {
+        this.mohs = data
+        // @ts-ignore
+        this.mohs.sort((a,b) => a.name.localeCompare(b.name))
+      },
     });
 
     this.rds.getAllDistricts().subscribe({
-      next: data => this.rdhs = data,
+      next: data => {
+        this.rdhs = data
+        // @ts-ignore
+        this.rdhs.sort((a,b) => a.name.localeCompare(b.name))
+      },
     });
 
     this.rss.getAll().subscribe({
@@ -537,10 +545,32 @@ export class MbireportComponent implements OnInit {
   }
 
   handleSearch() {
+    const sscode  = this.reportSearchForm.controls['sscode'].value;
+    const ssmoh  = this.reportSearchForm.controls['ssmoh'].value;
+    const ssreviewstatus  = this.reportSearchForm.controls['ssreviewstatus'].value;
 
+
+    let query = ""
+
+    if(sscode != null && sscode.trim() !="") query = query + "&code=" + sscode;
+    if(ssmoh != '') query = query + "&mohid=" + parseInt(ssmoh);
+    if(ssreviewstatus != '') query = query + "&reviewstatusid=" + parseInt(ssreviewstatus);
+
+    if(query != "") query = query.replace(/^./, "?")
+    this.loadTable(query);
   }
 
   clearSearch() {
-
+    this.dialog.open(ConfirmDialogComponent,{data:"Clear Search"}
+    ).afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.reportSearchForm.reset();
+        this.reportSearchForm.controls['ssmoh'].setValue('');
+        this.reportSearchForm.controls['ssreviewstatus'].setValue('');
+        this.loadTable("");
+      }
+    });
   }
 }

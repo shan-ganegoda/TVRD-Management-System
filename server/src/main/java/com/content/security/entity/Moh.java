@@ -1,6 +1,7 @@
 package com.content.security.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,5 +54,9 @@ public class Moh {
     @ManyToOne
     @JoinColumn(name = "mohstatus_id", referencedColumnName = "id", nullable = false)
     private Mohstatus mohstatus;
+
+    @Size(max = 45)
+    @Column(name = "codename", length = 45)
+    private String codename;
 
 }

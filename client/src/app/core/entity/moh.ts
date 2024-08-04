@@ -9,6 +9,7 @@ export interface Moh {
 
   id?: number;
   name?: string;
+  codename?:string;
   tele?: string;
   faxno?: string;
   email?: string;
