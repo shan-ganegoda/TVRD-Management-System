@@ -4,15 +4,15 @@
       <div class="stats shadow w-1/4 shadow-xl mx-4 mt-4 bg-[#1E4263] justify-center">
         <div class="stat">
           <div class="stat-title text-gray-100">Total Mohs</div>
-          <div class="stat-value text-gray-100">336</div>
+          <div class="stat-value text-gray-100">{{ mohcount }}</div>
           <div class="stat-desc text-gray-100">last updated {{today | date }}</div>
         </div>
       </div>
 
     <div class="stats shadow w-1/4 shadow-xl mx-4 mt-4 bg-[#1E4263] justify-center">
       <div class="stat">
-        <div class="stat-title text-gray-100">Total Parent Registrations</div>
-        <div class="stat-value text-gray-100">1004</div>
+        <div class="stat-title text-gray-100">Total Mother Registrations</div>
+        <div class="stat-value text-gray-100">{{ mothercount}}</div>
         <div class="stat-desc text-gray-100">last updated {{today | date }}</div>
       </div>
     </div>
@@ -20,7 +20,7 @@
     <div class="stats shadow w-1/4 shadow-xl mx-4 mt-4 bg-[#1E4263] justify-center">
       <div class="stat">
         <div class="stat-title text-gray-100">Total Clinics</div>
-        <div class="stat-value text-gray-100">400</div>
+        <div class="stat-value text-gray-100">{{ cliniccount}}</div>
         <div class="stat-desc text-gray-100">last updated {{today | date }}</div>
       </div>
     </div>
@@ -28,7 +28,7 @@
     <div class="stats shadow w-1/4 shadow-xl mx-4 mt-4 bg-[#1E4263] justify-center">
       <div class="stat">
         <div class="stat-title text-gray-100">Total Employees</div>
-        <div class="stat-value text-gray-100">280</div>
+        <div class="stat-value text-gray-100">{{ employeecount}}</div>
         <div class="stat-desc text-gray-100">last updated {{today | date }}</div>
       </div>
     </div>

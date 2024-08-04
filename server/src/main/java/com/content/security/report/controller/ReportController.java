@@ -5,6 +5,7 @@ import com.content.security.report.dto.ProductOrdersByProductDTO;
 import com.content.security.report.dto.CountByVaccineOrderDTO;
 import com.content.security.report.entity.*;
 import com.content.security.report.repository.*;
+import com.content.security.report.service.ChildReportService;
 import com.content.security.report.service.MotherReportService;
 import com.content.security.report.service.ProductOrderReportService;
 import com.content.security.report.service.VaccineOrderReportService;
@@ -36,6 +37,7 @@ public class ReportController {
     private final ProductOrderReportService productOrderReportService;
     private final VaccineOrderReportService vaccineOrderReportService;
     private final MotherReportService motherReportService;
+    private final ChildReportService childReportService;
 
     @GetMapping(path = "/countbypdh")
     public List<CountByPdh> getCountByPdh() {
@@ -82,6 +84,11 @@ public class ReportController {
     @GetMapping(path = "/countbymotherregister")
     public List<CountByMotherRegistration> getCountByMotherRegister(@RequestParam HashMap<String,String> params) {
         return motherReportService.getCountByMotherRegister(params);
+    }
+
+    @GetMapping(path = "/countbychildregister")
+    public List<CountByChildRegistration> getCountByChildRegister(@RequestParam HashMap<String,String> params) {
+        return childReportService.getCountByChildRegister(params);
     }
 
 }
