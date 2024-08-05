@@ -1,9 +1,6 @@
 package com.content.security.dto;
 
-import com.content.security.entity.Bloodtype;
-import com.content.security.entity.Clinic;
-import com.content.security.entity.Involvementstatus;
-import com.content.security.entity.Maritalstatus;
+import com.content.security.entity.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,4 +38,5 @@ public class MotherDTO {
     private Involvementstatus involvementstatus;
     @Pattern(regexp = "^.*$", message = "Invalid Description")
     private String description;
+    private Motherstatus motherstatus;
 }

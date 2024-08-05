@@ -26,6 +26,8 @@ import {PageLoadingComponent} from "../../shared/page-loading/page-loading.compo
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 import {AuthorizationService} from "../../core/service/auth/authorization.service";
+import {ClinicService} from "../../core/service/clinic/clinic.service";
+import {Clinic} from "../../core/entity/clinic";
 
 @Component({
   selector: 'app-childrecord',
@@ -58,6 +60,7 @@ export class ChildrecordComponent implements OnInit{
   mothers:Mother[] = [];
   healthstatuses:HealthStatus[] = [];
   childs:ChildRecord[] = [];
+  clinics:Clinic[] =[];
   bloodtypes:BloodType[] = [];
   genders:Gender[] = [];
   involvementstatuses:InvolvementStatus[] = [];
@@ -92,7 +95,8 @@ export class ChildrecordComponent implements OnInit{
               private dialog:MatDialog,
               private tst:ToastService,
               private cdr:ChangeDetectorRef,
-              private am: AuthorizationService
+              private am: AuthorizationService,
+              private cls:ClinicService
   ) {
 
     const today = new Date();
@@ -117,6 +121,7 @@ export class ChildrecordComponent implements OnInit{
       "apgarscore": new FormControl("",[Validators.required]),
 
       "gender": new FormControl(null,[Validators.required]),
+      "clinic": new FormControl(null,[Validators.required]),
       "mother": new FormControl(null,[Validators.required]),
       "bloodtype": new FormControl(null,[Validators.required]),
       "healthstatus": new FormControl(null,[Validators.required]),
@@ -134,6 +139,10 @@ export class ChildrecordComponent implements OnInit{
 
     this.gs.getGenderList().subscribe({
       next:data => this.genders = data,
+    });
+
+    this.cls.getAllList().subscribe({
+      next:data => this.clinics = data,
     });
 
     this.hs.getAll().subscribe({
@@ -187,6 +196,7 @@ export class ChildrecordComponent implements OnInit{
     this.childRecordForm.controls['mother'].setValidators([Validators.required]);
     this.childRecordForm.controls['bloodtype'].setValidators([Validators.required]);
     this.childRecordForm.controls['healthstatus'].setValidators([Validators.required]);
+    this.childRecordForm.controls['clinic'].setValidators([Validators.required]);
     this.childRecordForm.controls['involvementstatus'].setValidators([Validators.required]);
 
     for (const controlName in this.childRecordForm.controls) {
@@ -235,6 +245,7 @@ export class ChildrecordComponent implements OnInit{
 
 
       gender: this.currentChildRecord.gender?.id,
+      clinic: this.currentChildRecord.clinic?.id,
       mother: this.currentChildRecord.mother?.id,
       bloodtype: this.currentChildRecord.bloodtype?.id,
       healthstatus: this.currentChildRecord.healthstatus?.id,
@@ -242,6 +253,16 @@ export class ChildrecordComponent implements OnInit{
     });
 
     this.childRecordForm.markAsPristine();
+  }
+
+  filterClinic(event:any){
+    let motherid = event.target.value;
+
+    const mother = this.mothers.find(e=> e.id == parseInt(motherid));
+    if(mother != undefined ){
+      const clinicid = mother.clinic?.id;
+      this.childRecordForm.controls['clinic'].setValue(clinicid);
+    }
   }
 
   getUpdates():string {
@@ -299,6 +320,7 @@ export class ChildrecordComponent implements OnInit{
           apgarscore: this.childRecordForm.controls['apgarscore'].value,
 
           gender: {id: parseInt(this.childRecordForm.controls['gender'].value)},
+          clinic: {id: parseInt(this.childRecordForm.controls['clinic'].value)},
           mother: {id: parseInt(this.childRecordForm.controls['mother'].value)},
           bloodtype: {id: parseInt(this.childRecordForm.controls['bloodtype'].value)},
           healthstatus: {id: parseInt(this.childRecordForm.controls['healthstatus'].value)},
@@ -363,6 +385,7 @@ export class ChildrecordComponent implements OnInit{
               apgarscore: this.childRecordForm.controls['apgarscore'].value,
 
               gender: {id: parseInt(this.childRecordForm.controls['gender'].value)},
+              clinic: {id: parseInt(this.childRecordForm.controls['clinic'].value)},
               mother: {id: parseInt(this.childRecordForm.controls['mother'].value)},
               bloodtype: {id: parseInt(this.childRecordForm.controls['bloodtype'].value)},
               healthstatus: {id: parseInt(this.childRecordForm.controls['healthstatus'].value)},

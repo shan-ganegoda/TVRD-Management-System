@@ -4,6 +4,7 @@ import {Mother} from "./mother";
 import {BloodType} from "./bloodtype";
 import {InvolvementStatus} from "./involvementstatus";
 import {HealthStatus} from "./healthstatus";
+import {Clinic} from "./clinic";
 
 export interface ChildRecord{
 
@@ -22,6 +23,7 @@ export interface ChildRecord{
   apgarscore?:number;
   healthstatus?:HealthStatus;
   involvementstatus?:InvolvementStatus;
+  clinic?:Clinic;
 
 }
 

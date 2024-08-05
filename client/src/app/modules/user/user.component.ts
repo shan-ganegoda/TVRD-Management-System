@@ -14,8 +14,6 @@ import {UserstatusService} from "../../core/service/user/userstatus.service";
 import {UsertypeService} from "../../core/service/user/usertype.service";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
-import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {Employee} from "../../core/entity/employee";
 import {MatListOption, MatSelectionList} from "@angular/material/list";

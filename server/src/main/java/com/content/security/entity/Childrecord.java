@@ -74,4 +74,9 @@ public class Childrecord {
     @JoinColumn(name = "involvementstatus_id", nullable = false)
     private Involvementstatus involvementstatus;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "clinic_id", nullable = false)
+    private Clinic clinic;
+
 }

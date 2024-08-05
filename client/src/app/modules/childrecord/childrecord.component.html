@@ -139,6 +139,7 @@
           <select
             class="peer select select-bordered w-full bg-white focus:outline-none"
             formControlName="mother"
+            (change)="filterClinic($event)"
           >
             <option disabled [ngValue]="null">Mother</option>
 
@@ -147,6 +148,20 @@
             }
           </select>
           <label class="floating-labels-select">Mother</label>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
+          <select
+            class="peer select select-bordered w-full bg-white focus:outline-none"
+            formControlName="clinic"
+          >
+            <option disabled [ngValue]="null">Clinic</option>
+
+            @for (clinic of clinics; track clinics) {
+              <option [ngValue]="clinic.id">{{clinic.divisionname}}</option>
+            }
+          </select>
+          <label class="floating-labels-select">Clinic</label>
         </div>
 
         <div class="relative w-full mb-3 px-2">

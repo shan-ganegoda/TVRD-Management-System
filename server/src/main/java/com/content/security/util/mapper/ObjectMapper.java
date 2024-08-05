@@ -154,4 +154,12 @@ public interface ObjectMapper {
     List<ReviewStatusDTO> reviewStatusListToDtoList(List<Reviewstatus> reviewstatusList);
 
     List<ReportCategoryDTO> reportCategoryListToDtoList(List<Reportcategory> reportCategories);
+
+    List<MotherStatusDTO> motherStatusListToDtoList(List<Motherstatus> motherStatusList);
+
+    List<InventoryDTO> inventoryListToDtoList(List<Inventory> inventoryList);
+
+    Inventory inventoryDtoToInventory(InventoryDTO inventoryDTO);
+
+    List<InventoryStatusDTO> inventoryStatusListToDtoList(List<Inventorystatus> inventorystatusList);
 }

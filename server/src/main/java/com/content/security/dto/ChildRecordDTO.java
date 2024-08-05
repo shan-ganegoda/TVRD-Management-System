@@ -38,5 +38,6 @@ public class ChildRecordDTO {
     private Integer apgarscore;
     private Healthstatus healthstatus;
     private Involvementstatus involvementstatus;
+    private Clinic clinic;
 
 }
