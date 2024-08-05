@@ -104,7 +104,8 @@
           <label class="floating-label">Email</label>
         </div>
 
-        <div class="relative w-full px-2 mb-3">
+        <div class="flex flex-row items-center mb-3 px-2">
+        <div class="relative mr-2 w-full">
           <input
             type="password"
             placeholder="Password"
@@ -113,6 +114,8 @@
             autocomplete="off"
           />
           <label class="floating-label">Password</label>
+        </div>
+        <button class="btn bg-gray-950 text-white hover:bg-gray-900" (click)="resetPassword()">Reset</button>
         </div>
 
         <div class="flex flex-row items-center mb-3">

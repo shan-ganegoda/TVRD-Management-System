@@ -77,7 +77,7 @@ export class MainwindowComponent implements OnInit{
 
     if(user.id) this.user = user;
 
-    console.log(this.Admin);
+    //console.log(this.Admin);
   }
 
   logout(){

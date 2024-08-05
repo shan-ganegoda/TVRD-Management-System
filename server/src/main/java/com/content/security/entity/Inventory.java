@@ -16,7 +16,9 @@ import java.util.Set;
 @Entity
 @Table(name = "inventory")
 public class Inventory {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -25,12 +27,6 @@ public class Inventory {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "moh_id", nullable = false)
     private Moh moh;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "grn_id", nullable = false)
-    private Grn grn;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -55,8 +51,5 @@ public class Inventory {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "inventorystatus_id", nullable = false)
     private Inventorystatus inventorystatus;
-
-    @OneToMany(mappedBy = "inventory",cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Inventoryproduct> inventoryproducts = new LinkedHashSet<>();
 
 }

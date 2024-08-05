@@ -34,6 +34,7 @@ import {MbireportComponent} from "./modules/mbireport/mbireport.component";
 import {
   CountbychildregistrationComponent
 } from "./core/report/view/countbychildregistration/countbychildregistration.component";
+import {InventoryComponent} from "./modules/inventory/inventory.component";
 
 export const routes: Routes = [
   { path: "login", component: AuthComponent },
@@ -57,6 +58,7 @@ export const routes: Routes = [
       {path: "motherregistration", component: MotherregistrationComponent, title: "Mother Registration"},
       {path: "childrecord", component: ChildrecordComponent, title: "Child Record"},
       {path: "grn", component: GrnComponent, title: "GRN"},
+      {path: "inventory", component: InventoryComponent, title: "Inventory"},
       {path: "distribution", component: DistributionComponent, title: "Distribution"},
       {path: "vaccination", component: VaccinationComponent, title: "Vaccination"},
       {path: "mbireport", component: MbireportComponent, title: "MBI Report"},

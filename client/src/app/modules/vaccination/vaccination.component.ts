@@ -2,7 +2,6 @@ import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Vaccination} from "../../core/entity/vaccination";
 import {MatTableDataSource} from "@angular/material/table";
-import {Grn} from "../../core/entity/grn";
 import {Observable} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {AuthorizationService} from "../../core/service/auth/authorization.service";
@@ -20,8 +19,6 @@ import {VaccineofferingService} from "../../core/service/vaccine/vaccineoffering
 import {ClinicService} from "../../core/service/clinic/clinic.service";
 import {ChildrecordService} from "../../core/service/childrecords/childrecord.service";
 import {RouterLink} from "@angular/router";
-import {VaccineService} from "../../core/service/vaccine/vaccine.service";
-import {Vaccine} from "../../core/entity/vaccine";
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {AsyncPipe} from "@angular/common";
 import {PageErrorComponent} from "../../shared/page-error/page-error.component";
@@ -29,9 +26,7 @@ import {PageLoadingComponent} from "../../shared/page-loading/page-loading.compo
 import {VaccinationRecord} from "../../core/entity/vaccinationrecord";
 import {RegexService} from "../../core/service/regexes/regex.service";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
-import {DistributionProduct} from "../../core/entity/distributionproduct";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
-import {Distribution} from "../../core/entity/distribution";
 
 @Component({
   selector: 'app-vaccination',
@@ -49,14 +44,14 @@ import {Distribution} from "../../core/entity/distribution";
   templateUrl: './vaccination.component.html',
   styleUrl: './vaccination.component.scss'
 })
-export class VaccinationComponent implements OnInit{
+export class VaccinationComponent implements OnInit {
 
-  vaccinationForm!:FormGroup;
-  vaccinationSearchForm!:FormGroup;
+  vaccinationForm!: FormGroup;
+  vaccinationSearchForm!: FormGroup;
   innerForm!: FormGroup;
 
-  oldVaccination!:Vaccination;
-  currentVaccination!:Vaccination;
+  oldVaccination!: Vaccination;
+  currentVaccination!: Vaccination;
 
   inndata!: any;
   oldInndata!: any;
@@ -81,88 +76,89 @@ export class VaccinationComponent implements OnInit{
 
   regexes: any;
 
-  clinics:Clinic[] = [];
-  childs:ChildRecord[] = [];
-  vofferings:VaccineOffering[] = [];
+  clinics: Clinic[] = [];
+  childs: ChildRecord[] = [];
+  vofferings: VaccineOffering[] = [];
   vaccinations: Vaccination[] = [];
   vaccinationstatuses: VaccinationStatus[] = [];
   vaccinationprogresses: VaccinationProgress[] = [];
   innerdata: VaccinationRecord[] = [];
 
-  isInnerDataUpdated:boolean = false;
+  isInnerDataUpdated: boolean = false;
 
   constructor(
-              private am:AuthorizationService,
-              private fb:FormBuilder,
-              private tst:ToastService,
-              private cdr:ChangeDetectorRef,
-              private dialog:MatDialog,
-              private vs:VaccinationService,
-              private vss:VaccinationstatusService,
-              private vps:VaccinationprogressService,
-              private vos:VaccineofferingService,
-              private cs:ClinicService,
-              private crs:ChildrecordService,
-              private rs:RegexService
-              ) {
+    private am: AuthorizationService,
+    private fb: FormBuilder,
+    private tst: ToastService,
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog,
+    private vs: VaccinationService,
+    private vss: VaccinationstatusService,
+    private vps: VaccinationprogressService,
+    private vos: VaccineofferingService,
+    private cs: ClinicService,
+    private crs: ChildrecordService,
+    private rs: RegexService
+  ) {
 
     this.vaccinationSearchForm = this.fb.group({
       "sschildrecords": new FormControl(''),
       "ssvaccineoffering": new FormControl(''),
       "ssvaccinationprogress": new FormControl(''),
       "ssclinic": new FormControl(''),
-    },{updateOn:"change"});
+    }, {updateOn: "change"});
 
     this.vaccinationForm = this.fb.group({
-      "clinic": new FormControl(null,[Validators.required]),
-      "childrecords": new FormControl(null,[Validators.required]),
-      "lastupdated": new FormControl('',[Validators.required]),
-      "description": new FormControl('',[Validators.required]),
-      "vaccinationprogress": new FormControl(null,[Validators.required]),
-    },{updateOn:"change"});
+      "clinic": new FormControl(null, [Validators.required]),
+      "childrecords": new FormControl(null, [Validators.required]),
+      "lastupdated": new FormControl('', [Validators.required]),
+      "description": new FormControl('', [Validators.required]),
+      "vaccinationprogress": new FormControl(null, [Validators.required]),
+    }, {updateOn: "change"});
 
     this.innerForm = this.fb.group({
       "date": new FormControl(''),
       "vaccineoffering": new FormControl(null),
       "vaccinationstatus": new FormControl(null),
-    },{updateOn:"change"});
+    }, {updateOn: "change"});
   }
+
   ngOnInit(): void {
     this.initialize();
   }
 
-  initialize(){
+  initialize() {
     this.loadTable("");
 
     this.cs.getAllList().subscribe({
-      next:data => {
+      next: data => {
         this.clinics = data;
         // @ts-ignore
-        this.clinics.sort((a,b) => a.divisionname.localeCompare(b.divisionname));
+        this.clinics.sort((a, b) => a.divisionname.localeCompare(b.divisionname));
       }
     });
 
     this.crs.getAll("").subscribe({
-      next:data => {
+      next: data => {
         this.childs = data;
         // @ts-ignore
-        this.childs.sort((a,b) => a.fullname.localeCompare(b.fullname));
+        this.childs.sort((a, b) => a.fullname.localeCompare(b.fullname));
       }
     });
 
     this.vps.getAll().subscribe({
-      next:data => this.vaccinationprogresses = data,
+      next: data => this.vaccinationprogresses = data,
     });
 
     this.vss.getAll().subscribe({
-      next:data => this.vaccinationstatuses = data,
+      next: data => this.vaccinationstatuses = data,
     });
 
     this.vos.getAll().subscribe({
-      next:data => {
+      next: data => {
         this.vofferings = data;
         // @ts-ignore
-        this.vofferings.sort((a,b) => a.title.localeCompare(b.title));
+        this.vofferings.sort((a, b) => a.title.localeCompare(b.title));
       },
     });
 
@@ -175,7 +171,7 @@ export class VaccinationComponent implements OnInit{
     });
   }
 
-  loadTable(query:string){
+  loadTable(query: string) {
     this.vs.getAll(query).subscribe({
       next: data => {
         this.vaccinations = data;
@@ -190,7 +186,7 @@ export class VaccinationComponent implements OnInit{
   createForm() {
     this.vaccinationForm.controls['clinic'].setValidators([Validators.required]);
     this.vaccinationForm.controls['childrecords'].setValidators([Validators.required]);
-    this.vaccinationForm.controls['description'].setValidators([Validators.required,Validators.pattern(this.regexes['description']['regex'])]);
+    this.vaccinationForm.controls['description'].setValidators([Validators.required, Validators.pattern(this.regexes['description']['regex'])]);
     this.vaccinationForm.controls['vaccinationprogress'].setValidators([Validators.required]);
     this.vaccinationForm.controls['lastupdated'].setValidators([Validators.required]);
 
@@ -277,7 +273,7 @@ export class VaccinationComponent implements OnInit{
     }
   }
 
-  id= 0;
+  id = 0;
 
   addToTable() {
 
@@ -293,15 +289,35 @@ export class VaccinationComponent implements OnInit{
       });
     } else {
 
-      let vac = new VaccinationRecord(this.id,this.inndata.vaccineoffering,this.inndata.date,this.inndata.vaccinationstatus);
+      // Create the new vaccination record
+      let vac = new VaccinationRecord(this.id, this.inndata.vaccineoffering, this.inndata.date, this.inndata.vaccinationstatus);
 
+      // Create a temporary array to hold the existing records
       let tem: VaccinationRecord[] = [];
       if (this.innerdata != null) this.innerdata.forEach((i) => tem.push(i));
 
+      // Clear the original array
       this.innerdata = [];
+
+      // Add the existing records back to the original array
       tem.forEach((t) => this.innerdata.push(t));
 
-      this.innerdata.push(vac);
+      // Check if the new record already exists in the array
+      let exists = this.innerdata.some(record => record.vaccineoffering?.id === vac.vaccineoffering?.id);
+
+      if (!exists) {
+        // If it does not exist, add the new record
+        this.innerdata.push(vac);
+      } else {
+        // If it exists, you can handle it as needed, e.g., show a message
+        this.dialog.open(WarningDialogComponent, {
+          data: {heading: "Errors - Vaccination Record Add ", message: "Duplicate record. This record already exists in the table."}
+        }).afterClosed().subscribe(res => {
+          if (!res) {
+            return;
+          }
+        });
+      }
 
       this.id++;
 
@@ -343,7 +359,7 @@ export class VaccinationComponent implements OnInit{
         updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1) + " Changed";
       }
     }
-    if(this.isInnerDataUpdated){
+    if (this.isInnerDataUpdated) {
       updates = updates + "<br>" + "Vaccination Record Changed";
     }
     return updates;
@@ -363,7 +379,7 @@ export class VaccinationComponent implements OnInit{
         }
       }
     }
-    if(this.innerdata.length == 0) {
+    if (this.innerdata.length == 0) {
       errors = errors + "<br>Invalid Vaccination Record";
     }
     return errors;
@@ -386,10 +402,10 @@ export class VaccinationComponent implements OnInit{
       if (this.vaccinationForm.valid) {
 
         // @ts-ignore
-        this.innerdata.forEach((i)=> delete i.id);
+        this.innerdata.forEach((i) => delete i.id);
 
 
-        const vaccination:Vaccination = {
+        const vaccination: Vaccination = {
           lastupdated: this.vaccinationForm.controls['lastupdated'].value,
           description: this.vaccinationForm.controls['description'].value,
 
@@ -397,7 +413,7 @@ export class VaccinationComponent implements OnInit{
 
           clinic: {id: parseInt(this.vaccinationForm.controls['clinic'].value)},
           vaccinationprogress: {id: parseInt(this.vaccinationForm.controls['vaccinationprogress'].value)},
-          childrecords: {id: parseInt(this.vaccinationForm.controls['childrecords'].value),dobirth:''},
+          childrecords: {id: parseInt(this.vaccinationForm.controls['childrecords'].value), dobirth: ''},
         }
 
         //console.log(porder);
@@ -408,12 +424,12 @@ export class VaccinationComponent implements OnInit{
           if (res) {
             this.vs.save(vaccination).subscribe({
               next: () => {
-                this.tst.handleResult('success',"Vaccination Saved Successfully");
+                this.tst.handleResult('success', "Vaccination Saved Successfully");
                 this.loadTable("");
                 this.clearForm();
               },
               error: (err: any) => {
-                this.tst.handleResult('Failed',err.error.data.message);
+                this.tst.handleResult('Failed', err.error.data.message);
               }
             });
           }
@@ -426,31 +442,31 @@ export class VaccinationComponent implements OnInit{
   update(currentVaccination: Vaccination) {
     let errors = this.getErrors();
 
-    if(errors != ""){
-      this.dialog.open(WarningDialogComponent,{
-        data:{heading:"Errors - Vaccination Update ",message: "You Have Following Errors <br> " + errors}
+    if (errors != "") {
+      this.dialog.open(WarningDialogComponent, {
+        data: {heading: "Errors - Vaccination Update ", message: "You Have Following Errors <br> " + errors}
       }).afterClosed().subscribe(res => {
-        if(!res){
+        if (!res) {
           return;
         }
       });
 
-    }else{
+    } else {
 
-      let updates:string = this.getUpdates();
+      let updates: string = this.getUpdates();
 
-      if(updates != ""){
-        this.dialog.open(WarningDialogComponent,{
-          data:{heading:"Updates - Vaccination Update ",message: "You Have Following Updates <br> " + updates}
+      if (updates != "") {
+        this.dialog.open(WarningDialogComponent, {
+          data: {heading: "Updates - Vaccination Update ", message: "You Have Following Updates <br> " + updates}
         }).afterClosed().subscribe(res => {
-          if(!res){
+          if (!res) {
             return;
-          }else{
+          } else {
 
             // @ts-ignore
-            this.innerdata.forEach((i)=> delete i.id);
+            this.innerdata.forEach((i) => delete i.id);
 
-            const vaccination:Vaccination = {
+            const vaccination: Vaccination = {
               lastupdated: this.vaccinationForm.controls['lastupdated'].value,
               description: this.vaccinationForm.controls['description'].value,
 
@@ -458,7 +474,7 @@ export class VaccinationComponent implements OnInit{
 
               clinic: {id: parseInt(this.vaccinationForm.controls['clinic'].value)},
               vaccinationprogress: {id: parseInt(this.vaccinationForm.controls['vaccinationprogress'].value)},
-              childrecords: {id: parseInt(this.vaccinationForm.controls['childrecords'].value),dobirth:''},
+              childrecords: {id: parseInt(this.vaccinationForm.controls['childrecords'].value), dobirth: ''},
             }
 
             vaccination.id = currentVaccination.id;
@@ -467,17 +483,17 @@ export class VaccinationComponent implements OnInit{
 
             this.currentOperation = "Vaccination Update ";
 
-            this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+            this.dialog.open(ConfirmDialogComponent, {data: this.currentOperation})
               .afterClosed().subscribe(res => {
-              if(res) {
+              if (res) {
                 this.vs.update(vaccination).subscribe({
-                  next:() => {
-                    this.tst.handleResult('success',"Vaccination Successfully Updated");
+                  next: () => {
+                    this.tst.handleResult('success', "Vaccination Successfully Updated");
                     this.loadTable("");
                     this.clearForm();
                   },
-                  error:(err:any) => {
-                    this.tst.handleResult('Failed',err.error.data.message);
+                  error: (err: any) => {
+                    this.tst.handleResult('Failed', err.error.data.message);
                     //console.log(err);
                   }
                 });
@@ -487,11 +503,13 @@ export class VaccinationComponent implements OnInit{
           }
         });
 
-      }else{
-        this.dialog.open(WarningDialogComponent,{
-          data:{heading:"Updates - Vaccination Update ",message: "No Fields Updated "}
-        }).afterClosed().subscribe(res =>{
-          if(res){return;}
+      } else {
+        this.dialog.open(WarningDialogComponent, {
+          data: {heading: "Updates - Vaccination Update ", message: "No Fields Updated "}
+        }).afterClosed().subscribe(res => {
+          if (res) {
+            return;
+          }
         })
       }
     }
@@ -502,18 +520,18 @@ export class VaccinationComponent implements OnInit{
     const operation = "Delete Vaccination ";
     //console.log(operation);
 
-    this.dialog.open(ConfirmDialogComponent,{data:operation})
-      .afterClosed().subscribe((res:boolean) => {
-      if(res && currentVaccination.id){
+    this.dialog.open(ConfirmDialogComponent, {data: operation})
+      .afterClosed().subscribe((res: boolean) => {
+      if (res && currentVaccination.id) {
         this.vs.delete(currentVaccination.id).subscribe({
           next: () => {
             this.loadTable("");
-            this.tst.handleResult("success","Vaccination Successfully Deleted");
+            this.tst.handleResult("success", "Vaccination Successfully Deleted");
             this.clearForm();
           },
 
-          error: (err:any) => {
-            this.tst.handleResult("Failed",err.error.data.message);
+          error: (err: any) => {
+            this.tst.handleResult("Failed", err.error.data.message);
           }
         });
       }
@@ -529,34 +547,34 @@ export class VaccinationComponent implements OnInit{
     this.innerdata = [];
     this.isInnerDataUpdated = false;
 
-    this.enableButtons(true,false,false);
+    this.enableButtons(true, false, false);
   }
 
   handleSearch() {
-    const ssclinic  = this.vaccinationSearchForm.controls['ssclinic'].value;
-    const ssvaccinationprogress  = this.vaccinationSearchForm.controls['ssvaccinationprogress'].value;
-    const sschildrecords  = this.vaccinationSearchForm.controls['sschildrecords'].value;
-    const ssvaccineoffering  = this.vaccinationSearchForm.controls['ssvaccineoffering'].value;
+    const ssclinic = this.vaccinationSearchForm.controls['ssclinic'].value;
+    const ssvaccinationprogress = this.vaccinationSearchForm.controls['ssvaccinationprogress'].value;
+    const sschildrecords = this.vaccinationSearchForm.controls['sschildrecords'].value;
+    const ssvaccineoffering = this.vaccinationSearchForm.controls['ssvaccineoffering'].value;
 
     let query = ""
 
-    if(ssclinic != "") query = query + "&clinicid=" + parseInt(ssclinic);
-    if(ssvaccinationprogress != "") query = query + "&vaccinationprogressid=" + parseInt(ssvaccinationprogress);
-    if(sschildrecords != "") query = query + "&childrecordid=" + parseInt(sschildrecords);
-    if(ssvaccineoffering != "") query = query + "&vaccineofferingid=" + parseInt(ssvaccineoffering);
+    if (ssclinic != "") query = query + "&clinicid=" + parseInt(ssclinic);
+    if (ssvaccinationprogress != "") query = query + "&vaccinationprogressid=" + parseInt(ssvaccinationprogress);
+    if (sschildrecords != "") query = query + "&childrecordid=" + parseInt(sschildrecords);
+    if (ssvaccineoffering != "") query = query + "&vaccineofferingid=" + parseInt(ssvaccineoffering);
 
-    if(query != "") query = query.replace(/^./, "?")
+    if (query != "") query = query.replace(/^./, "?")
     this.loadTable(query);
   }
 
   clearSearch() {
     const operation = "Clear Search";
 
-    this.dialog.open(ConfirmDialogComponent,{data:operation})
+    this.dialog.open(ConfirmDialogComponent, {data: operation})
       .afterClosed().subscribe(res => {
-      if(!res){
+      if (!res) {
         return;
-      }else{
+      } else {
         this.vaccinationSearchForm.controls['ssclinic'].setValue('');
         this.vaccinationSearchForm.controls['ssvaccinationprogress'].setValue('');
         this.vaccinationSearchForm.controls['sschildrecords'].setValue('');

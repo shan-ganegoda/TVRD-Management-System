@@ -502,5 +502,25 @@ export class UserComponent implements OnInit{
     });
   }
 
+  resetPassword() {
+    let employeeid = this.userForm.controls['employee'].value;
+    if(employeeid != null){
+      this.es.getEmployeeById(parseInt(employeeid)).subscribe({
+        next: data => {
+          const nic = data.nic;
+          const resetVal = `Pr@${nic}`;
+          this.userForm.controls['password'].setValue(resetVal);
+        }
+      });
+    }else{
+      this.dialog.open(WarningDialogComponent, {
+        data: {heading: "Errors - User Password Reset ", message: "Please Select Employee First"}
+      }).afterClosed().subscribe(res => {
+        if (!res) {
+          return;
+        }
+      });
+    }
 
+  }
 }
