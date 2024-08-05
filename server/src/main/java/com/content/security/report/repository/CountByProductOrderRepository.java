@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface CountByProductOrderRepository extends JpaRepository<CountByProductOrder, Integer> {
 
-    @Query("select new CountByProductOrder (po.dorequested, sum(pop.quentity)) from Productorderproduct pop,Productorder po where pop.productorder.id = po.id  group by po.dorequested order by po.dorequested")
+    @Query("select new CountByProductOrder (po.dorequested, sum(pop.quentity)) from Productorderproduct pop,Productorder po where pop.productorder.id = po.id  group by po.dorequested order by po.dorequested desc ")
     List<CountByProductOrder> findCountByProductOrder();
 
-    @Query("select new CountByProductOrder (po.dorequested, sum(pop.quentity)) from Productorderproduct pop,Productorder po where pop.productorder.id = po.id and po.dorequested BETWEEN :startDate And :endDate group by po.dorequested order by po.dorequested")
+    @Query("select new CountByProductOrder (po.dorequested, sum(pop.quentity)) from Productorderproduct pop,Productorder po where pop.productorder.id = po.id and po.dorequested BETWEEN :startDate And :endDate group by po.dorequested order by po.dorequested desc ")
     List<CountByProductOrder> findCountByProductOrderBetween(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }

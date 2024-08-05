@@ -119,7 +119,7 @@ export class CountbyvorderComponent implements OnInit{
     const barData = new google.visualization.DataTable();
     barData.addColumn('string', 'Date');
     barData.addColumn('number', 'Count');
-    barData.addColumn('number', 'Expected');
+    // barData.addColumn('number', 'Expected');
 
     const pieData = new google.visualization.DataTable();
     pieData.addColumn('string', 'Date');
@@ -130,7 +130,7 @@ export class CountbyvorderComponent implements OnInit{
     lineData.addColumn('number', 'Count');
 
     this.countbyVorders.forEach((vo: CountByVOrders) => {
-      barData.addRow([vo.requestedDate, vo.count,10]);
+      barData.addRow([vo.requestedDate, vo.count]);
       pieData.addRow([vo.requestedDate, vo.count]);
       lineData.addRow([vo.requestedDate, vo.count]);
     });
