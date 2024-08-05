@@ -214,7 +214,6 @@ export class UserComponent implements OnInit{
       userroles: null
     });
 
-    this.userForm.get('email')?.disable();
     this.userForm.get('employee')?.disable();
 
     this.userRoleList = this.user.roles;
