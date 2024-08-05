@@ -14,6 +14,7 @@ import {NgForOf} from "@angular/common";
 import {RouterLink} from "@angular/router";
 import {ReportService} from "../../service/report.service";
 import {VehicleCountByMoh} from "../../entity/vehiclecountbymoh";
+import {VehicleCountByRdh} from "../../entity/vehiclecountbyrdh";
 
 declare var google: any;
 
@@ -45,6 +46,7 @@ declare var google: any;
 })
 export class VehiclecountbymohComponent implements OnInit{
   vehicalcountbymohs!: VehicleCountByMoh[];
+  vehicalcountbyrdhs!: VehicleCountByRdh[];
   data!: MatTableDataSource<VehicleCountByMoh>;
 
   columns: string[] = ['name', 'count'];
@@ -52,6 +54,7 @@ export class VehiclecountbymohComponent implements OnInit{
   binders: string[] = ['name', 'count'];
 
   @ViewChild('barchart', { static: false }) barchart: any;
+  @ViewChild('columnchart', { static: false }) columnchart: any;
   @ViewChild('piechart', { static: false }) piechart: any;
   @ViewChild('linechart', { static: false }) linechart: any;
 
@@ -59,6 +62,13 @@ export class VehiclecountbymohComponent implements OnInit{
   }
 
   ngOnInit() {
+
+    this.rs.vehicleCountByRdh().subscribe({
+      next: data => {
+        this.vehicalcountbyrdhs = data;
+        this.loadCharts();
+      },
+    });
 
     this.rs.vehicleCountByMoh().subscribe({
       next:data => {
@@ -82,6 +92,10 @@ export class VehiclecountbymohComponent implements OnInit{
 
   drawCharts() {
 
+    const columnData = new google.visualization.DataTable();
+    columnData.addColumn('string', 'RDH');
+    columnData.addColumn('number', 'Count');
+
     const barData = new google.visualization.DataTable();
     barData.addColumn('string', 'MOH');
     barData.addColumn('number', 'Count');
@@ -99,6 +113,18 @@ export class VehiclecountbymohComponent implements OnInit{
       pieData.addRow([des.name, des.count]);
       lineData.addRow([des.name, des.count]);
     });
+
+    this.vehicalcountbyrdhs.forEach((des: VehicleCountByRdh) => {
+      columnData.addRow([des.name, des.count]);
+    });
+
+    const columnOptions = {
+      title: 'Vehicle Count (Column Chart)',
+      subtitle: 'Count of Vehicle by RDH',
+      orientation: 'horizontal',
+      height: 400,
+      width: 600
+    };
 
     const barOptions = {
       title: 'Vehicle Count (Bar Chart)',
@@ -120,6 +146,9 @@ export class VehiclecountbymohComponent implements OnInit{
       height: 400,
       width: 600
     };
+
+    const columnChart = new google.visualization.ColumnChart(this.columnchart.nativeElement);
+    columnChart.draw(columnData, columnOptions);
 
     const barChart = new google.visualization.BarChart(this.barchart.nativeElement);
     barChart.draw(barData, barOptions);

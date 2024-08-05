@@ -57,6 +57,7 @@ export class MainwindowComponent implements OnInit{
   protected PdOfficer = this.am.hasRole("PD Officer");
   protected RdhOfficer = this.am.hasRole("RDH Officer");
   protected PhnOfficer = this.am.hasRole("PHN Officer");
+  protected Supplier = this.am.hasRole("Supplier");
 
   opened: boolean = true;
   hidden = false;

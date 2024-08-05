@@ -15,14 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -33,6 +28,7 @@ public class ReportController {
     private final CountByProductOrderRepository countByProductOrderRepository;
     private final CountByDesignationRepository countByDesignationRepository;
     private final VehicleCountByMohRepository vehicleCountByMohRepository;
+    private final VehicleCountByRdhRepository vehicleCountByRdhRepository;
 
     private final ProductOrderReportService productOrderReportService;
     private final VaccineOrderReportService vaccineOrderReportService;
@@ -74,6 +70,13 @@ public class ReportController {
 
         List<VehicleCountByMoh> vehicleCountByMohs = vehicleCountByMohRepository.findVehicleCountByMoh();
         return vehicleCountByMohs;
+    }
+
+    @GetMapping(path = "/vehiclecountbyrdh")
+    public List<VehicleCountByRdh> getVehicleCountByRdh() {
+
+        List<VehicleCountByRdh> vehicleCountByRdhs = vehicleCountByRdhRepository.findVehicleCountByRdh();
+        return vehicleCountByRdhs;
     }
 
     @GetMapping(path = "/countbyvaccineorderdate")

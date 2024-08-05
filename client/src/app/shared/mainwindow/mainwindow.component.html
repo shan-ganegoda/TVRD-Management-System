@@ -51,6 +51,7 @@
    </div>
 
 <!--    ADMIN-Start-->
+    @if(Admin || PdOfficer){
     <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu1=!togglemenu1">
         <span class=" text-white flex mt-1 mx-2.5" >
           ADMIN
@@ -115,9 +116,10 @@
 
     </ul>
    </div>
-    }
+    }}
 <!--ADMIN-END-->
 <!--DIVISIONS-START-->
+    @if(Admin || PdOfficer){
     <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu=!togglemenu">
         <span class=" text-white flex mt-1 mx-2.5" >
           DIVISIONS
@@ -182,9 +184,10 @@
 
         </ul>
       </div>
-    }
+    }}
 <!--DIVISIONS-END-->
 <!--ORDER-START-->
+    @if(Admin || MohOfficer || Supplier){
     <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu2=!togglemenu2">
         <span class=" text-white flex mt-1 mx-2.5" >
           ORDER
@@ -248,9 +251,10 @@
 
       </ul>
     </div>
-    }
+    }}
 <!--ORDER-->
     <!--PROGRAMMES-START-->
+    @if(Admin || PdOfficer){
     <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu3=!togglemenu3">
         <span class=" text-white flex mt-1 mx-2.5" >
           PROGRAMMS
@@ -300,9 +304,10 @@
 
         </ul>
       </div>
-    }
+    }}
     <!--PROGRAMMS-->
     <!--DISTRIBUTION-START-->
+    @if(Admin || PhnOfficer){
     <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu6=!togglemenu6">
         <span class=" text-white flex mt-1 mx-2.5" >
           DISTRIBUTION
@@ -353,10 +358,10 @@
 
         </ul>
       </div>
-    }
+    }}
     <!--DISTRIBUTION-END-->
     <!--SUBMISSION-START-->
-    @if(Admin){
+    @if(Admin || MohOfficer){
     <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu7=!togglemenu7">
         <span class=" text-white flex mt-1 mx-2.5" >
           SUBMISSION
@@ -394,6 +399,7 @@
     }}
     <!--SUBMISSION-END-->
     <!--REGISTRATION-START-->
+    @if(Admin || PhnOfficer){
     <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu4=!togglemenu4">
         <span class=" text-white flex mt-1 mx-2.5" >
           REGISTRATION
@@ -443,10 +449,11 @@
 
         </ul>
       </div>
-    }
+    }}
     <!--REGISTRATION-END-->
 
     <!--REPORT-START-->
+    @if(Admin || PhnOfficer || RdhOfficer || MohOfficer){
     <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600" (click)="togglemenu5=!togglemenu5">
         <span class=" text-white flex mt-1 mx-2.5" >
           REPORTS
@@ -565,7 +572,7 @@
 
         </ul>
       </div>
-    }
+    }}
 <!-- REPORT END   -->
 
   </mat-drawer>

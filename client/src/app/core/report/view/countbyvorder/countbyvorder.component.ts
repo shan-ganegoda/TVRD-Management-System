@@ -15,7 +15,6 @@ import {NgForOf} from "@angular/common";
 import {RouterLink} from "@angular/router";
 import {CountByVOrders} from "../../entity/countbyvorders";
 import {ReportService} from "../../service/report.service";
-import {CountByPOrders} from "../../entity/countByPOrders";
 
 declare var google: any;
 
