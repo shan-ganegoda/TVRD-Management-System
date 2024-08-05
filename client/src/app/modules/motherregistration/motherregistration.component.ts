@@ -26,6 +26,8 @@ import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 import {AuthorizationService} from "../../core/service/auth/authorization.service";
 import {ToastService} from "../../core/util/toast/toast.service";
+import {MotherStatus} from "../../core/entity/motherstatus";
+import {MotherstatusService} from "../../core/service/motherregistration/motherstatus.service";
 
 @Component({
   selector: 'app-motherregistration',
@@ -60,6 +62,7 @@ export class MotherregistrationComponent implements OnInit{
   involvementstatuses:InvolvementStatus[] = [];
   maritalstatuses:MaritalStatus[] = [];
   clinics:Clinic[] = [];
+  motherstatuses:MotherStatus[] = [];
 
   dataSource!: MatTableDataSource<Mother>;
   data!: Observable<any>
@@ -86,11 +89,11 @@ export class MotherregistrationComponent implements OnInit{
               private mts:MaritalstatusService,
               private rs:RegexService,
               private dialog:MatDialog,
-              private snackBar:MatSnackBar,
               private cdr:ChangeDetectorRef,
               private fb:FormBuilder,
               private am: AuthorizationService,
-              private tst: ToastService
+              private tst: ToastService,
+              private mss:MotherstatusService
   ) {
 
     this.motherregSearchForm = this.fb.group({
@@ -114,6 +117,7 @@ export class MotherregistrationComponent implements OnInit{
       "bloodtype": new FormControl(null,[Validators.required]),
       "maritalstatus": new FormControl(null,[Validators.required]),
       "involvementstatus": new FormControl(null,[Validators.required]),
+      "motherstatus": new FormControl(null,[Validators.required]),
     },{updateOn:"change"});
   }
 
@@ -134,6 +138,10 @@ export class MotherregistrationComponent implements OnInit{
 
     this.bts.getAll().subscribe({
       next: data => this.bloodtypes = data,
+    });
+
+    this.mss.getAll().subscribe({
+      next: data => this.motherstatuses = data,
     });
 
     this.iss.getAll().subscribe({
@@ -179,6 +187,7 @@ export class MotherregistrationComponent implements OnInit{
     this.motherregForm.controls['bloodtype'].setValidators([Validators.required]);
     this.motherregForm.controls['maritalstatus'].setValidators([Validators.required]);
     this.motherregForm.controls['involvementstatus'].setValidators([Validators.required]);
+    this.motherregForm.controls['motherstatus'].setValidators([Validators.required]);
 
     for (const controlName in this.motherregForm.controls) {
       const control = this.motherregForm.controls[controlName];
@@ -228,6 +237,7 @@ export class MotherregistrationComponent implements OnInit{
       description: this.currentMother.description,
 
       clinic: this.currentMother.clinic?.id,
+      motherstatus: this.currentMother.motherstatus?.id,
       bloodtype: this.currentMother.bloodtype?.id,
       maritalstatus: this.currentMother.maritalstatus?.id,
       involvementstatus: this.currentMother.involvementstatus?.id,
@@ -292,6 +302,7 @@ export class MotherregistrationComponent implements OnInit{
           currentweight: this.motherregForm.controls['currentweight'].value,
 
           clinic: {id: parseInt(this.motherregForm.controls['clinic'].value)},
+          motherstatus: {id: parseInt(this.motherregForm.controls['motherstatus'].value)},
           bloodtype: {id: parseInt(this.motherregForm.controls['bloodtype'].value)},
           involvementstatus: {id: parseInt(this.motherregForm.controls['involvementstatus'].value)},
           maritalstatus: {id: parseInt(this.motherregForm.controls['maritalstatus'].value)},
@@ -355,6 +366,7 @@ export class MotherregistrationComponent implements OnInit{
               currentweight: this.motherregForm.controls['currentweight'].value,
 
               clinic: {id: parseInt(this.motherregForm.controls['clinic'].value)},
+              motherstatus: {id: parseInt(this.motherregForm.controls['motherstatus'].value)},
               bloodtype: {id: parseInt(this.motherregForm.controls['bloodtype'].value)},
               involvementstatus: {id: parseInt(this.motherregForm.controls['involvementstatus'].value)},
               maritalstatus: {id: parseInt(this.motherregForm.controls['maritalstatus'].value)},

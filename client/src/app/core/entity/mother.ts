@@ -3,6 +3,7 @@ import {Clinic} from "./clinic";
 import {BloodType} from "./bloodtype";
 import {MaritalStatus} from "./maritalstatus";
 import {InvolvementStatus} from "./involvementstatus";
+import {MotherStatus} from "./motherstatus";
 
 export interface Mother{
 
@@ -21,6 +22,7 @@ export interface Mother{
   doregistered?:string;
   involvementstatus?:InvolvementStatus;
   description?:string;
+  motherstatus?:MotherStatus;
 
 }
 

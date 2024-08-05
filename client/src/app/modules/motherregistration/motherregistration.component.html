@@ -112,6 +112,20 @@
         </div>
 
         <div class="relative w-full mb-3 px-2">
+          <select
+            class="peer select select-bordered w-full bg-white focus:outline-none"
+            formControlName="motherstatus"
+          >
+            <option disabled [ngValue]="null">Mother Status</option>
+
+            @for (motherstatus of motherstatuses; track motherstatuses) {
+              <option [ngValue]="motherstatus.id">{{motherstatus.name}}</option>
+            }
+          </select>
+          <label class="floating-labels-select">Mother Status</label>
+        </div>
+
+        <div class="relative w-full mb-3 px-2">
           <input
             type="text"
             placeholder="NIC"
