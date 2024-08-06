@@ -7,7 +7,6 @@ import {PageErrorComponent} from "../../shared/page-error/page-error.component";
 import {PageLoadingComponent} from "../../shared/page-loading/page-loading.component";
 import {ProductOrder} from "../../core/entity/productorder";
 import {ProductorderService} from "../../core/service/productorder/productorder.service";
-import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 import {MatTableDataSource} from "@angular/material/table";
 import {Moh} from "../../core/entity/moh";
 import {Observable} from "rxjs";
@@ -23,9 +22,7 @@ import {ProductOrderProducts} from "../../core/entity/productorderproducts";
 import {RegexService} from "../../core/service/regexes/regex.service";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
-import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 import {AuthorizationService} from "../../core/service/auth/authorization.service";
 import {ToastService} from "../../core/util/toast/toast.service";
 
@@ -175,7 +172,6 @@ export class ProducorderComponent implements OnInit {
         this.cdr.detectChanges();
         this.dataSource.paginator = this.paginator;
         this.data = this.dataSource.connect();
-        // console.log(query);
       }
     });
   }
@@ -264,8 +260,6 @@ export class ProducorderComponent implements OnInit {
       grandtotal: this.productOrder.grandtotal,
     })
 
-    //this.porderForm.patchValue(this.productOrder);
-
     this.porderForm.markAsPristine();
 
     for (const controlName in this.innerForm.controls) {
@@ -305,7 +299,28 @@ export class ProducorderComponent implements OnInit {
         this.innerdata = [];
         tem.forEach((t) => this.innerdata.push(t));
 
-        this.innerdata.push(orderp);
+        // Clear the original array
+        this.innerdata = [];
+
+        // Add the existing records back to the original array
+        tem.forEach((t) => this.innerdata.push(t));
+
+        // Check if the new record already exists in the array
+        let exists = this.innerdata.some(record => record.product?.id === orderp.product?.id);
+
+        if (!exists) {
+          // If it does not exist, add the new record
+          this.innerdata.push(orderp);
+        } else {
+          // If it exists, you can handle it as needed, e.g., show a message
+          this.dialog.open(WarningDialogComponent, {
+            data: {heading: "Errors - Product Order Add ", message: "Duplicate record. This record already exists in the table."}
+          }).afterClosed().subscribe(res => {
+            if (!res) {
+              return;
+            }
+          });
+        }
 
         this.id++;
 
@@ -613,13 +628,14 @@ export class ProducorderComponent implements OnInit {
 
           const today = new Date();
           const date = today.getDate();
-          const month = today.getMonth();
+          const month = today.getMonth()+1;
           const year = today.getFullYear();
 
           const formatteddate = (date < 10 ? '0' : '') + date;
           const formattedmonth = (month < 10 ? '0' : '') + month;
 
           this.porderForm.controls['code'].setValue(`O${moh.codename}${year}${formattedmonth}${formatteddate}`);
+          this.porderForm.controls['dorequested'].setValue(`${year}-${formattedmonth}-${formatteddate}`);
         }
       });
     }

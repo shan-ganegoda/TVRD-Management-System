@@ -23,8 +23,6 @@ import {RegexService} from "../../core/service/regexes/regex.service";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 import {AuthorizationService} from "../../core/service/auth/authorization.service";
 import {ToastService} from "../../core/util/toast/toast.service";
 
@@ -553,7 +551,7 @@ export class VaccineorderComponent implements OnInit{
       }else{
         this.voSearchForm.reset();
         this.voSearchForm.controls['ssmoh'].setValue('');
-        this.voSearchForm.controls['ssporderstatus'].setValue('');
+        this.voSearchForm.controls['ssvorderstatus'].setValue('');
         this.loadTable("");
       }
     });
