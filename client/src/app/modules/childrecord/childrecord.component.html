@@ -35,6 +35,17 @@
       </select>
 
       <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
+              formControlName="ssclinic"
+              data-tip="Clinic"
+      >
+        <option disabled value="">Clinic</option>
+
+        @for(clinic of clinics; track clinics){
+          <option value="{{clinic.id}}">{{clinic.divisionname}}</option>
+        }
+      </select>
+
+      <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
               formControlName="sshealthstatus"
               data-tip="Health Status"
       >

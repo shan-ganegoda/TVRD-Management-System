@@ -35,6 +35,7 @@ public class ChildRecordServiceIMPL implements ChildRecordService {
                 String fullname = params.get("fullname");
                 String genderid = params.get("genderid");
                 String healthstatusid = params.get("healthstatusid");
+                String clinicid = params.get("clinicid");
 
                 Stream<ChildRecordDTO> cstreame = childRecordDTOS.stream();
 
@@ -44,6 +45,8 @@ public class ChildRecordServiceIMPL implements ChildRecordService {
                     cstreame = cstreame.filter(e -> e.getGender().getId() == Integer.parseInt(genderid));
                 if (healthstatusid != null)
                     cstreame = cstreame.filter(e -> e.getHealthstatus().getId() == Integer.parseInt(healthstatusid));
+                if (clinicid != null)
+                    cstreame = cstreame.filter(e -> e.getClinic().getId() == Integer.parseInt(clinicid));
 
                 return cstreame.collect(Collectors.toList());
             }

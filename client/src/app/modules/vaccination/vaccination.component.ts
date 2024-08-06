@@ -548,6 +548,8 @@ export class VaccinationComponent implements OnInit {
     this.isInnerDataUpdated = false;
 
     this.enableButtons(true, false, false);
+
+    this.initialize();
   }
 
   handleSearch() {
@@ -585,4 +587,16 @@ export class VaccinationComponent implements OnInit {
   }
 
 
+  filterChild() {
+    const clinicid = this.vaccinationForm.controls['clinic'].value;
+    // console.log(clinicid)
+    this.crs.getAll(`?clinicid=${parseInt(clinicid)}`).subscribe({
+      next: data => {
+        if(data != null) this.childs = data
+      },
+      error: (err: any) => {
+        this.tst.handleResult("Failed", err.error.data.message);
+      }
+    });
+  }
 }

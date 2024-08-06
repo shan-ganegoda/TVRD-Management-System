@@ -106,6 +106,7 @@ export class ChildrecordComponent implements OnInit{
       "ssregno": new FormControl(''),
       "ssfullname": new FormControl(''),
       "ssgender": new FormControl(''),
+      "ssclinic": new FormControl(''),
       "sshealthstatus": new FormControl(''),
     },{updateOn:'change'});
 
@@ -452,6 +453,7 @@ export class ChildrecordComponent implements OnInit{
     const ssregno  = this.childRecordSearchForm.controls['ssregno'].value;
     const sshealthstatus  = this.childRecordSearchForm.controls['sshealthstatus'].value;
     const ssgender  = this.childRecordSearchForm.controls['ssgender'].value;
+    const ssclinic  = this.childRecordSearchForm.controls['ssclinic'].value;
 
     let query = ""
 
@@ -459,6 +461,7 @@ export class ChildrecordComponent implements OnInit{
     if(ssregno != null && ssregno.trim() !="") query = query + "&regno=" + ssregno;
     if(sshealthstatus != '') query = query + "&healthstatusid=" + parseInt(sshealthstatus);
     if(ssgender != '') query = query + "&genderid=" + parseInt(ssgender);
+    if(ssclinic != '') query = query + "&clinicid=" + parseInt(ssclinic);
 
     if(query != "") query = query.replace(/^./, "?")
     this.loadTable(query);
@@ -472,6 +475,7 @@ export class ChildrecordComponent implements OnInit{
       }else{
         this.childRecordSearchForm.reset();
         this.childRecordSearchForm.controls['ssgender'].setValue('');
+        this.childRecordSearchForm.controls['ssclinic'].setValue('');
         this.childRecordSearchForm.controls['sshealthstatus'].setValue('');
         this.loadTable("");
       }
