@@ -2,6 +2,7 @@ package com.content.security.service;
 
 import com.content.security.dto.EmployeeDTO;
 import com.content.security.dto.ProductOrderDTO;
+import com.content.security.dto.ProductOrderStatusUpdateDTO;
 import com.content.security.entity.Productorder;
 import com.content.security.entity.Productorderproduct;
 import com.content.security.exception.ResourceAlreadyExistException;
@@ -110,5 +111,14 @@ public class ProductOrderServiceIMPL implements ProductOrderService {
         } else {
             throw new ResourceNotFountException("Product Order Not Found");
         }
+    }
+
+    @Override
+    public ProductOrderDTO updateStatus(ProductOrderStatusUpdateDTO productOrderStatusUpdateDTO) {
+        Productorder po = productOrderRepository.findById(productOrderStatusUpdateDTO.getId()).orElseThrow(() -> new ResourceNotFountException("Product Order Not Found"));
+        po.setProductorderstatus(productOrderStatusUpdateDTO.getProductorderstatus());
+        productOrderRepository.save(po);
+
+        return objectMapper.productOrderToProductOrderDto(po);
     }
 }

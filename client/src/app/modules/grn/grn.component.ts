@@ -25,6 +25,7 @@ import {RegexService} from "../../core/service/regexes/regex.service";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 import {AuthorizationService} from "../../core/service/auth/authorization.service";
+import {POStatusUpdate} from "../../core/entity/postatusupdate";
 
 @Component({
   selector: 'app-grn',
@@ -140,7 +141,7 @@ export class GrnComponent implements OnInit{
       next: data => this.products = data,
     });
 
-    this.pos.getAllProductOrders("").subscribe({
+    this.pos.getAllProductOrders("?postatusid=2").subscribe({
       next: data => this.productorders = data,
     });
 
@@ -288,7 +289,22 @@ export class GrnComponent implements OnInit{
       this.innerdata = [];
       tem.forEach((t) => this.innerdata.push(t));
 
-      this.innerdata.push(grnproduct);
+      // Check if the new record already exists in the array
+      let exists = this.innerdata.some(record => record.product?.id === grnproduct.product?.id);
+
+      if (!exists) {
+        // If it does not exist, add the new record
+        this.innerdata.push(grnproduct);
+      } else {
+        // If it exists, you can handle it as needed, e.g., show a message
+        this.dialog.open(WarningDialogComponent, {
+          data: {heading: "Errors - GRN Product Add ", message: "Duplicate record. This record already exists in the table."}
+        }).afterClosed().subscribe(res => {
+          if (!res) {
+            return;
+          }
+        });
+      }
 
       this.id++;
 
@@ -391,6 +407,12 @@ export class GrnComponent implements OnInit{
           productorder: {id: parseInt(this.grnForm.controls['productorder'].value)},
         }
 
+        const posupdate:POStatusUpdate ={
+          // @ts-ignore
+          id: parseInt(this.grnForm.controls['productorder'].value),
+          productorderstatus: { id:parseInt("5")}
+        }
+
         //console.log(porder);
         this.currentOperation = "Add GRN ";
 
@@ -402,9 +424,19 @@ export class GrnComponent implements OnInit{
                 this.tst.handleResult('success',"GRN Saved Successfully");
                 this.loadTable("");
                 this.clearForm();
+
+                this.pos.updatePorderStatus(posupdate).subscribe({
+                  next: () =>{
+                    console.log("POS Updated!")
+                  },
+                  error: (err: any) => {
+                    this.tst.handleResult('Failed',err.error.data.message);
+                  }
+                });
+
               },
               error: (err: any) => {
-                this.tst.handleResult('failed',err.error.data.message);
+                this.tst.handleResult('Failed',err.error.data.message);
               }
             });
           }
@@ -555,4 +587,33 @@ export class GrnComponent implements OnInit{
     });
   }
 
+  generateCode() {
+    const numbers = this.grns.map(n => parseInt(<string>n.code?.substring(1)));
+    const maxno = Math.max(...numbers);
+    const nextno = maxno + 1;
+    const formattedNextNumber = 'R' + nextno.toString();
+    this.grnForm.controls['code'].setValue(formattedNextNumber);
+  }
+
+  filterOrder() {
+    const poid = this.grnForm.controls['productorder'].value;
+    const po = this.productorders.find(p => p.id == parseInt(poid));
+
+    this.grnForm.controls['employee'].setValue(po?.employee.id);
+
+    this.innerdata = [];
+    let tem: GrnProduct[] = [];
+    po?.productorderproducts.forEach(e => {
+      let grnproduct = new GrnProduct(this.id,e.product, e.quentity);
+      //tem.forEach((t) => this.innerdata.push(t));
+
+      tem.push(grnproduct);
+
+      this.id++;
+
+      this.innerdata = tem;
+    });
+
+    //this.innerdata = po?.productorderproducts;
+  }
 }

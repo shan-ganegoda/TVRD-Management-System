@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class VaccineServiceIMPL implements VaccineService{
+public class VaccineServiceIMPL implements VaccineService {
 
     private final VaccineRepository vaccineRepository;
     private final ObjectMapper objectMapper;
@@ -30,12 +30,12 @@ public class VaccineServiceIMPL implements VaccineService{
     public List<VaccineDTO> getAll(HashMap<String, String> params) {
         List<Vaccine> vaccineList = vaccineRepository.findAll();
 
-        if(!vaccineList.isEmpty()){
+        if (!vaccineList.isEmpty()) {
             List<VaccineDTO> vaccineDTOList = objectMapper.vaccineListToDtoList(vaccineList);
 
-            if(params.isEmpty()){
+            if (params.isEmpty()) {
                 return vaccineDTOList;
-            }else{
+            } else {
                 String name = params.get("name");
                 String code = params.get("code");
                 String vaccinestatusid = params.get("vaccinestatusid");
@@ -43,82 +43,73 @@ public class VaccineServiceIMPL implements VaccineService{
 
                 Stream<VaccineDTO> vstreame = vaccineDTOList.stream();
 
-                if(name!=null) vstreame = vstreame.filter(e-> e.getName().contains(name));
-                if(offeredinstitute!=null) vstreame = vstreame.filter(e-> e.getOfferedinstitute().contains(offeredinstitute));
-                if(code!=null) vstreame = vstreame.filter(e-> e.getCode().equals(code));
-                if(vaccinestatusid!=null) vstreame = vstreame.filter(e-> e.getVaccinestatus().getId()==Integer.parseInt(vaccinestatusid));
+                if (name != null) vstreame = vstreame.filter(e -> e.getName().contains(name));
+                if (offeredinstitute != null)
+                    vstreame = vstreame.filter(e -> e.getOfferedinstitute().contains(offeredinstitute));
+                if (code != null) vstreame = vstreame.filter(e -> e.getCode().equals(code));
+                if (vaccinestatusid != null)
+                    vstreame = vstreame.filter(e -> e.getVaccinestatus().getId() == Integer.parseInt(vaccinestatusid));
 
                 return vstreame.collect(Collectors.toList());
             }
-        }else{
+        } else {
             throw new ResourceNotFountException("No Vaccine found");
         }
     }
 
     @Override
     public VaccineDTO saveVaccine(VaccineDTO vaccineDTO) {
-        if(vaccineDTO != null){
+        if (vaccineDTO != null) {
+
             Vaccine vaccine = objectMapper.vaccineDtoToVaccine(vaccineDTO);
 
-            if(!vaccineRepository.existsByCode(vaccine.getCode())){
-                for(Vaccineoffering vo : vaccine.getVaccineofferings()){
+            if (!vaccineRepository.existsByCode(vaccine.getCode())) {
+                for (Vaccineoffering vo : vaccine.getVaccineofferings()) {
                     vo.setVaccine(vaccine);
                 }
 
                 vaccineRepository.save(vaccine);
                 return vaccineDTO;
-            }else{
+            } else {
                 throw new ResourceAlreadyExistException("Vaccine Already Exist!");
             }
-        }else{
+        } else {
             throw new ResourceNotFountException("Vaccine Not Found");
         }
     }
 
     @Override
     public VaccineDTO updateVaccine(VaccineDTO vaccineDTO) {
-        Vaccine vaccinerec = vaccineRepository.findById(vaccineDTO.getId()).orElseThrow(() ->  new ResourceNotFountException("Vaccine Not Found"));
+        Vaccine vaccinerec = vaccineRepository.findById(vaccineDTO.getId()).orElseThrow(() -> new ResourceNotFountException("Vaccine Not Found"));
 
-        if(vaccinerec != null) {
-            Vaccine vaccine = objectMapper.vaccineDtoToVaccine(vaccineDTO);
-
-            if (Objects.equals(vaccinerec.getCode(), vaccine.getCode())) {
-                try {
-                    vaccine.getVaccineofferings().forEach(vo -> vo.setVaccine(vaccine));
-                    vaccineRepository.save(vaccine);
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-                return vaccineDTO;
-
-            } else if (!vaccineRepository.existsByCode(vaccine.getCode())) {
-                try {
-                    vaccine.getVaccineofferings().forEach(vo -> vo.setVaccine(vaccine));
-                    vaccineRepository.save(vaccine);
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-                return vaccineDTO;
-            } else {
-                throw new ResourceAlreadyExistException("Vaccine Already Exist!");
-            }
-        }else{
-            throw new ResourceNotFountException("Vaccine Not Found");
+        if (!vaccinerec.getCode().equals(vaccineDTO.getCode()) && vaccineRepository.existsByCode(vaccineDTO.getCode())) {
+            throw new ResourceAlreadyExistException("Code Already Exist!");
         }
+
+        Vaccine vaccine = objectMapper.vaccineDtoToVaccine(vaccineDTO);
+
+        try {
+            vaccine.getVaccineofferings().forEach(vo -> vo.setVaccine(vaccine));
+            vaccineRepository.save(vaccine);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return vaccineDTO;
+
 
     }
 
     @Override
     public void deleteVaccine(Integer id) {
-        if(vaccineRepository.existsById(id)){
+        if (vaccineRepository.existsById(id)) {
 
-            Vaccine vaccine = vaccineRepository.findById(id).orElseThrow(() ->  new ResourceNotFountException("Vaccine Not Found"));
+            Vaccine vaccine = vaccineRepository.findById(id).orElseThrow(() -> new ResourceNotFountException("Vaccine Not Found"));
 
-            if(vaccine != null){
+            if (vaccine != null) {
                 vaccineRepository.delete(vaccine);
             }
 
-        }else{
+        } else {
             throw new ResourceNotFountException("Vaccine Not Found");
         }
     }
@@ -126,18 +117,18 @@ public class VaccineServiceIMPL implements VaccineService{
     @Override
     public List<VaccineDTO> getAllList() {
         List<Vaccine> vaccineList = vaccineRepository.findAll();
-        if(!vaccineList.isEmpty()){
+        if (!vaccineList.isEmpty()) {
             List<VaccineDTO> vaccineDTO = objectMapper.vaccineListToDtoList(vaccineList);
 
             vaccineDTO = vaccineDTO.stream().map(
                     vaccinedto -> {
-                        VaccineDTO v = new VaccineDTO(vaccinedto.getId(),vaccinedto.getName(),vaccinedto.getCode());
+                        VaccineDTO v = new VaccineDTO(vaccinedto.getId(), vaccinedto.getName(), vaccinedto.getCode());
                         return v;
                     }
             ).collect(Collectors.toList());
 
             return vaccineDTO;
-        }else{
+        } else {
             throw new ResourceNotFountException("No Vaccine found");
         }
     }

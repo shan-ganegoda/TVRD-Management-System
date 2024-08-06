@@ -162,4 +162,6 @@ public interface ObjectMapper {
     Inventory inventoryDtoToInventory(InventoryDTO inventoryDTO);
 
     List<InventoryStatusDTO> inventoryStatusListToDtoList(List<Inventorystatus> inventorystatusList);
+
+    ProductOrderDTO productOrderToProductOrderDto(Productorder po);
 }

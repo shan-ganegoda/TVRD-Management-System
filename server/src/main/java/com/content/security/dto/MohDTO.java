@@ -19,7 +19,7 @@ import java.sql.Time;
 public class MohDTO {
 
         private Integer id;
-        @Pattern(regexp = "^([A-Z][a-z]*[.]?[\\s]?)*([A-Z][a-z]*)$", message = "Invalid Fullname")
+        @Pattern(regexp = "^([A-Z][a-z]*[.]?[\\s]?)*([A-Z][a-z]*)$", message = "Invalid Name")
         private String name;
         @Pattern(regexp = "^0\\d{9}$", message = "Invalid Telephone Number")
         private String tele;

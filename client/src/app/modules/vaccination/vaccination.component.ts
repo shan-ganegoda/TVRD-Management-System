@@ -335,7 +335,7 @@ export class VaccinationComponent implements OnInit {
   deleteRow(indata: VaccinationRecord) {
     let datasources = this.innerdata;
 
-    this.dialog.open(ConfirmDialogComponent, {data: "Vaccination Records"})
+    this.dialog.open(ConfirmDialogComponent, {data: "Vaccination Records Delete"})
       .afterClosed().subscribe(res => {
       if (res) {
 

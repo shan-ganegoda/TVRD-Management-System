@@ -294,7 +294,7 @@ export class DistributionComponent implements OnInit{
   deleteRow(indata: DistributionProduct) {
     let datasources = this.innerdata;
 
-    this.dialog.open(ConfirmDialogComponent, {data: "Distribution Details"})
+    this.dialog.open(ConfirmDialogComponent, {data: "Distribution Details Delete"})
       .afterClosed().subscribe(res => {
       if (res) {
 
@@ -500,6 +500,7 @@ export class DistributionComponent implements OnInit{
     this.isInnerDataUpdated = false;
 
     this.enableButtons(true,false,false);
+    this.initialize();
   }
 
 
@@ -535,4 +536,15 @@ export class DistributionComponent implements OnInit{
   }
 
 
+  filterMother() {
+    const clinicid = this.distributionForm.controls['clinic'].value;
+    this.ms.getAll(`?clinicid=${parseInt(clinicid)}`).subscribe({
+      next: data => {
+        if(data != null) this.mothers = data
+      },
+      error: (err: any) => {
+        this.tst.handleResult("Failed", err.error.data.message);
+      }
+    });
+  }
 }

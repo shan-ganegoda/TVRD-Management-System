@@ -68,7 +68,8 @@
 
       <form [formGroup]="grnForm" class="mt-5 animate animate-fade">
 
-        <div class="relative w-full px-2 mb-3">
+        <div class="flex flex-row items-center mb-3 px-2">
+          <div class="relative mr-2 w-full">
           <input
             type="text"
             placeholder="Code"
@@ -76,17 +77,21 @@
             formControlName="code"
           />
           <label class="floating-label">Code</label>
+          </div>
+
+          <button class="btn bg-gray-950 text-white hover:bg-gray-900" (click)="generateCode()">Generate Code</button>
         </div>
 
         <div class="relative w-full mb-3 px-2">
           <select
             class="peer select select-bordered w-full bg-white focus:outline-none"
             formControlName="productorder"
+            (change)= "filterOrder()"
           >
             <option disabled [ngValue]="null">Product Order</option>
 
             @for (productorder of productorders; track productorders) {
-              <option [ngValue]="productorder.id">{{productorder.code}}</option>
+              <option [ngValue]="productorder.id">{{productorder.code +" ( "+ productorder.moh.name+" ) " }}</option>
             }
           </select>
           <label class="floating-labels-select">Product Order</label>

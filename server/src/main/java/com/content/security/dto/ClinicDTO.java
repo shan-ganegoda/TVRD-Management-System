@@ -29,7 +29,7 @@ public class ClinicDTO {
     }
 
     private Integer id;
-    @Pattern(regexp = "^([A-Z][a-z]+)$", message = "Invalid Division Name")
+    @Pattern(regexp = "^([A-Z][a-z]*[.]?[\\s]?)*([A-Z][a-z]*)$", message = "Invalid Divisionname")
     private String divisionname;
     @Pattern(regexp = "^[A-Z]{3}\\d{5}$", message = "Invalid Division Number")
     private String divisionno;

@@ -75,6 +75,7 @@
           <select
             class="peer select select-bordered w-full bg-white focus:outline-none"
             formControlName="clinic"
+            (change)="filterMother()"
           >
             <option disabled [ngValue]="null">Clinic</option>
 

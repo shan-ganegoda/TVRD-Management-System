@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environment";
 import {Rdh} from "../../entity/rdh";
 import {ProductOrder} from "../../entity/productorder";
+import {POStatusUpdate} from "../../entity/postatusupdate";
 
 const API_URL = environment.apiUrl + '/admin/productorders';
 
@@ -23,6 +24,10 @@ export class ProductorderService {
 
   updatePorder(porder:ProductOrder){
     return this.http.put<ProductOrder>(API_URL,porder);
+  }
+
+  updatePorderStatus(porder:POStatusUpdate){
+    return this.http.put<ProductOrder>(API_URL + "/statusupdate",porder);
   }
 
   deletePorder(id:number){

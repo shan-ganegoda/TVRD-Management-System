@@ -25,8 +25,6 @@ import {RegexService} from "../../core/service/regexes/regex.service";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 import {ToastService} from "../../core/util/toast/toast.service";
 import {AuthorizationService} from "../../core/service/auth/authorization.service";
 
@@ -302,7 +300,22 @@ export class VaccineComponent implements OnInit{
       this.innerdata = [];
       tem.forEach((t) => this.innerdata.push(t));
 
-      this.innerdata.push(vaccineof);
+      // Check if the new record already exists in the array
+      let exists = this.innerdata.some(record => record.dose?.id === vaccineof.dose?.id);
+
+      if (!exists) {
+        // If it does not exist, add the new record
+        this.innerdata.push(vaccineof);
+      } else {
+        // If it exists, you can handle it as needed, e.g., show a message
+        this.dialog.open(WarningDialogComponent, {
+          data: {heading: "Errors - Vaccine Dose Add ", message: "Duplicate record.<br> This record already exists in the table."}
+        }).afterClosed().subscribe(res => {
+          if (!res) {
+            return;
+          }
+        });
+      }
 
       this.id++;
 
