@@ -160,13 +160,13 @@ export class MotherregistrationComponent implements OnInit {
       next: data => this.maritalstatuses = data,
     });
 
-    this.rs.getRegexes('mother').subscribe({
-      next: data => {
-        this.regexes = data;
-        this.createForm();
-      },
-      error: () => this.regexes = [] || undefined
-    });
+    // this.rs.getRegexes('mother').subscribe({
+    //   next: data => {
+    //     this.regexes = data;
+    //     this.createForm();
+    //   },
+    //   error: () => this.regexes = [] || undefined
+    // });
   }
 
   loadTable(query: string) {

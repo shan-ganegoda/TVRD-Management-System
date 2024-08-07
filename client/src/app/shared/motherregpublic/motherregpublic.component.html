@@ -1,1 +1,230 @@
-<p>motherregpublic works!</p>
+<div class="px-4 py-3 mt-2 mx-3 h-20 flex text-white shadow-2xl rounded-lg justify-center items-center bg-[#1E4263]">
+  <div class="flex flex-col justify-center items-center gap-3">
+    <div class="items-start mt-0 ml-3 mr-4 text-[1.7em] font-semibold pointer-events-none">Mother Registration</div>
+    <div class="items-end mt-0 ml-3 mr-4 text-sm pointer-events-none">{{today|date}}</div>
+  </div>
+  <div class="absolute right-5 top-6">
+    <a routerLink="">
+    <button class="btn">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+      </svg>
+      Login
+    </button>
+    </a>
+  </div>
+</div>
+
+<div class="flex justify-center">
+  <div class="w-full bg-white shadow-2xl relative mx-4 top-4 rounded-lg px-8 py-6">
+  <p class="font-lexend font-bold text-lg">Personal Information</p>
+  <p class="font-lexend font-light">Insert your personal information</p>
+
+  <form class="flex" [formGroup]="motherRegPublicForm">
+    <div class="w-1/3">
+      <label class="form-control w-full max-w-xs">
+        <div class="label">
+          <span class="label-text font-bold">Mother Name</span>
+          <span class="label-text font-light"> Eg: Amanda Bandara</span>
+        </div>
+        <input
+          type="text"
+          placeholder="Mother Name"
+          class="input input-bordered w-full max-w-xs focus:outline-none"
+          formControlName="mothername"/>
+      </label>
+
+      <label class="form-control w-full max-w-xs">
+        <div class="label">
+          <span class="label-text font-bold">Nic</span>
+          <span class="label-text font-light"> Eg: xxxxxxxxxV or xxxxxxxxxxxx</span>
+        </div>
+        <input
+          type="text"
+          placeholder="Nic"
+          class="input input-bordered w-full max-w-xs focus:outline-none"
+          formControlName="nic" />
+      </label>
+
+      <label class="form-control w-full max-w-xs">
+        <div class="label">
+          <span class="label-text font-bold">Mobile Number</span>
+          <span class="label-text font-light"> Eg: 07xxxxxxxx</span>
+        </div>
+        <input
+          type="text"
+          placeholder="Mobile No"
+          class="input input-bordered w-full max-w-xs focus:outline-none"
+          formControlName="mobileno" />
+      </label>
+
+      <label class="form-control w-full max-w-xs">
+        <div class="label">
+          <span class="label-text font-bold">Age</span>
+          <span class="label-text font-light"> Eg: xx</span>
+        </div>
+        <input
+          type="text"
+          placeholder="Age"
+          class="input input-bordered w-full max-w-xs focus:outline-none"
+          formControlName="age" />
+      </label>
+
+      <label class="form-control w-full max-w-xs">
+        <div class="label">
+          <span class="label-text font-bold">Address</span>
+          <span class="label-text font-light"> Eg: Hanwella</span>
+        </div>
+        <input
+          type="text"
+          placeholder="Address"
+          class="input input-bordered w-full max-w-xs focus:outline-none"
+          formControlName="address" />
+      </label>
+
+    </div>
+
+    <div class="divider lg:divider-horizontal"></div>
+
+
+    <div class="w-1/3">
+
+      <label class="form-control w-full max-w-xs">
+        <div class="label">
+          <span class="label-text font-bold">Date Of Pregnant</span>
+          <span class="label-text font-light"> Eg: 20xx/xx/xx</span>
+        </div>
+        <input
+          type="text"
+          placeholder="Date Of Pregnant"
+          class="input input-bordered w-full max-w-xs focus:outline-none"
+          formControlName="dopregnant"
+          onfocus="(this.type='date')"/>
+      </label>
+
+      <label class="form-control w-full max-w-xs">
+        <div class="label">
+          <span class="label-text font-bold">Current Weight</span>
+          <span class="label-text font-light"> Eg: xx</span>
+        </div>
+        <input
+          type="text"
+          placeholder="Current Weight"
+          class="input input-bordered w-full max-w-xs focus:outline-none"
+          formControlName="currentweight"
+          />
+      </label>
+
+      <label class="form-control w-full max-w-xs">
+        <div class="label">
+          <span class="label-text font-bold">Blood Type</span>
+        </div>
+        <select
+          class="select select-bordered w-full max-w-xs focus:outline-none"
+          formControlName="bloodtype"
+        >
+          <option disabled [ngValue]="null">Blood Type</option>
+
+          @for (bloodtype of bloodtypes; track bloodtypes) {
+            <option [ngValue]="bloodtype.id">{{bloodtype.name}}</option>
+          }
+        </select>
+      </label>
+
+      <label class="form-control w-full max-w-xs">
+        <div class="label">
+          <span class="label-text font-bold">Marital Status</span>
+        </div>
+        <select
+          class="select select-bordered w-full max-w-xs focus:outline-none"
+          formControlName="maritalstatus"
+        >
+          <option disabled [ngValue]="null">Marital Status</option>
+
+          @for (maritalstatus of maritalstatuses; track maritalstatuses) {
+            <option [ngValue]="maritalstatus.id">{{maritalstatus.name}}</option>
+          }
+        </select>
+      </label>
+
+      <label class="form-control w-full max-w-xs">
+        <div class="label">
+          <span class="label-text font-bold">Mother Status</span>
+        </div>
+        <select
+          class="select select-bordered w-full max-w-xs focus:outline-none"
+          formControlName="motherstatus"
+        >
+          <option disabled [ngValue]="null">Mother Status</option>
+
+          @for (motherstatus of motherstatuses; track motherstatuses) {
+            <option [ngValue]="motherstatus.id">{{motherstatus.name}}</option>
+          }
+        </select>
+      </label>
+
+    </div>
+
+    <div class="divider lg:divider-horizontal"></div>
+
+    <div class="w-1/3">
+      <label class="form-control w-full max-w-xs">
+        <div class="label">
+          <span class="label-text font-bold">Clinic</span>
+        </div>
+        <select
+          class="select select-bordered w-full max-w-xs focus:outline-none"
+          formControlName="clinic"
+        >
+          <option disabled [ngValue]="null">Clinic</option>
+
+          @for (clinic of clinics; track clinics) {
+            <option [ngValue]="clinic.id">{{clinic.divisionname}}</option>
+          }
+        </select>
+      </label>
+
+      <label class="form-control w-full max-w-xs mb-3">
+        <div class="label">
+          <span class="label-text font-bold">Description</span>
+        </div>
+        <textarea
+          class="textarea textarea-bordered h-24 focus:outline-none"
+          placeholder="If There are Special Medical Conditions Mention Here, Else Input 'Not Described'"
+          formControlName="description"></textarea>
+      </label>
+
+    </div>
+
+    <div class="absolute right-3 bottom-3 flex">
+      <button class="btn text-white bg-gray-950 mr-1 hover:bg-gray-900" (click)="add()">Submit</button>
+      <button class="btn text-white bg-gray-950 mr-1 hover:bg-gray-900">Clear</button>
+    </div>
+
+  </form>
+  </div>
+
+</div>
+
+<div class="flex justify-center mt-6">
+  <div class="w-full bg-white shadow-2xl relative mx-4 top-4 rounded-lg px-8 py-6">
+    <p class="font-lexend font-bold text-lg">QR Code</p>
+    <p class="font-lexend font-light">Please Download Your Attendance QR Code After Form Submission</p>
+
+    <div class="flex">
+      <div class="w-1/3">
+
+      <div class="flex flex-col justify-center items-center {{ifqrshow ? 'block' : 'hidden'}} border border-6 py-2">
+        <div id="qrcode" #qrcode class="flex flex-col justify-center items-center">
+          <p class="font-lexend font-bold text-lg p-3">Clinic Attendance Card</p>
+          <qrcode [qrdata]="qrData" [width]="200" [allowEmptyString]="true" [errorCorrectionLevel]="'M'"></qrcode>
+        </div>
+        <button (click)="downloadAsPDF()" class="btn text-white bg-gray-950 mr-1 hover:bg-gray-900">Download as PDF</button>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+</div>
