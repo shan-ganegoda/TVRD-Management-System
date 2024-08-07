@@ -10,4 +10,5 @@ public interface VehicleCountByMohRepository extends JpaRepository<VehicleCountB
 
     @Query("SELECT NEW VehicleCountByMoh(m.name, count (v.number)) FROM Vehicle v, Moh m WHERE v.moh.id = m.id GROUP BY m.id")
     List<VehicleCountByMoh> findVehicleCountByMoh();
+
 }

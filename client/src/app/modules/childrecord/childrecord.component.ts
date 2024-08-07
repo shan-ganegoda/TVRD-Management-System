@@ -493,4 +493,20 @@ export class ChildrecordComponent implements OnInit{
 
     this.enableButtons(true,false,false);
   }
+
+  generateRegNo() {
+    const numbers = this.childs.map(n => {
+      const parts = n.regno?.split('-');
+      return parts ? parseInt(parts[2]) : 0;
+    });
+
+
+    const maxno = Math.max(...numbers);
+    const nextno = maxno + 1;
+    const formattedLastNumber = nextno.toString().padStart(3, '0');
+    const middleNumber = '128'; // This can be static or dynamically generated if needed
+
+    const formattedNextNumber = `C-1017-${formattedLastNumber}`;
+    this.childRecordForm.controls['regno'].setValue(formattedNextNumber);
+  }
 }

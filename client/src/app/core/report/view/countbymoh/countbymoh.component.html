@@ -20,23 +20,14 @@
 
 
   <mat-grid-tile [colspan]="1" [rowspan]="2">
+
     <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Table View</mat-card-title></mat-card-header>
-      <mat-card-content class="overflow-auto h-full">
-        <mat-table [dataSource]="data">
-<!--          @for(column of columns;track columns){}-->
-          <ng-container *ngFor="let column of columns; let i = index;" [matColumnDef]="column">
-            <mat-header-cell *matHeaderCellDef> {{ headers[i] }} </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{ element[binders[i]] }} </mat-cell>
-          </ng-container>
-          <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: columns;"></mat-row>
-        </mat-table>
-      </mat-card-content>
+      <mat-card-header><mat-card-title>MOH Data of Packets Below 100 - Column Chat View</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full"><div #columnchart></div></mat-card-content>
     </mat-card>
 
     <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Bar Chart</mat-card-title></mat-card-header>
+      <mat-card-header><mat-card-title>MOH Count By PDHS - Bar Chart View</mat-card-title></mat-card-header>
       <mat-card-content class="overflow-auto h-full"><div #barchart></div></mat-card-content>
     </mat-card>
   </mat-grid-tile>
@@ -45,14 +36,33 @@
   <mat-grid-tile [colspan]="1" [rowspan]="2">
 
     <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Pie Chat View</mat-card-title></mat-card-header>
+      <mat-card-header><mat-card-title>MOH Count By PDHS - Pie Chat View</mat-card-title></mat-card-header>
       <mat-card-content class="overflow-auto h-full"><div #piechart></div></mat-card-content>
     </mat-card>
 
 
     <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Line Chart View</mat-card-title></mat-card-header>
+      <mat-card-header><mat-card-title>MOH Count By PDHS - Line Chart View</mat-card-title></mat-card-header>
       <mat-card-content class="overflow-auto h-full"><div #linechart></div></mat-card-content>
+    </mat-card>
+
+  </mat-grid-tile>
+
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+
+    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>MOH Count By PDHS - Table View</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full">
+        <mat-table [dataSource]="data">
+          <!--          @for(column of columns;track columns){}-->
+          <ng-container *ngFor="let column of columns; let i = index;" [matColumnDef]="column">
+            <mat-header-cell *matHeaderCellDef> {{ headers[i] }} </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element[binders[i]] }} </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+        </mat-table>
+      </mat-card-content>
     </mat-card>
 
   </mat-grid-tile>

@@ -24,7 +24,6 @@ import java.util.List;
 @RequestMapping("/api/v1/admin/reports")
 public class ReportController {
 
-    private final CountByPdhRepository countByRdhRepository;
     private final CountByProductOrderRepository countByProductOrderRepository;
     private final CountByDesignationRepository countByDesignationRepository;
     private final VehicleCountByMohRepository vehicleCountByMohRepository;
@@ -34,12 +33,18 @@ public class ReportController {
     private final VaccineOrderReportService vaccineOrderReportService;
     private final MotherReportService motherReportService;
     private final ChildReportService childReportService;
+    private final CountByPdhRepository countByPdhRepository;
 
     @GetMapping(path = "/countbypdh")
     public List<CountByPdh> getCountByPdh() {
 
-        List<CountByPdh> countByPdhs = countByRdhRepository.findCountByRdh();
+        List<CountByPdh> countByPdhs = countByPdhRepository.findCountByRdh();
         return countByPdhs;
+    }
+
+    @GetMapping(path = "/packetsbelowh")
+    public List<MohCount> getCountByPacketsBelowH() {
+        return countByPdhRepository.findMohWithPacketsBelowH();
     }
 
     @GetMapping(path = "/countbyproductorder")

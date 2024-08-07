@@ -46,12 +46,14 @@ declare var google: any;
 export class CountbymohComponent implements OnInit{
 
   countbypdh!: CountByPdh[];
+  mohsByPacketsBelowH!: CountByPdh[];
   data!: MatTableDataSource<CountByPdh>;
 
   columns: string[] = ['name', 'count'];
   headers: string[] = ['PDHS', 'Count'];
   binders: string[] = ['name', 'count'];
 
+  @ViewChild('columnchart', { static: false }) columnchart: any;
   @ViewChild('barchart', { static: false }) barchart: any;
   @ViewChild('piechart', { static: false }) piechart: any;
   @ViewChild('linechart', { static: false }) linechart: any;
@@ -64,9 +66,16 @@ export class CountbymohComponent implements OnInit{
     this.rs.countByPdh().subscribe({
       next:data => {
         this.countbypdh = data;
-        console.log(this.countbypdh);
+        //console.log(this.countbypdh);
         this.loadTable();
         this.loadCharts();
+      }
+    });
+
+    this.rs.mohCountBelowH().subscribe({
+      next:data => {
+        this.mohsByPacketsBelowH = data;
+        //this.loadCharts();
       }
     });
 
@@ -88,6 +97,10 @@ export class CountbymohComponent implements OnInit{
     barData.addColumn('string', 'PDH');
     barData.addColumn('number', 'Count');
 
+    const columnData = new google.visualization.DataTable();
+    columnData.addColumn('string', 'MOH');
+    columnData.addColumn('number', 'Count');
+
     const pieData = new google.visualization.DataTable();
     pieData.addColumn('string', 'PDH');
     pieData.addColumn('number', 'Count');
@@ -101,6 +114,18 @@ export class CountbymohComponent implements OnInit{
       pieData.addRow([des.name, des.count]);
       lineData.addRow([des.name, des.count]);
     });
+
+    this.mohsByPacketsBelowH.forEach((des: CountByPdh) => {
+      columnData.addRow([des.name, des.count]);
+    });
+
+    const columnOptions = {
+      title: 'Packet Count (Bar Chart)',
+      subtitle: 'Count of Packet By MOH',
+      bars: 'horizontal',
+      height: 400,
+      width: 600
+    };
 
     const barOptions = {
       title: 'MOH Count (Bar Chart)',
@@ -121,6 +146,9 @@ export class CountbymohComponent implements OnInit{
       height: 400,
       width: 600
     };
+
+    const columnChart = new google.visualization.ColumnChart(this.columnchart.nativeElement);
+    columnChart.draw(columnData, columnOptions);
 
     const barChart = new google.visualization.BarChart(this.barchart.nativeElement);
     barChart.draw(barData, barOptions);

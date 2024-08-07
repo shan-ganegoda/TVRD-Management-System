@@ -25,6 +25,10 @@ export class ReportService {
     return this.http.get<CountByPdh[]>(API_URL + "/countbypdh");
   }
 
+  mohCountBelowH(){
+    return this.http.get<CountByPdh[]>(API_URL + "/packetsbelowh");
+  }
+
   countByPorder(query:string){
     return this.http.get<CountByPOrders[]>(API_URL + "/countbyproductorderdate"+ query);
   }

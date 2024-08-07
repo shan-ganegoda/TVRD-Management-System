@@ -36,8 +36,8 @@
       >
         <option disabled value="">Clinic</option>
 
-        @for(clinic of clinics; track clinics){
-          <option value="{{clinic.id}}">{{clinic.divisionname}}</option>
+        @for (clinic of clinics; track clinics) {
+          <option value="{{clinic.id}}">{{ clinic.divisionname }}</option>
         }
       </select>
 
@@ -86,15 +86,18 @@
           <label class="floating-label">Mother Name</label>
         </div>
 
-        <div class="relative w-full mb-3 px-2">
-          <input
-            type="text"
-            placeholder="Register Number"
-            class="peer input input-bordered w-full focus:outline-none"
-            formControlName="registerno"
-          />
-          <label class="floating-label">Register Number</label>
-
+        <div class="flex flex-row items-center mb-3 px-2">
+          <div class="relative mr-2 w-full">
+            <input
+              type="text"
+              placeholder="Register Number"
+              class="peer input input-bordered w-full focus:outline-none"
+              formControlName="registerno"
+            />
+            <label class="floating-label">Register Number</label>
+          </div>
+          <button class="btn bg-gray-950 text-white hover:bg-gray-900" (click)="generateRegNo()">Generate Number
+          </button>
         </div>
 
         <div class="relative w-full mb-3 px-2">
@@ -105,7 +108,7 @@
             <option disabled [ngValue]="null">Clinic</option>
 
             @for (clinic of clinics; track clinics) {
-              <option [ngValue]="clinic.id">{{clinic.divisionname}}</option>
+              <option [ngValue]="clinic.id">{{ clinic.divisionname }}</option>
             }
           </select>
           <label class="floating-labels-select">Clinic</label>
@@ -119,7 +122,7 @@
             <option disabled [ngValue]="null">Mother Status</option>
 
             @for (motherstatus of motherstatuses; track motherstatuses) {
-              <option [ngValue]="motherstatus.id">{{motherstatus.name}}</option>
+              <option [ngValue]="motherstatus.id">{{ motherstatus.name }}</option>
             }
           </select>
           <label class="floating-labels-select">Mother Status</label>
@@ -165,7 +168,7 @@
             <option disabled [ngValue]="null">Blood Type</option>
 
             @for (bloodtype of bloodtypes; track bloodtypes) {
-              <option [ngValue]="bloodtype.id">{{bloodtype.name}}</option>
+              <option [ngValue]="bloodtype.id">{{ bloodtype.name }}</option>
             }
           </select>
           <label class="floating-labels-select">Blood Type</label>
@@ -179,7 +182,7 @@
             <option disabled [ngValue]="null">Marital Status</option>
 
             @for (maritalstatus of maritalstatuses; track maritalstatuses) {
-              <option [ngValue]="maritalstatus.id">{{maritalstatus.name}}</option>
+              <option [ngValue]="maritalstatus.id">{{ maritalstatus.name }}</option>
             }
           </select>
           <label class="floating-labels-select">Marital Status</label>
@@ -223,7 +226,7 @@
             <option disabled [ngValue]="null">Involment Status</option>
 
             @for (involvementstatus of involvementstatuses; track involvementstatuses) {
-              <option [ngValue]="involvementstatus.id">{{involvementstatus.name}}</option>
+              <option [ngValue]="involvementstatus.id">{{ involvementstatus.name }}</option>
             }
           </select>
           <label class="floating-labels-select">Involvement Status</label>
@@ -248,14 +251,18 @@
 
         <div class="flex flex-row mt-3 max-w-[97%] px-2 pb-5">
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
-                  (click)="add()" [disabled]="!enaadd || !hasWriteAuthority">Add</button>
+                  (click)="add()" [disabled]="!enaadd || !hasWriteAuthority">Add
+          </button>
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
-                  (click)="update(currentMother)" [disabled]="!enaupd || !hasUpdateAuthority">Update</button>
+                  (click)="update(currentMother)" [disabled]="!enaupd || !hasUpdateAuthority">Update
+          </button>
           <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900"
                   (click)="delete(currentMother)"
-                  [disabled]="!hasDeleteAuthority || !enadel " >Delete</button>
+                  [disabled]="!hasDeleteAuthority || !enadel ">Delete
+          </button>
           <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900"
-                  (click)="clearForm()">Clear</button>
+                  (click)="clearForm()">Clear
+          </button>
         </div>
 
       </form>
@@ -271,7 +278,7 @@
       </div>
 
       <div class="overflow-auto p-4 mt-2 mx-3 flex flex-col bg-white shadow-md rounded-lg">
-        @if(!isFailed || !isLoading || mothers.length !== 0){
+        @if (!isFailed || !isLoading || mothers.length !== 0) {
           <table class="text-left p-4 table">
             <thead>
             <tr class="text-black bold">
@@ -285,36 +292,37 @@
             </thead>
 
             <tbody>
-              @for(mother of data | async ; track mothers){
+              @for (mother of data | async; track mothers) {
                 <tr>
                   <td>
                     <div>
-                      <div>{{mother.mothername}}</div>
+                      <div>{{ mother.mothername }}</div>
                     </div>
                   </td>
 
                   <td>
                     <div class="flex items-center">
-                      {{mother.registerno}}
+                      {{ mother.registerno }}
                     </div>
                   </td>
 
                   <td>
                     <div class="flex items-center">
-                      {{mother.nic}}
+                      {{ mother.nic }}
                     </div>
                   </td>
 
                   <td>
                     <div class="flex items-center">
-                      {{mother.clinic.divisionname}}
+                      {{ mother.clinic.divisionname }}
                     </div>
                   </td>
 
                   <td>
                     <div class="flex items-center">
-                      <div class="badge badge-xs mr-1.5 {{mother.involvementstatus.name === 'On Program'? 'bg-success border-white' : mother.involvementstatus.name === 'Off Program'? 'bg-error border-white' : 'bg-warning border-white'}}"></div>
-                      {{mother.involvementstatus.name}}
+                      <div
+                        class="badge badge-xs mr-1.5 {{mother.involvementstatus.name === 'On Program'? 'bg-success border-white' : mother.involvementstatus.name === 'Off Program'? 'bg-error border-white' : 'bg-warning border-white'}}"></div>
+                      {{ mother.involvementstatus.name }}
                     </div>
                   </td>
 
@@ -322,7 +330,7 @@
                     <div class="join">
                       <button
                         class=" join-item {{hasReadAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
-                        (click) = "fillForm(mother)"
+                        (click)="fillForm(mother)"
                         [disabled]="!hasReadAuthority"
                       >
                         <svg
@@ -353,11 +361,11 @@
           <mat-paginator [length]="20" [pageSize]="7" [pageSizeOptions]="[3,7,10,20]"></mat-paginator>
         }
 
-        @if (isLoading){
+        @if (isLoading) {
           <app-page-loading/>
         }
 
-        @if (isFailed){
+        @if (isFailed) {
           <app-page-error/>
         }
       </div>

@@ -518,4 +518,19 @@ export class MotherregistrationComponent implements OnInit {
     }
   }
 
+  generateRegNo() {
+    const numbers = this.mothers.map(n => {
+      const parts = n.registerno?.split('-');
+      return parts ? parseInt(parts[2]) : 0;
+    });
+
+
+    const maxno = Math.max(...numbers);
+    const nextno = maxno + 1;
+    const formattedLastNumber = nextno.toString().padStart(3, '0');
+    const middleNumber = '128'; // This can be static or dynamically generated if needed
+
+    const formattedNextNumber = `A-128-${formattedLastNumber}`;
+    this.motherregForm.controls['registerno'].setValue(formattedNextNumber);
+  }
 }

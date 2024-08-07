@@ -54,8 +54,39 @@
 
 
   <mat-grid-tile [colspan]="1" [rowspan]="2">
+
     <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Table View</mat-card-title></mat-card-header>
+      <mat-card-header><mat-card-title>Orders By Product Types - Column Chat View</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full"><div #columnchart></div></mat-card-content>
+    </mat-card>
+
+    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Orders By Month - Bar Chart</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full"><div #barchart></div></mat-card-content>
+    </mat-card>
+
+  </mat-grid-tile>
+
+
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+
+    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Orders By Month - Pie Chat View</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full"><div #piechart></div></mat-card-content>
+    </mat-card>
+
+
+    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Orders By Month - Line Chart View</mat-card-title></mat-card-header>
+      <mat-card-content class="overflow-auto h-full"><div #linechart></div></mat-card-content>
+    </mat-card>
+
+  </mat-grid-tile>
+
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+
+    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
+      <mat-card-header><mat-card-title>Orders By Month - Table View</mat-card-title></mat-card-header>
       <mat-card-content class="overflow-auto h-full">
         <mat-table [dataSource]="data">
           <!--          @for(column of columns;track columns){}-->
@@ -67,35 +98,6 @@
           <mat-row *matRowDef="let row; columns: columns;"></mat-row>
         </mat-table>
       </mat-card-content>
-    </mat-card>
-
-    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Bar Chart</mat-card-title></mat-card-header>
-      <mat-card-content class="overflow-auto h-full"><div #barchart></div></mat-card-content>
-    </mat-card>
-  </mat-grid-tile>
-
-
-  <mat-grid-tile [colspan]="1" [rowspan]="2">
-
-    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Pie Chat View</mat-card-title></mat-card-header>
-      <mat-card-content class="overflow-auto h-full"><div #piechart></div></mat-card-content>
-    </mat-card>
-
-
-    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Line Chart View</mat-card-title></mat-card-header>
-      <mat-card-content class="overflow-auto h-full"><div #linechart></div></mat-card-content>
-    </mat-card>
-
-  </mat-grid-tile>
-
-  <mat-grid-tile [colspan]="1" [rowspan]="2">
-
-    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Pie Chat View</mat-card-title></mat-card-header>
-      <mat-card-content class="overflow-auto h-full"><div #columnchart></div></mat-card-content>
     </mat-card>
 
   </mat-grid-tile>
