@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Mother} from "../../core/entity/mother";
 import {BloodType} from "../../core/entity/bloodtype";
@@ -15,19 +15,20 @@ import {InvolvementstatusService} from "../../core/service/motherregistration/in
 import {MaritalstatusService} from "../../core/service/motherregistration/maritalstatus.service";
 import {RegexService} from "../../core/service/regexes/regex.service";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {RouterLink} from "@angular/router";
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {AsyncPipe} from "@angular/common";
 import {PageErrorComponent} from "../../shared/page-error/page-error.component";
 import {PageLoadingComponent} from "../../shared/page-loading/page-loading.component";
-import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 import {AuthorizationService} from "../../core/service/auth/authorization.service";
 import {ToastService} from "../../core/util/toast/toast.service";
 import {MotherStatus} from "../../core/entity/motherstatus";
 import {MotherstatusService} from "../../core/service/motherregistration/motherstatus.service";
+import {QRCodeModule} from "angularx-qrcode";
+import html2canvas from "html2canvas-pro";
+import {jsPDF} from "jspdf";
 
 @Component({
   selector: 'app-motherregistration',
@@ -41,34 +42,41 @@ import {MotherstatusService} from "../../core/service/motherregistration/mothers
     AsyncPipe,
     MatPaginator,
     PageErrorComponent,
-    PageLoadingComponent
+    PageLoadingComponent,
+    QRCodeModule
   ],
   templateUrl: './motherregistration.component.html',
   styleUrl: './motherregistration.component.scss'
 })
-export class MotherregistrationComponent implements OnInit{
+export class MotherregistrationComponent implements OnInit {
 
-  motherregForm!:FormGroup;
-  motherregSearchForm!:FormGroup;
+  qrData: string = "QR Data";
+
+  @ViewChild('qrcode', {static: true}) el!: ElementRef<HTMLImageElement>
+
+  motherregForm!: FormGroup;
+  motherregSearchForm!: FormGroup;
 
   isLoading = false;
   isFailed = false;
 
-  currentMother!:Mother;
-  oldMother!:Mother;
+  currentMother!: Mother;
+  oldMother!: Mother;
+
+  ifqrshow: boolean = false;
 
   mothers: Mother[] = [];
   bloodtypes: BloodType[] = [];
-  involvementstatuses:InvolvementStatus[] = [];
-  maritalstatuses:MaritalStatus[] = [];
-  clinics:Clinic[] = [];
-  motherstatuses:MotherStatus[] = [];
+  involvementstatuses: InvolvementStatus[] = [];
+  maritalstatuses: MaritalStatus[] = [];
+  clinics: Clinic[] = [];
+  motherstatuses: MotherStatus[] = [];
 
   dataSource!: MatTableDataSource<Mother>;
   data!: Observable<any>
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  regexes:any;
+  regexes: any;
 
   currentOperation = '';
 
@@ -77,23 +85,23 @@ export class MotherregistrationComponent implements OnInit{
   hasReadAuthority = this.am.hasAuthority("Mother-Read");
   hasWriteAuthority = this.am.hasAuthority("Mother-Write");
 
-  enaadd:boolean = false;
-  enaupd:boolean = false;
-  enadel:boolean = false;
+  enaadd: boolean = false;
+  enaupd: boolean = false;
+  enadel: boolean = false;
 
   constructor(
-              private cs:ClinicService,
-              private ms:MotherService,
-              private bts:BloodtypeService,
-              private iss:InvolvementstatusService,
-              private mts:MaritalstatusService,
-              private rs:RegexService,
-              private dialog:MatDialog,
-              private cdr:ChangeDetectorRef,
-              private fb:FormBuilder,
-              private am: AuthorizationService,
-              private tst: ToastService,
-              private mss:MotherstatusService
+    private cs: ClinicService,
+    private ms: MotherService,
+    private bts: BloodtypeService,
+    private iss: InvolvementstatusService,
+    private mts: MaritalstatusService,
+    private rs: RegexService,
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
+    private fb: FormBuilder,
+    private am: AuthorizationService,
+    private tst: ToastService,
+    private mss: MotherstatusService
   ) {
 
     this.motherregSearchForm = this.fb.group({
@@ -101,38 +109,38 @@ export class MotherregistrationComponent implements OnInit{
       "ssregisterno": new FormControl(''),
       "ssnic": new FormControl(''),
       "ssclinic": new FormControl(''),
-    },{updateOn:"change"});
+    }, {updateOn: "change"});
 
     this.motherregForm = this.fb.group({
-      "registerno": new FormControl('',[Validators.required]),
-      "mothername": new FormControl('',[Validators.required]),
-      "nic": new FormControl('',[Validators.required]),
-      "mobileno": new FormControl('',[Validators.required]),
-      "dopregnant": new FormControl('',[Validators.required]),
-      "age": new FormControl('',[Validators.required]),
-      "address": new FormControl('',[Validators.required]),
-      "currentweight": new FormControl('',[Validators.required]),
-      "description": new FormControl('',[Validators.required]),
-      "clinic": new FormControl(null,[Validators.required]),
-      "bloodtype": new FormControl(null,[Validators.required]),
-      "maritalstatus": new FormControl(null,[Validators.required]),
-      "involvementstatus": new FormControl(null,[Validators.required]),
-      "motherstatus": new FormControl(null,[Validators.required]),
-    },{updateOn:"change"});
+      "registerno": new FormControl('', [Validators.required]),
+      "mothername": new FormControl('', [Validators.required]),
+      "nic": new FormControl('', [Validators.required]),
+      "mobileno": new FormControl('', [Validators.required]),
+      "dopregnant": new FormControl('', [Validators.required]),
+      "age": new FormControl('', [Validators.required]),
+      "address": new FormControl('', [Validators.required]),
+      "currentweight": new FormControl('', [Validators.required]),
+      "description": new FormControl('', [Validators.required]),
+      "clinic": new FormControl(null, [Validators.required]),
+      "bloodtype": new FormControl(null, [Validators.required]),
+      "maritalstatus": new FormControl(null, [Validators.required]),
+      "involvementstatus": new FormControl(null, [Validators.required]),
+      "motherstatus": new FormControl(null, [Validators.required]),
+    }, {updateOn: "change"});
   }
 
   ngOnInit() {
     this.initialize();
   }
 
-  initialize(){
+  initialize() {
     this.loadTable("");
 
     this.cs.getAllList().subscribe({
       next: data => {
         this.clinics = data;
         // @ts-ignore
-        this.clinics.sort((a,b) => a.divisionname.localeCompare(b.divisionname))
+        this.clinics.sort((a, b) => a.divisionname.localeCompare(b.divisionname))
       },
     });
 
@@ -153,7 +161,7 @@ export class MotherregistrationComponent implements OnInit{
     });
 
     this.rs.getRegexes('mother').subscribe({
-      next:data => {
+      next: data => {
         this.regexes = data;
         this.createForm();
       },
@@ -161,9 +169,9 @@ export class MotherregistrationComponent implements OnInit{
     });
   }
 
-  loadTable(query:string){
+  loadTable(query: string) {
     this.ms.getAll(query).subscribe({
-      next:data =>{
+      next: data => {
         this.mothers = data;
         this.dataSource = new MatTableDataSource(this.mothers);
         this.cdr.detectChanges();
@@ -173,16 +181,21 @@ export class MotherregistrationComponent implements OnInit{
     });
   }
 
-  createForm(){
-    this.motherregForm.controls['registerno'].setValidators([Validators.required,Validators.pattern(this.regexes['registerno']['regex'])]);
-    this.motherregForm.controls['mothername'].setValidators([Validators.required,Validators.pattern(this.regexes['mothername']['regex'])]);
-    this.motherregForm.controls['nic'].setValidators([Validators.required,Validators.pattern(this.regexes['nic']['regex'])]);
-    this.motherregForm.controls['mobileno'].setValidators([Validators.required,Validators.pattern(this.regexes['mobileno']['regex'])]);
+  loadQR(regno: string, name: string) {
+    const data = {registerno: regno, mothername: name}
+    this.qrData = JSON.stringify(data)
+  }
+
+  createForm() {
+    this.motherregForm.controls['registerno'].setValidators([Validators.required, Validators.pattern(this.regexes['registerno']['regex'])]);
+    this.motherregForm.controls['mothername'].setValidators([Validators.required, Validators.pattern(this.regexes['mothername']['regex'])]);
+    this.motherregForm.controls['nic'].setValidators([Validators.required, Validators.pattern(this.regexes['nic']['regex'])]);
+    this.motherregForm.controls['mobileno'].setValidators([Validators.required, Validators.pattern(this.regexes['mobileno']['regex'])]);
     this.motherregForm.controls['dopregnant'].setValidators([Validators.required]);
-    this.motherregForm.controls['age'].setValidators([Validators.required,Validators.pattern(this.regexes['age']['regex'])]);
-    this.motherregForm.controls['address'].setValidators([Validators.required,Validators.pattern(this.regexes['address']['regex'])]);
-    this.motherregForm.controls['currentweight'].setValidators([Validators.required,Validators.pattern(this.regexes['currentweight']['regex'])]);
-    this.motherregForm.controls['description'].setValidators([Validators.required,Validators.pattern(this.regexes['description']['regex'])]);
+    this.motherregForm.controls['age'].setValidators([Validators.required, Validators.pattern(this.regexes['age']['regex'])]);
+    this.motherregForm.controls['address'].setValidators([Validators.required, Validators.pattern(this.regexes['address']['regex'])]);
+    this.motherregForm.controls['currentweight'].setValidators([Validators.required, Validators.pattern(this.regexes['currentweight']['regex'])]);
+    this.motherregForm.controls['description'].setValidators([Validators.required, Validators.pattern(this.regexes['description']['regex'])]);
     this.motherregForm.controls['clinic'].setValidators([Validators.required]);
     this.motherregForm.controls['bloodtype'].setValidators([Validators.required]);
     this.motherregForm.controls['maritalstatus'].setValidators([Validators.required]);
@@ -195,7 +208,7 @@ export class MotherregistrationComponent implements OnInit{
 
           if (this.oldMother != undefined && control.valid) {
             // @ts-ignore
-            if (value === this.motherregForm[controlName]) {
+            if (value === this.currentMother[controlName]) {
               control.markAsPristine();
             } else {
               control.markAsDirty();
@@ -207,22 +220,22 @@ export class MotherregistrationComponent implements OnInit{
       );
 
     }
-    this.enableButtons(true,false,false);
+    this.enableButtons(true, false, false);
   }
 
-  enableButtons(add:boolean, upd:boolean, del:boolean){
-    this.enaadd=add;
-    this.enaupd=upd;
-    this.enadel=del;
+  enableButtons(add: boolean, upd: boolean, del: boolean) {
+    this.enaadd = add;
+    this.enaupd = upd;
+    this.enadel = del;
   }
 
   fillForm(mother: Mother) {
-    this.enableButtons(false,true,true);
+    this.enableButtons(false, true, true);
 
     this.currentMother = mother;
     this.oldMother = this.currentMother;
 
-    console.log(this.currentMother);
+    //console.log(this.currentMother);
 
 
     this.motherregForm.setValue({
@@ -244,30 +257,35 @@ export class MotherregistrationComponent implements OnInit{
 
     });
 
+    this.ifqrshow = true;
+    if (this.currentMother.registerno != null && this.currentMother.mothername != null) {
+      this.loadQR(this.currentMother.registerno, this.currentMother.mothername);
+    }
+
     this.motherregForm.markAsPristine();
   }
 
-  getUpdates():string {
+  getUpdates(): string {
     let updates: string = "";
     for (const controlName in this.motherregForm.controls) {
       const control = this.motherregForm.controls[controlName];
       if (control.dirty) {
-        updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1)+" Changed";
+        updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1) + " Changed";
       }
     }
     return updates;
   }
 
-  getErrors(){
+  getErrors() {
 
-    let errors:string = "";
+    let errors: string = "";
 
-    for(const controlName in this.motherregForm.controls){
+    for (const controlName in this.motherregForm.controls) {
       const control = this.motherregForm.controls[controlName];
-      if(control.errors){
-        if(this.regexes[controlName] != undefined){
+      if (control.errors) {
+        if (this.regexes[controlName] != undefined) {
           errors = errors + "<br>" + this.regexes[controlName]['message'];
-        }else{
+        } else {
           errors = errors + "<br>Invalid " + controlName;
         }
       }
@@ -278,19 +296,19 @@ export class MotherregistrationComponent implements OnInit{
   add() {
     let errors = this.getErrors();
 
-    if(errors != ""){
-      this.dialog.open(WarningDialogComponent,{
-        data:{heading:"Errors - Mother Add ",message: "You Have Following Errors <br/> " + errors}
+    if (errors != "") {
+      this.dialog.open(WarningDialogComponent, {
+        data: {heading: "Errors - Mother Add ", message: "You Have Following Errors <br/> " + errors}
       }).afterClosed().subscribe(res => {
-        if(!res){
+        if (!res) {
           return;
         }
       });
-    }else{
+    } else {
 
-      if(this.motherregForm.valid){
+      if (this.motherregForm.valid) {
 
-        const mother:Mother = {
+        const mother: Mother = {
           registerno: this.motherregForm.controls['registerno'].value,
           mothername: this.motherregForm.controls['mothername'].value,
           mobileno: this.motherregForm.controls['mobileno'].value,
@@ -308,20 +326,22 @@ export class MotherregistrationComponent implements OnInit{
           maritalstatus: {id: parseInt(this.motherregForm.controls['maritalstatus'].value)},
         }
 
+        //this.loadQR(this.motherregForm.controls['registerno'].value, this.motherregForm.controls['mothername'].value);
 
         this.currentOperation = "Add Mother " + mother.registerno;
 
-        this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+        this.dialog.open(ConfirmDialogComponent, {data: this.currentOperation})
           .afterClosed().subscribe(res => {
-          if(res) {
+          if (res) {
             this.ms.save(mother).subscribe({
-              next:() => {
-                this.tst.handleResult('success',"Mother Saved Successfully");
+              next: () => {
+                //this.downloadAsPDF();
+                this.tst.handleResult('success', "Mother Saved Successfully");
                 this.loadTable("");
                 this.clearForm();
               },
-              error:(err:any) => {
-                this.tst.handleResult('Failed',err.error.data.message);
+              error: (err: any) => {
+                this.tst.handleResult('Failed', err.error.data.message);
               }
             });
           }
@@ -333,28 +353,28 @@ export class MotherregistrationComponent implements OnInit{
   update(currentMother: Mother) {
     let errors = this.getErrors();
 
-    if(errors != ""){
-      this.dialog.open(WarningDialogComponent,{
-        data:{heading:"Errors - Mother Update ",message: "You Have Following Errors <br/> " + errors}
+    if (errors != "") {
+      this.dialog.open(WarningDialogComponent, {
+        data: {heading: "Errors - Mother Update ", message: "You Have Following Errors <br/> " + errors}
       }).afterClosed().subscribe(res => {
-        if(!res){
+        if (!res) {
           return;
         }
       });
 
-    }else{
+    } else {
 
-      let updates:string = this.getUpdates();
+      let updates: string = this.getUpdates();
 
-      if(updates != ""){
-        this.dialog.open(WarningDialogComponent,{
-          data:{heading:"Updates - Mother Update ",message: "You Have Following Updates <br> " + updates}
+      if (updates != "") {
+        this.dialog.open(WarningDialogComponent, {
+          data: {heading: "Updates - Mother Update ", message: "You Have Following Updates <br> " + updates}
         }).afterClosed().subscribe(res => {
-          if(!res){
+          if (!res) {
             return;
-          }else{
+          } else {
 
-            const mother:Mother = {
+            const mother: Mother = {
               registerno: this.motherregForm.controls['registerno'].value,
               mothername: this.motherregForm.controls['mothername'].value,
               mobileno: this.motherregForm.controls['mobileno'].value,
@@ -376,17 +396,17 @@ export class MotherregistrationComponent implements OnInit{
 
             this.currentOperation = "Update Mother " + mother.registerno;
 
-            this.dialog.open(ConfirmDialogComponent,{data:this.currentOperation})
+            this.dialog.open(ConfirmDialogComponent, {data: this.currentOperation})
               .afterClosed().subscribe(res => {
-              if(res) {
+              if (res) {
                 this.ms.update(mother).subscribe({
-                  next:() => {
-                    this.tst.handleResult('success',"Mother Updated Successfully");
+                  next: () => {
+                    this.tst.handleResult('success', "Mother Updated Successfully");
                     this.loadTable("");
                     this.clearForm();
                   },
-                  error:(err:any) => {
-                    this.tst.handleResult('Failed',err.error.data.message);
+                  error: (err: any) => {
+                    this.tst.handleResult('Failed', err.error.data.message);
                   }
                 });
               }
@@ -394,11 +414,13 @@ export class MotherregistrationComponent implements OnInit{
           }
         });
 
-      }else{
-        this.dialog.open(WarningDialogComponent,{
-          data:{heading:"Updates - Mother Update ",message: "No Fields Updated "}
-        }).afterClosed().subscribe(res =>{
-          if(res){return;}
+      } else {
+        this.dialog.open(WarningDialogComponent, {
+          data: {heading: "Updates - Mother Update ", message: "No Fields Updated "}
+        }).afterClosed().subscribe(res => {
+          if (res) {
+            return;
+          }
         })
       }
     }
@@ -407,23 +429,23 @@ export class MotherregistrationComponent implements OnInit{
   delete(currentMother: Mother) {
     const operation = "Delete Mother " + currentMother.registerno;
 
-    this.dialog.open(ConfirmDialogComponent,{data:operation})
-      .afterClosed().subscribe((res:boolean) => {
-      if(res){
+    this.dialog.open(ConfirmDialogComponent, {data: operation})
+      .afterClosed().subscribe((res: boolean) => {
+      if (res) {
         if (currentMother.id) {
           this.ms.delete(currentMother.id).subscribe({
             next: () => {
               this.loadTable("");
-              this.tst.handleResult('success',"Mother Delete Successfully");
+              this.tst.handleResult('success', "Mother Delete Successfully");
               this.clearForm();
             },
-            error: (err:any) => {
-              this.tst.handleResult('Failed',err.error.data.message);
+            error: (err: any) => {
+              this.tst.handleResult('Failed', err.error.data.message);
               console.log(err);
             },
           });
         } else {
-          this.tst.handleResult('Failed'," Employee Id Not Found!");
+          this.tst.handleResult('Failed', " Employee Id Not Found!");
         }
       }
     });
@@ -435,38 +457,65 @@ export class MotherregistrationComponent implements OnInit{
     this.motherregForm.controls['bloodtype'].setValue(null);
     this.motherregForm.controls['involvementstatus'].setValue(null);
     this.motherregForm.controls['maritalstatus'].setValue(null);
+    this.ifqrshow = false;
 
-    this.enableButtons(true,false,false);
+    this.enableButtons(true, false, false);
   }
 
   handleSearch() {
-    const ssmothername  = this.motherregSearchForm.controls['ssmothername'].value;
-    const ssregisterno  = this.motherregSearchForm.controls['ssregisterno'].value;
-    const ssnic  = this.motherregSearchForm.controls['ssnic'].value;
-    const ssclinic  = this.motherregSearchForm.controls['ssclinic'].value;
+    const ssmothername = this.motherregSearchForm.controls['ssmothername'].value;
+    const ssregisterno = this.motherregSearchForm.controls['ssregisterno'].value;
+    const ssnic = this.motherregSearchForm.controls['ssnic'].value;
+    const ssclinic = this.motherregSearchForm.controls['ssclinic'].value;
 
     let query = ""
 
-    if(ssmothername != null && ssmothername.trim() !="") query = query + "&mothername=" + ssmothername;
-    if(ssregisterno != null && ssregisterno.trim() !="") query = query + "&registerno=" + ssregisterno;
-    if(ssnic != null && ssnic.trim() !="") query = query + "&nic=" + ssnic;
-    if(ssclinic != '') query = query + "&clinicid=" + parseInt(ssclinic);
+    if (ssmothername != null && ssmothername.trim() != "") query = query + "&mothername=" + ssmothername;
+    if (ssregisterno != null && ssregisterno.trim() != "") query = query + "&registerno=" + ssregisterno;
+    if (ssnic != null && ssnic.trim() != "") query = query + "&nic=" + ssnic;
+    if (ssclinic != '') query = query + "&clinicid=" + parseInt(ssclinic);
 
-    if(query != "") query = query.replace(/^./, "?")
+    if (query != "") query = query.replace(/^./, "?")
     this.loadTable(query);
   }
 
   clearSearch() {
-    this.dialog.open(ConfirmDialogComponent,{data:"Clear Search"}
+    this.dialog.open(ConfirmDialogComponent, {data: "Clear Search"}
     ).afterClosed().subscribe(res => {
-      if(!res){
+      if (!res) {
         return;
-      }else{
+      } else {
         this.motherregSearchForm.reset();
         this.motherregSearchForm.controls['ssclinic'].setValue('');
         this.loadTable("");
       }
     });
+  }
+
+  downloadAsPDF(): void {
+    const element: HTMLElement | null = document.getElementById('qrcode');
+    if (element) {
+      element.style.backgroundColor = 'white';
+      html2canvas(element).then((canvas: HTMLCanvasElement) => {
+        const imgData: string = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: [50, 50] // Set the PDF size to 50mm x 50mm
+        });
+        const width = pdf.internal.pageSize.getWidth();
+        const height = pdf.internal.pageSize.getHeight();
+
+        // Adjust the image dimensions and position as needed
+        pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+        const data = JSON.parse(this.qrData)
+        pdf.save(`${data.registerno}.pdf`);
+      }).catch(error => {
+        console.error('Error generating canvas:', error);
+      });
+    } else {
+      console.error('Element with id "qrcode" not found.');
+    }
   }
 
 }

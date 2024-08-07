@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import {Moh} from "../../core/entity/moh";
@@ -26,6 +26,9 @@ import {RegexService} from "../../core/service/regexes/regex.service";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas-pro';
+import {QRCodeModule} from "angularx-qrcode";
 
 @Component({
   selector: 'app-mbireport',
@@ -39,7 +42,8 @@ import {MatDialog} from "@angular/material/dialog";
     MatPaginator,
     PageErrorComponent,
     PageLoadingComponent,
-    MatGridList
+    MatGridList,
+    QRCodeModule
   ],
   templateUrl: './mbireport.component.html',
   styleUrl: './mbireport.component.scss'
@@ -69,10 +73,10 @@ export class MbireportComponent implements OnInit {
 
   regexes: any;
 
-  protected hasUpdateAuthority = this.authorizationService.hasAuthority("Employee-Update"); //need to be false
-  protected hasDeleteAuthority = this.authorizationService.hasAuthority("Employee-Delete"); //need to be false
-  protected hasWriteAuthority = this.authorizationService.hasAuthority("Employee-Write"); //need to be false
-  protected hasReadAuthority = this.authorizationService.hasAuthority("Employee-Read"); //need to be false
+  protected hasUpdateAuthority = this.authorizationService.hasAuthority("MbiReport-Update"); //need to be false
+  protected hasDeleteAuthority = this.authorizationService.hasAuthority("MbiReport-Delete"); //need to be false
+  protected hasWriteAuthority = this.authorizationService.hasAuthority("MbiReport-Write"); //need to be false
+  protected hasReadAuthority = this.authorizationService.hasAuthority("MbiReport-Read"); //need to be false
 
   dataSource!: MatTableDataSource<MbiReport>;
   data!: Observable<any>
@@ -573,4 +577,36 @@ export class MbireportComponent implements OnInit {
       }
     });
   }
+
+  qrData = JSON.stringify({id:"1",name:"Lakshan"});
+
+  @ViewChild('qrcode',{static:true}) el!: ElementRef<HTMLImageElement>
+
+  downloadAsPDF(): void {
+    const element: HTMLElement | null = document.getElementById('qrcode');
+    if (element) {
+      // Ensure the element has a supported background color
+      element.style.backgroundColor = 'white';
+
+      html2canvas(element).then((canvas: HTMLCanvasElement) => {
+        const imgData: string = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: [50, 50] // Set the PDF size to 50mm x 50mm
+        });
+        const width = pdf.internal.pageSize.getWidth();
+        const height = pdf.internal.pageSize.getHeight();
+
+        // Adjust the image dimensions and position as needed
+        pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+        pdf.save('qrcode.pdf');
+      }).catch(error => {
+        console.error('Error generating canvas:', error);
+      });
+    } else {
+      console.error('Element with id "qrcode" not found.');
+    }
+  }
+
 }

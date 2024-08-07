@@ -238,6 +238,14 @@
           <label class="floating-label">Description</label>
         </div>
 
+        <div class="flex flex-col justify-center {{ifqrshow ? 'block' : 'hidden'}}">
+          <div id="qrcode" #qrcode class="flex flex-col justify-center items-center">
+            <p class="font-lexend font-bold text-lg">Clinic Attendance Card</p>
+            <qrcode [qrdata]="qrData" [width]="200" [allowEmptyString]="true" [errorCorrectionLevel]="'M'"></qrcode>
+          </div>
+          <button (click)="downloadAsPDF()" class="btn mx-2 flex justify-center">Download as PDF</button>
+        </div>
+
         <div class="flex flex-row mt-3 max-w-[97%] px-2 pb-5">
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
                   (click)="add()" [disabled]="!enaadd || !hasWriteAuthority">Add</button>

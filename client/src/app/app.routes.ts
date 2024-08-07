@@ -35,9 +35,11 @@ import {
   CountbychildregistrationComponent
 } from "./core/report/view/countbychildregistration/countbychildregistration.component";
 import {InventoryComponent} from "./modules/inventory/inventory.component";
+import {MotherregpublicComponent} from "./shared/motherregpublic/motherregpublic.component";
 
 export const routes: Routes = [
-  { path: "login", component: AuthComponent },
+  { path: "login", component: AuthComponent, title: 'Login' },
+  { path: "motherregpublic", component: MotherregpublicComponent, title: 'Mother Reg Public' },
   { path: "", redirectTo:"login" ,pathMatch:"full"},
   {
     path: "main",

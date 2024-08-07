@@ -343,13 +343,13 @@
 
     <div>
       @if(isSubmit){
-        <button class="btn text-white bg-gray-950 mr-1 hover:bg-gray-900 mt-4" (click)="add()" [disabled]="false" >Submit</button>
+        <button class="btn text-white bg-gray-950 mr-1 hover:bg-gray-900 mt-4" (click)="add()" [disabled]="!hasWriteAuthority" >Submit</button>
       }
       @if(isUpdate){
-        <button class="btn text-white bg-gray-950 mr-1 hover:bg-gray-900 mt-4" (click)="update(currentReport)" [disabled]="false" >Update</button>
+        <button class="btn text-white bg-gray-950 mr-1 hover:bg-gray-900 mt-4" (click)="update(currentReport)" [disabled]="!hasUpdateAuthority" >Update</button>
       }
 
-      <button class="btn text-white bg-gray-950 mr-1 hover:bg-gray-900 mt-4"  (click)="clearForm()" [disabled]="false" >Clear</button>
+      <button class="btn text-white bg-gray-950 mr-1 hover:bg-gray-900 mt-4"  (click)="clearForm()" >Clear</button>
     </div>
 
   </form>
@@ -453,3 +453,11 @@
 
 
 </mat-grid-list>
+
+<div class="flex justify-center">
+<div id="qrcode" #qrcode class="flex flex-col justify-center items-center">
+  <p class="font-lexend font-bold text-lg">Clinic Attendance Card</p>
+  <qrcode [qrdata]="qrData" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+</div>
+<button (click)="downloadAsPDF()">Download as PDF</button>
+</div>

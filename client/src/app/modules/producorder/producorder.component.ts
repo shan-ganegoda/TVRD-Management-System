@@ -314,7 +314,7 @@ export class ProducorderComponent implements OnInit {
         } else {
           // If it exists, you can handle it as needed, e.g., show a message
           this.dialog.open(WarningDialogComponent, {
-            data: {heading: "Errors - Product Order Add ", message: "Duplicate record. This record already exists in the table."}
+            data: {heading: "Errors - Product Order Add ", message: "Duplicate record.<br>This record already exists in the table."}
           }).afterClosed().subscribe(res => {
             if (!res) {
               return;
