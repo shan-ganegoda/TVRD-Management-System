@@ -2,6 +2,7 @@ package com.content.security.service;
 
 
 import com.content.security.dto.MohDTO;
+import com.content.security.dto.MohPacketUpdateDTO;
 import com.content.security.entity.Moh;
 import com.content.security.exception.ResourceAlreadyExistException;
 import com.content.security.exception.ResourceNotFountException;
@@ -83,12 +84,11 @@ public class MohServiceIMPL implements MohService {
 
     @Override
     public String deleteMoh(Integer id) {
-        if (mohRepository.existsById(id)) {
-            mohRepository.deleteById(id);
+
+        Moh moh = mohRepository.findById(id).orElseThrow(() -> new ResourceNotFountException("Moh Not Found"));
+            mohRepository.delete(moh);
             return "Moh Deleted Successfully";
-        } else {
-            throw new ResourceNotFountException("Moh Not Found");
-        }
+
     }
 
     @Override
@@ -144,6 +144,18 @@ public class MohServiceIMPL implements MohService {
         } else {
             throw new ResourceNotFountException("Mohs Not Found");
         }
+
+    }
+
+    @Override
+    public MohDTO updateMohPacket(MohPacketUpdateDTO mohPacketUpdateDTO) {
+
+        Moh moh = mohRepository.findById(mohPacketUpdateDTO.getId()).orElseThrow(() -> new ResourceNotFountException("Moh Not Found"));
+        Integer totalpacketcount = moh.getPacketcount() + mohPacketUpdateDTO.getPacketcount();
+        moh.setPacketcount(totalpacketcount);
+        MohDTO mohDTO = objectMapper.MohToDTO(moh);
+        mohRepository.save(moh);
+        return mohDTO;
 
     }
 }

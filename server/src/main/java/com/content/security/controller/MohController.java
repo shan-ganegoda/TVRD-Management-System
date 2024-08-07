@@ -2,6 +2,7 @@ package com.content.security.controller;
 
 
 import com.content.security.dto.MohDTO;
+import com.content.security.dto.MohPacketUpdateDTO;
 import com.content.security.service.MohService;
 import com.content.security.util.StandardResponse;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,11 @@ public class MohController {
 
     @PutMapping
     public MohDTO updateMoh(@RequestBody MohDTO mohDTO){
-
         return mohService.updateMoh(mohDTO);
+    }
+
+    @PutMapping("/packetupdate")
+    public MohDTO updateMohPacket(@RequestBody MohPacketUpdateDTO mohPacketUpdateDTO){
+        return mohService.updateMohPacket(mohPacketUpdateDTO);
     }
 }

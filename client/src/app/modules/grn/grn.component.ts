@@ -26,6 +26,9 @@ import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 import {AuthorizationService} from "../../core/service/auth/authorization.service";
 import {POStatusUpdate} from "../../core/entity/postatusupdate";
+import {MohPacketUpdate} from "../../core/entity/mohpacketupdate";
+import {MohService} from "../../core/service/moh/moh.service";
+import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 
 @Component({
   selector: 'app-grn',
@@ -84,6 +87,8 @@ export class GrnComponent implements OnInit{
   products:Product[] = [];
   innerdata:GrnProduct[]=[];
 
+  mohid: number | undefined = 0;
+
 
   constructor(
               private fb:FormBuilder,
@@ -96,7 +101,8 @@ export class GrnComponent implements OnInit{
               private tst:ToastService,
               private dialog:MatDialog,
               private rs:RegexService,
-              private am:AuthorizationService
+              private am:AuthorizationService,
+              private ms:MohService
   ) {
     this.grnSearchForm = this.fb.group({
       "sscode": new FormControl(''),
@@ -372,6 +378,12 @@ export class GrnComponent implements OnInit{
     return errors;
   }
 
+  totalpacketcount = 0;
+  getTotalPacketCount(){
+    const totalquentity = this.innerdata.reduce((total,item) => total + item.quentity,0)
+    this.totalpacketcount = totalquentity;
+  }
+
   add() {
     let errors = this.getErrors();
 
@@ -407,13 +419,22 @@ export class GrnComponent implements OnInit{
           productorder: {id: parseInt(this.grnForm.controls['productorder'].value)},
         }
 
+        this.getTotalPacketCount();
+
         const posupdate:POStatusUpdate ={
           // @ts-ignore
           id: parseInt(this.grnForm.controls['productorder'].value),
           productorderstatus: { id:parseInt("5")}
         }
 
-        //console.log(porder);
+
+        const mohpacket:MohPacketUpdate = {
+          // @ts-ignore
+          id: parseInt(this.mohid),
+          packetcount: this.totalpacketcount
+        }
+
+        // console.log(mohpacket);
         this.currentOperation = "Add GRN ";
 
         this.dialog.open(ConfirmDialogComponent, {data: this.currentOperation})
@@ -425,10 +446,19 @@ export class GrnComponent implements OnInit{
                 this.loadTable("");
                 this.clearForm();
 
+                //Product Order Status Update to Completed
                 this.pos.updatePorderStatus(posupdate).subscribe({
                   next: () =>{
                     console.log("POS Updated!")
                   },
+                  error: (err: any) => {
+                    this.tst.handleResult('Failed',err.error.data.message);
+                  }
+                });
+
+                //Moh Packet Count Update
+                this.ms.updateMohPacketCount(mohpacket).subscribe({
+                  next: () => console.log("Moh Packet Count Updated"),
                   error: (err: any) => {
                     this.tst.handleResult('Failed',err.error.data.message);
                   }
@@ -598,6 +628,8 @@ export class GrnComponent implements OnInit{
   filterOrder() {
     const poid = this.grnForm.controls['productorder'].value;
     const po = this.productorders.find(p => p.id == parseInt(poid));
+
+    this.mohid = po?.moh.id;
 
     this.grnForm.controls['employee'].setValue(po?.employee.id);
 

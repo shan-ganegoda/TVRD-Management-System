@@ -37,6 +37,9 @@ public class Moh {
     @Column(name = "address")
     private String address;
     @Basic
+    @Column(name = "packetcount")
+    private Integer packetcount;
+    @Basic
     @Column(name = "toopen")
     private Time toopen;
     @Basic

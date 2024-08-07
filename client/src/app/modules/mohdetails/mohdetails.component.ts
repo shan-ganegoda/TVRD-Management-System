@@ -113,6 +113,7 @@ export class MohdetailsComponent implements OnInit{
       "email": new FormControl('',[Validators.required]),
       "address": new FormControl('',[Validators.required]),
       "doestablished": new FormControl('',[Validators.required]),
+      "packetcount": new FormControl('',[Validators.required]),
       "mohstatus": new FormControl(null,[Validators.required]),
       "rdh": new FormControl(null,[Validators.required]),
       "employee": new FormControl(null,[Validators.required]),
@@ -165,6 +166,7 @@ export class MohdetailsComponent implements OnInit{
     this.mohForm.controls['tele'].setValidators([Validators.required,Validators.pattern(this.regexes['tele']['regex'])]);
     this.mohForm.controls['faxno'].setValidators([Validators.required,Validators.pattern(this.regexes['faxno']['regex'])]);
     this.mohForm.controls['codename'].setValidators([Validators.required,Validators.pattern(this.regexes['codename']['regex'])]);
+    this.mohForm.controls['packetcount'].setValidators([Validators.required,Validators.pattern(this.regexes['packetcount']['regex'])]);
     this.mohForm.controls['email'].setValidators([Validators.required]);
     this.mohForm.controls['address'].setValidators([Validators.required]);
     this.mohForm.controls['doestablished'].setValidators([Validators.required]);
@@ -214,7 +216,7 @@ export class MohdetailsComponent implements OnInit{
       address: this.currentMoh.address,
       doestablished: this.currentMoh.doestablished,
       codename: this.currentMoh.codename,
-      // toclose: this.currentMoh.toclose,
+      packetcount: this.currentMoh.packetcount,
 
       rdh: this.currentMoh.rdh?.id,
       mohstatus: this.currentMoh.mohstatus?.id,
@@ -280,6 +282,7 @@ export class MohdetailsComponent implements OnInit{
               faxno: this.mohForm.controls['faxno'].value,
               address: this.mohForm.controls['address'].value,
               doestablished: this.mohForm.controls['doestablished'].value,
+              packetcount: this.mohForm.controls['packetcount'].value,
               codename: this.mohForm.controls['codename'].value,
 
               rdh: {id: parseInt(this.mohForm.controls['rdh'].value)},
@@ -349,6 +352,7 @@ export class MohdetailsComponent implements OnInit{
                     faxno: this.mohForm.controls['faxno'].value,
                     address: this.mohForm.controls['address'].value,
                     doestablished: this.mohForm.controls['doestablished'].value,
+                    packetcount: this.mohForm.controls['packetcount'].value,
                     codename: this.mohForm.controls['codename'].value,
 
                     rdh: {id: parseInt(this.mohForm.controls['rdh'].value)},

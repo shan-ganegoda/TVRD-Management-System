@@ -27,6 +27,8 @@ public class MohDTO {
         private String faxno;
         private String email;
         private String location;
+        @Pattern(regexp = "^\\d+$", message = "Invalid PacketCount")
+        private Integer packetcount;
         private String address;
         private Time toopen;
         private Time toclose;

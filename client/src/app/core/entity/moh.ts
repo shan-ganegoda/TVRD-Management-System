@@ -20,6 +20,7 @@ export interface Moh {
   toopen?: string;
   toclose?: string;
   doestablished?:string;
+  packetcount?:number;
   mohstatus?: MohStatus;
 
 }

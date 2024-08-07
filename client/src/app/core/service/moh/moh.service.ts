@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environment";
 import {Moh} from "../../entity/moh";
+import {MohPacketUpdate} from "../../entity/mohpacketupdate";
 
 const API_URL = environment.apiUrl + '/admin/mohdetails';
 @Injectable({
@@ -32,6 +33,10 @@ export class MohService {
 
   updateMoh(moh:Moh){
     return this.http.put<Moh>(API_URL,moh);
+  }
+
+  updateMohPacketCount(moh:MohPacketUpdate){
+    return this.http.put<Moh>(API_URL+"/packetupdate",moh);
   }
 
 
