@@ -4,7 +4,6 @@ import {MainwindowComponent} from "./shared/mainwindow/mainwindow.component";
 import {HomeComponent} from "./view/home/home.component";
 import {DashboardComponent} from "./view/dashboard/dashboard.component";
 
-import {authGuard} from "./core/guard/auth.guard";
 import {EmployeeComponent} from "./modules/employee/employee.component";
 import {UserComponent} from "./modules/user/user.component";
 import {authenticationGuard} from "./core/interceptor/authentication.guard";
@@ -34,7 +33,7 @@ import {MbireportComponent} from "./modules/mbireport/mbireport.component";
 import {
   CountbychildregistrationComponent
 } from "./core/report/view/countbychildregistration/countbychildregistration.component";
-import {InventoryComponent} from "./modules/inventory/inventory.component";
+
 import {MotherregpublicComponent} from "./shared/motherregpublic/motherregpublic.component";
 
 export const routes: Routes = [
@@ -60,7 +59,6 @@ export const routes: Routes = [
       {path: "motherregistration", component: MotherregistrationComponent, title: "Mother Registration"},
       {path: "childrecord", component: ChildrecordComponent, title: "Child Record"},
       {path: "grn", component: GrnComponent, title: "GRN"},
-      {path: "inventory", component: InventoryComponent, title: "Inventory"},
       {path: "distribution", component: DistributionComponent, title: "Distribution"},
       {path: "vaccination", component: VaccinationComponent, title: "Vaccination"},
       {path: "mbireport", component: MbireportComponent, title: "MBI Report"},
