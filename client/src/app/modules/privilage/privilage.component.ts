@@ -2,7 +2,6 @@ import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import {MatTableDataSource} from "@angular/material/table";
-import {Mother} from "../../core/entity/mother";
 import {Observable} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {Authority} from "../../core/entity/authority";
@@ -13,7 +12,6 @@ import {AuthorityService} from "../../core/service/authority/authority.service";
 import {OperationService} from "../../core/service/authority/operation.service";
 import {ModuleService} from "../../core/service/authority/module.service";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {AsyncPipe} from "@angular/common";
 import {PageErrorComponent} from "../../shared/page-error/page-error.component";
@@ -64,9 +62,10 @@ export class PrivilageComponent implements OnInit{
 
   currentOperation = '';
 
-  hasUpdateAuthority = this.authorizationService.hasAuthority("Privilege-Update");
-  hasDeleteAuthority = this.authorizationService.hasAuthority("Privilege-Delete");
-  hasWriteAuthority = this.authorizationService.hasAuthority("Privilege-Write");
+  hasUpdateAuthority = this.authorizationService.hasAuthority("Privilage-Update");
+  hasDeleteAuthority = this.authorizationService.hasAuthority("Privilage-Delete");
+  hasWriteAuthority = this.authorizationService.hasAuthority("Privilage-Write");
+  hasReadAuthority = this.authorizationService.hasAuthority("Privilage-Read");
 
   enaadd:boolean = false;
   enaupd:boolean = false;

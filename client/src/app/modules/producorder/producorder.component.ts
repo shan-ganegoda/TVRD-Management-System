@@ -267,6 +267,12 @@ export class ProducorderComponent implements OnInit {
       this.innerForm.controls[controlName].updateValueAndValidity();
     }
 
+    if(this.authorizationService.hasRole('Supplier')){
+      this.porderForm.disable();
+      this.porderForm.controls['productorderstatus'].enable();
+      this.innerForm.disable();
+    }
+
   }
 
   id = 0;

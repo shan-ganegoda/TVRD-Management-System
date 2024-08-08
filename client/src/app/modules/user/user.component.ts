@@ -17,12 +17,10 @@ import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {Employee} from "../../core/entity/employee";
 import {MatListOption, MatSelectionList} from "@angular/material/list";
-import {Input} from "postcss";
 import {RegexService} from "../../core/service/regexes/regex.service";
 import {EmployeeService} from "../../core/service/employee/employee.service";
 import {RouterLink} from "@angular/router";
 import {MatTableDataSource} from "@angular/material/table";
-import {Moh} from "../../core/entity/moh";
 import {Observable} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {AsyncPipe} from "@angular/common";

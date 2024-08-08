@@ -123,7 +123,7 @@
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
                   (click)="add()" [disabled]="!enaadd || !hasWriteAuthority">Add</button>
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900"
-                  (click)="update(currentAuthority)" [disabled]="!enaupd">Update</button>
+                  (click)="update(currentAuthority)" [disabled]="!enaupd || !hasUpdateAuthority">Update</button>
           <button class="btn text-white bg-gray-950 w-1/4 mr-1 hover:bg-gray-900"
                   (click)="delete(currentAuthority)"
                   [disabled]="!hasDeleteAuthority || !enadel " >Delete</button>
@@ -171,9 +171,9 @@
                   <th>
                     <div class="join">
                       <button
-                        class=" join-item {{hasUpdateAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
+                        class=" join-item {{hasReadAuthority ? '' : 'text-gray-300'}} hover:cursor-pointer"
                         (click) = "fillForm(authority)"
-                        [disabled]="!hasUpdateAuthority"
+                        [disabled]="!hasReadAuthority"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

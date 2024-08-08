@@ -48,7 +48,6 @@ export class ProfileComponent implements OnInit{
     });
 
     this.passwordForm = this.fb.group({
-      "currentpassword" : [{ value: ''}, [Validators.required,Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")]],
       "newpassword" : [{ value: ''},[Validators.required,Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")]],
       "confirmpassword" : [{ value: ''}, [Validators.required,Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")]],
     });

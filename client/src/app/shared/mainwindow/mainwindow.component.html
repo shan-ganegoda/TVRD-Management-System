@@ -212,7 +212,7 @@
     }
     <!--DIVISIONS-END-->
     <!--ORDER-START-->
-    @if (Admin || MohOfficer || Supplier) {
+    @if (Admin || MohOfficer || Supplier || PdOfficer) {
       <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600"
            (click)="togglemenu2=!togglemenu2">
         <span class=" text-white flex mt-1 mx-2.5">
@@ -247,6 +247,7 @@
               </a>
             </li>
 
+            @if (Admin || MohOfficer ||  PdOfficer) {
             <li class="mb-1 group active ml-7">
               <a
                 routerLink="vaccineorder"
@@ -279,7 +280,7 @@
                 <span class="text-sm ml-7">GRN</span>
               </a>
             </li>
-
+            }
           </ul>
         </div>
       }
@@ -386,7 +387,7 @@
     }
     <!--DISTRIBUTION-END-->
     <!--SUBMISSION-START-->
-    @if (Admin || MohOfficer) {
+    @if (Admin || MohOfficer || PdOfficer) {
       <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600"
            (click)="togglemenu7=!togglemenu7">
         <span class=" text-white flex mt-1 mx-2.5">
@@ -494,7 +495,7 @@
     <!--REGISTRATION-END-->
 
     <!--REPORT-START-->
-    @if (Admin || PhnOfficer || RdhOfficer || MohOfficer) {
+    @if (Admin || PdOfficer || RdhOfficer || MohOfficer) {
       <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600"
            (click)="togglemenu5=!togglemenu5">
         <span class=" text-white flex mt-1 mx-2.5">
