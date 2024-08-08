@@ -9,6 +9,14 @@
 
   <form [formGroup]="poSearchForm" class="flex flex-row animate animate-fade">
     <div class="join ml-auto  scale-95">
+
+      <input
+        type="text"
+        placeholder="Code"
+        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
+        formControlName="sscode"
+      />
+
       <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
               formControlName="ssmoh"
       >
@@ -23,14 +31,6 @@
         placeholder="Date Requested"
         class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
         formControlName="ssdorequested"
-        onfocus="(this.type='date')"
-      />
-
-      <input
-        type="text"
-        placeholder="Date Required"
-        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
-        formControlName="ssdorequired"
         onfocus="(this.type='date')"
       />
 

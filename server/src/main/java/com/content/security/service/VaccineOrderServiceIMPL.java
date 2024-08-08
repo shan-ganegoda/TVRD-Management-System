@@ -1,10 +1,6 @@
 package com.content.security.service;
 
-import com.content.security.dto.EmployeeDTO;
-import com.content.security.dto.ProductOrderDTO;
 import com.content.security.dto.VaccineOrderDTO;
-import com.content.security.entity.Productorder;
-import com.content.security.entity.Productorderproduct;
 import com.content.security.entity.Vaccineorder;
 import com.content.security.entity.Vaccineordervaccine;
 import com.content.security.exception.ResourceAlreadyExistException;
@@ -37,7 +33,7 @@ public class VaccineOrderServiceIMPL implements VaccineOrderService {
             if (params.isEmpty()) {
                 return vaccineOrderDTOS;
             } else {
-                String dorequired = params.get("dorequired");
+                //String dorequired = params.get("dorequired");
                 String dorequested = params.get("dorequested");
                 String mohid = params.get("mohid");
                 String vostatusid = params.get("vostatusid");
@@ -49,8 +45,8 @@ public class VaccineOrderServiceIMPL implements VaccineOrderService {
                 if (code != null) vostream = vostream.filter(e -> e.getCode().equals(code));
                 if (vostatusid != null)
                     vostream = vostream.filter(e -> e.getVaccineorderstatus().getId() == Integer.parseInt(vostatusid));
-                if (dorequired != null)
-                    vostream = vostream.filter(e -> e.getDorequired().equals(LocalDate.parse(dorequired)));
+//                if (dorequired != null)
+//                    vostream = vostream.filter(e -> e.getDorequired().equals(LocalDate.parse(dorequired)));
                 if (dorequested != null)
                     vostream = vostream.filter(e -> e.getDorequested().equals(LocalDate.parse(dorequested)));
 
@@ -88,7 +84,6 @@ public class VaccineOrderServiceIMPL implements VaccineOrderService {
     public VaccineOrderDTO update(VaccineOrderDTO vaccineOrderDTO) {
 
         Vaccineorder vo = vaccineOrderRepository.findById(vaccineOrderDTO.getId()).orElseThrow(() -> new ResourceNotFountException("VaccineOrder Not Found"));
-
         if (!vo.getCode().equals(vaccineOrderDTO.getCode()) && vaccineOrderRepository.existsByCode(vaccineOrderDTO.getCode())) {
             throw new ResourceAlreadyExistException("Code Already Exist!");
         }
@@ -109,9 +104,7 @@ public class VaccineOrderServiceIMPL implements VaccineOrderService {
         if (vaccineOrderRepository.existsById(id)) {
 
             Vaccineorder vorder = vaccineOrderRepository.findById(id).orElseThrow(() -> new ResourceNotFountException("Vaccine Order Not Found"));
-
             vaccineOrderRepository.delete(vorder);
-
 
         } else {
             throw new ResourceNotFountException("Vaccine Order Not Found");

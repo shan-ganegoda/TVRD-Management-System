@@ -35,7 +35,7 @@ public class ProductOrderServiceIMPL implements ProductOrderService {
             if (params.isEmpty()) {
                 return productOrderDTOList;
             } else {
-                String dorequired = params.get("dorequired");
+                String code = params.get("code");
                 String dorequested = params.get("dorequested");
                 String mohid = params.get("mohid");
                 String postatusid = params.get("postatusid");
@@ -45,8 +45,8 @@ public class ProductOrderServiceIMPL implements ProductOrderService {
                 if (mohid != null) postream = postream.filter(e -> e.getMoh().getId() == Integer.parseInt(mohid));
                 if (postatusid != null)
                     postream = postream.filter(e -> e.getProductorderstatus().getId() == Integer.parseInt(postatusid));
-                if (dorequired != null)
-                    postream = postream.filter(e -> e.getDorequired().equals(LocalDate.parse(dorequired)));
+                if (code != null)
+                    postream = postream.filter(e -> e.getCode().equals(code));
                 if (dorequested != null)
                     postream = postream.filter(e -> e.getDorequested().equals(LocalDate.parse(dorequested)));
 

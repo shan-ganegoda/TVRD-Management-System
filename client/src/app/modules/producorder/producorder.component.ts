@@ -117,7 +117,7 @@ export class ProducorderComponent implements OnInit {
 
     this.poSearchForm = this.fb.group({
       "ssporderstatus": new FormControl(''),
-      "ssdorequired": new FormControl(''),
+      "sscode": new FormControl(''),
       "ssdorequested": new FormControl(''),
       "ssmoh": new FormControl(''),
     }, {updateOn: 'change'});
@@ -582,12 +582,12 @@ export class ProducorderComponent implements OnInit {
   handleSearch() {
     const ssmoh  = this.poSearchForm.controls['ssmoh'].value;
     const ssporderstatus  = this.poSearchForm.controls['ssporderstatus'].value;
-    const ssdorequired  = this.poSearchForm.controls['ssdorequired'].value;
+    const sscode  = this.poSearchForm.controls['sscode'].value;
     const ssdorequested  = this.poSearchForm.controls['ssdorequested'].value;
 
     let query = ""
 
-    if(ssdorequired != null && ssdorequired.trim() !="") query = query + "&dorequired=" + ssdorequired;
+    if(sscode != null && sscode.trim() !="") query = query + "&code=" + sscode;
     if(ssdorequested != null && ssdorequested.trim() !="") query = query + "&dorequested=" + ssdorequested;
     if(ssmoh != '') query = query + "&mohid=" + parseInt(ssmoh);
     if(ssporderstatus != '') query = query + "&postatusid=" + parseInt(ssporderstatus);

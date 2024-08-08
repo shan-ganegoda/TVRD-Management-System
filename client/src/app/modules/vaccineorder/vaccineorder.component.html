@@ -34,14 +34,6 @@
         onfocus="(this.type='date')"
       />
 
-      <input
-        type="text"
-        placeholder="Date Required"
-        class="input input-bordered w-15 max-w-xs bg-white border-gray-300 text-sm join-item"
-        formControlName="ssdorequired"
-        onfocus="(this.type='date')"
-      />
-
       <select class="select select-bordered w-15 border-gray-300 text-sm bg-white h-5 join-item"
               formControlName="ssvorderstatus"
       >
@@ -302,7 +294,7 @@
                   <td>
                     <div class="flex items-center">
                       <div
-                        class="badge badge-xs mr-1.5 {{vorder.vaccineorderstatus.name === 'Pending'? 'bg-warning border-white' : vorder.vaccineorderstatus.name === 'Completed' ? 'bg-success border-white' :'bg-error border-white'}}"></div>
+                        class="badge badge-xs mr-1.5 {{vorder.vaccineorderstatus.name === 'Pending'? 'bg-warning border-white' : vorder.vaccineorderstatus.name === 'Received' ? 'bg-success border-white' :'bg-error border-white'}}"></div>
                       {{ vorder.vaccineorderstatus.name }}
                     </div>
                   </td>

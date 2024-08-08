@@ -100,7 +100,6 @@ export class VaccineorderComponent implements OnInit {
 
     this.voSearchForm = this.fb.group({
       "sscode": new FormControl(''),
-      "ssdorequired": new FormControl(''),
       "ssdorequested": new FormControl(''),
       "ssmoh": new FormControl(''),
       "ssvorderstatus": new FormControl(''),
@@ -546,12 +545,10 @@ export class VaccineorderComponent implements OnInit {
     const ssmoh = this.voSearchForm.controls['ssmoh'].value;
     const sscode = this.voSearchForm.controls['sscode'].value;
     const ssvorderstatus = this.voSearchForm.controls['ssvorderstatus'].value;
-    const ssdorequired = this.voSearchForm.controls['ssdorequired'].value;
     const ssdorequested = this.voSearchForm.controls['ssdorequested'].value;
 
     let query = ""
 
-    if (ssdorequired != null && ssdorequired.trim() != "") query = query + "&dorequired=" + ssdorequired;
     if (ssdorequested != null && ssdorequested.trim() != "") query = query + "&dorequested=" + ssdorequested;
     if (sscode != null && sscode.trim() != "") query = query + "&code=" + sscode;
     if (ssmoh != '') query = query + "&mohid=" + parseInt(ssmoh);
@@ -608,13 +605,14 @@ export class VaccineorderComponent implements OnInit {
 
           const today = new Date();
           const date = today.getDate();
-          const month = today.getMonth();
+          const month = today.getMonth()+1;
           const year = today.getFullYear();
 
           const formatteddate = (date < 10 ? '0' : '') + date;
           const formattedmonth = (month < 10 ? '0' : '') + month;
 
           this.vorderForm.controls['code'].setValue(`VO${moh.codename}${year}${formattedmonth}${formatteddate}`);
+          this.vorderForm.controls['dorequested'].setValue(`${year}-${formattedmonth}-${formatteddate}`);
         }
       });
     }
