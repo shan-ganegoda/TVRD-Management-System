@@ -239,6 +239,11 @@ export class GrnComponent implements OnInit{
   }
 
   fillForm(grn: Grn) {
+
+    this.pos.getAllProductOrders("").subscribe({
+      next: data => this.productorders = data,
+    });
+
     this.enableButtons(false, true, true);
 
     this.currentGrn = grn;
@@ -434,7 +439,6 @@ export class GrnComponent implements OnInit{
           packetcount: this.totalpacketcount
         }
 
-        // console.log(mohpacket);
         this.currentOperation = "Add GRN ";
 
         this.dialog.open(ConfirmDialogComponent, {data: this.currentOperation})
@@ -583,6 +587,8 @@ export class GrnComponent implements OnInit{
     this.grnForm.controls['productorder'].setValue(null);
     this.innerdata = [];
     this.isInnerDataUpdated=false;
+
+    this.initialize();
 
     this.enableButtons(true,false,false);
   }

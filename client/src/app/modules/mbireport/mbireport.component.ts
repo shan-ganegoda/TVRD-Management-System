@@ -26,9 +26,10 @@ import {RegexService} from "../../core/service/regexes/regex.service";
 import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
 import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas-pro';
 import {QRCodeModule} from "angularx-qrcode";
+import {POStatusUpdate} from "../../core/entity/postatusupdate";
+import {MohPacketUpdate} from "../../core/entity/mohpacketupdate";
+import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 
 @Component({
   selector: 'app-mbireport',
@@ -187,6 +188,7 @@ export class MbireportComponent implements OnInit {
         this.reports = data;
         this.dataSource = new MatTableDataSource<MbiReport>(this.reports);
         this.cdr.detectChanges();
+        this.generateCode();
         this.dataSource.paginator = this.paginator;
         this.data = this.dataSource.connect();
       }
@@ -316,8 +318,10 @@ export class MbireportComponent implements OnInit {
       next: data => {
         let rdhid = data.rdh?.id;
         let employeeid = data.employee?.id;
+        let packetcount = data.packetcount;
         this.ReportForm.controls['rdh'].setValue(rdhid);
         this.ReportForm.controls['employee'].setValue(employeeid);
+        this.ReportForm.controls['receivedpacketcount'].setValue(packetcount);
       }
     });
   }
@@ -416,7 +420,12 @@ export class MbireportComponent implements OnInit {
 
         }
 
-        console.log(report);
+        const mohpacket:MohPacketUpdate = {
+          id: parseInt(this.ReportForm.controls['moh'].value),
+          packetcount: this.ReportForm.controls['distributedpacketcount'].value
+        }
+
+        //console.log(report);
 
         this.currentOperation = "Add Report ";
 
@@ -428,6 +437,15 @@ export class MbireportComponent implements OnInit {
                 this.tst.handleResult('success', "Report Saved Successfully");
                 this.loadTable("");
                 this.clearForm();
+
+                this.ms.updateMohPacketCountDist(mohpacket).subscribe({
+                  next: () => {
+                    console.log("MOH Updated");
+                  },
+                  error: (err: any) => {
+                    this.tst.handleResult('Failed', err.error.data.message);
+                  }
+                });
               },
               error: (err: any) => {
                 this.tst.handleResult('Failed', err.error.data.message);
@@ -578,35 +596,20 @@ export class MbireportComponent implements OnInit {
     });
   }
 
-  qrData = JSON.stringify({id:"1",name:"Lakshan"});
+  generateCode() {
+    const numbers = this.reports.map(n => {
+      const parts = n.code?.split('/');
+      return parts ? parseInt(parts[1]) : 0;
+    });
 
-  @ViewChild('qrcode',{static:true}) el!: ElementRef<HTMLImageElement>
 
-  downloadAsPDF(): void {
-    const element: HTMLElement | null = document.getElementById('qrcode');
-    if (element) {
-      // Ensure the element has a supported background color
-      element.style.backgroundColor = 'white';
+    const maxno = Math.max(...numbers);
+    const nextno = maxno + 1;
+    const formattedLastNumber = nextno.toString().padStart(5, '0');
 
-      html2canvas(element).then((canvas: HTMLCanvasElement) => {
-        const imgData: string = canvas.toDataURL('image/png');
-        const pdf = new jsPDF({
-          orientation: 'portrait',
-          unit: 'mm',
-          format: [50, 50] // Set the PDF size to 50mm x 50mm
-        });
-        const width = pdf.internal.pageSize.getWidth();
-        const height = pdf.internal.pageSize.getHeight();
-
-        // Adjust the image dimensions and position as needed
-        pdf.addImage(imgData, 'PNG', 0, 0, width, height);
-        pdf.save('qrcode.pdf');
-      }).catch(error => {
-        console.error('Error generating canvas:', error);
-      });
-    } else {
-      console.error('Element with id "qrcode" not found.');
-    }
+    const formattedNextNumber = `T/${formattedLastNumber}`;
+    this.ReportForm.controls['code'].setValue(formattedNextNumber);
   }
+
 
 }

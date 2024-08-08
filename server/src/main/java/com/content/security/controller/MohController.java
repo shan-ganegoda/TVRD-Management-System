@@ -57,4 +57,9 @@ public class MohController {
     public MohDTO updateMohPacket(@RequestBody MohPacketUpdateDTO mohPacketUpdateDTO){
         return mohService.updateMohPacket(mohPacketUpdateDTO);
     }
+
+    @PutMapping("/packetdistribution")
+    public MohDTO updateMohPacketDist(@RequestBody MohPacketUpdateDTO mohPacketUpdateDTO){
+        return mohService.updateMohPacketDist(mohPacketUpdateDTO);
+    }
 }

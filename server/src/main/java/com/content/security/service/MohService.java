@@ -21,4 +21,6 @@ public interface MohService {
     List<MohDTO> getAllMohsList();
 
     MohDTO updateMohPacket(MohPacketUpdateDTO mohPacketUpdateDTO);
+
+    MohDTO updateMohPacketDist(MohPacketUpdateDTO mohPacketUpdateDTO);
 }

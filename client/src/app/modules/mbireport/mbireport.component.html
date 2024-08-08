@@ -451,13 +451,5 @@
   </div>
 </mat-grid-tile>
 
-
 </mat-grid-list>
 
-<div class="flex justify-center">
-<div id="qrcode" #qrcode class="flex flex-col justify-center items-center">
-  <p class="font-lexend font-bold text-lg">Clinic Attendance Card</p>
-  <qrcode [qrdata]="qrData" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
-</div>
-<button (click)="downloadAsPDF()">Download as PDF</button>
-</div>

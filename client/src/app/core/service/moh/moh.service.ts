@@ -39,5 +39,9 @@ export class MohService {
     return this.http.put<Moh>(API_URL+"/packetupdate",moh);
   }
 
+  updateMohPacketCountDist(moh:MohPacketUpdate){
+    return this.http.put<Moh>(API_URL+"/packetdistribution",moh);
+  }
+
 
 }

@@ -14,6 +14,7 @@ import {CountByPdh} from "../../entity/countByPdh";
 import {ReportService} from "../../service/report.service";
 import {NgForOf} from "@angular/common";
 import {RouterLink} from "@angular/router";
+import {Mohcount} from "../../entity/mohcount";
 
 declare var google: any;
 
@@ -46,7 +47,7 @@ declare var google: any;
 export class CountbymohComponent implements OnInit{
 
   countbypdh!: CountByPdh[];
-  mohsByPacketsBelowH!: CountByPdh[];
+  mohsByPacketsBelowH!: Mohcount[];
   data!: MatTableDataSource<CountByPdh>;
 
   columns: string[] = ['name', 'count'];
@@ -75,7 +76,7 @@ export class CountbymohComponent implements OnInit{
     this.rs.mohCountBelowH().subscribe({
       next:data => {
         this.mohsByPacketsBelowH = data;
-        //this.loadCharts();
+        this.loadCharts();
       }
     });
 
@@ -115,7 +116,7 @@ export class CountbymohComponent implements OnInit{
       lineData.addRow([des.name, des.count]);
     });
 
-    this.mohsByPacketsBelowH.forEach((des: CountByPdh) => {
+    this.mohsByPacketsBelowH.forEach((des: Mohcount) => {
       columnData.addRow([des.name, des.count]);
     });
 

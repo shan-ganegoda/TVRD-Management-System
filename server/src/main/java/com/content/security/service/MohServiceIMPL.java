@@ -158,4 +158,20 @@ public class MohServiceIMPL implements MohService {
         return mohDTO;
 
     }
+
+    @Override
+    public MohDTO updateMohPacketDist(MohPacketUpdateDTO mohPacketUpdateDTO) {
+
+        Moh moh = mohRepository.findById(mohPacketUpdateDTO.getId()).orElseThrow(() -> new ResourceNotFountException("Moh Not Found"));
+
+        if(moh.getPacketcount() <= mohPacketUpdateDTO.getPacketcount()) {
+            throw new ResourceNotFountException("Does Not Have Enough Packet Count");
+        }
+
+        Integer remainpacketcount = moh.getPacketcount() - mohPacketUpdateDTO.getPacketcount();
+        moh.setPacketcount(remainpacketcount);
+        MohDTO mohDTO = objectMapper.MohToDTO(moh);
+        mohRepository.save(moh);
+        return mohDTO;
+    }
 }

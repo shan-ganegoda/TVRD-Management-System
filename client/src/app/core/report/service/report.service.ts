@@ -11,6 +11,7 @@ import {ProductOrdersByProduct} from "../entity/productordersbyproduct";
 import {CountByMotherRegistration} from "../entity/countbymotherregistration";
 import {CountByChildRegistration} from "../entity/countbychildregistration";
 import {VehicleCountByRdh} from "../entity/vehiclecountbyrdh";
+import {Mohcount} from "../entity/mohcount";
 
 const API_URL = environment.apiUrl + '/admin/reports';
 
@@ -26,7 +27,7 @@ export class ReportService {
   }
 
   mohCountBelowH(){
-    return this.http.get<CountByPdh[]>(API_URL + "/packetsbelowh");
+    return this.http.get<Mohcount[]>(API_URL + "/packetsbelowh");
   }
 
   countByPorder(query:string){

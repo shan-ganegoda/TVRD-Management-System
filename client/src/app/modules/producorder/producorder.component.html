@@ -13,8 +13,8 @@
               formControlName="ssmoh"
       >
         <option disabled value="">MOH</option>
-        @for(moh of mohs; track mohs){
-          <option value="{{moh.id}}">{{moh.name}}</option>
+        @for (moh of mohs; track mohs) {
+          <option value="{{moh.id}}">{{ moh.name }}</option>
         }
       </select>
 
@@ -38,9 +38,9 @@
               formControlName="ssporderstatus"
       >
         <option disabled value="">Order Status</option>
-                @for(porderstatus of postatuses; track postatuses){
-                  <option value="{{porderstatus.id}}">{{porderstatus.name}}</option>
-                }
+        @for (porderstatus of postatuses; track postatuses) {
+          <option value="{{porderstatus.id}}">{{ porderstatus.name }}</option>
+        }
       </select>
 
       <button class="btn join-item border-black bg-gray-950 text-gray-300 hover:bg-gray-900" (click)="handleSearch()">
@@ -108,13 +108,13 @@
 
         <div class="flex flex-row items-center mb-3 px-2">
           <div class="relative mr-2 w-full">
-          <input
-            type="text"
-            placeholder="Code"
-            class="peer input input-bordered w-full focus:outline-none"
-            formControlName="code"
-          />
-          <label class="floating-label">Code</label>
+            <input
+              type="text"
+              placeholder="Code"
+              class="peer input input-bordered w-full focus:outline-none"
+              formControlName="code"
+            />
+            <label class="floating-label">Code</label>
           </div>
 
           <button class="btn bg-gray-950 text-white hover:bg-gray-900" (click)="generateCode()">Generate Code</button>
@@ -251,7 +251,8 @@
         </div>
 
         <div class="flex flex-row mt-3 max-w-[98%] px-2 pb-5">
-          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="add()" [disabled]="!enaadd || !hasWriteAuthority">
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="add()"
+                  [disabled]="!enaadd || !hasWriteAuthority">
             Add
           </button>
           <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="update(productOrder)"
@@ -280,7 +281,7 @@
             <thead>
             <tr class="text-black bold">
               <th>MOH</th>
-              <th>Date Reqested</th>
+              <th>Date Requested</th>
               <th>Date Required</th>
               <th>Officer</th>
               <th>Order Status</th>
@@ -311,7 +312,7 @@
                   <td>
                     <div class="flex items-center">
                       <div
-                        class="badge badge-xs mr-1.5 {{porder.productorderstatus.name === 'Pending'? 'bg-warning border-white' : porder.productorderstatus.name === 'Relesed' ? 'bg-success border-white' :'bg-error border-white'}}"></div>
+                        class="badge badge-xs mr-1.5 {{porder.productorderstatus.name === 'Pending'? 'bg-warning border-white' : porder.productorderstatus.name === 'Relesed' ? 'bg-success border-white' :porder.productorderstatus.name === 'Money Approved' ? 'bg-gray-500 border-white' :porder.productorderstatus.name === 'Completed' ? 'bg-blue-500 border-white' :'bg-error border-white'}}"></div>
                       {{ porder.productorderstatus.name }}
                     </div>
                   </td>
