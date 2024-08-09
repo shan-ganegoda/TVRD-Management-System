@@ -8,6 +8,7 @@ import {EmployeeService} from "../../core/service/employee/employee.service";
 import {MohService} from "../../core/service/moh/moh.service";
 import {ClinicService} from "../../core/service/clinic/clinic.service";
 import {MotherService} from "../../core/service/motherregistration/mother.service";
+import {ChildrecordService} from "../../core/service/childrecords/childrecord.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -35,6 +36,7 @@ export class DashboardComponent implements OnInit{
   mothercount:number =0;
   cliniccount:number =0;
   mohcount:number =0;
+  childs:number=0;
 
   userspecmessages: any[] = [
     {name: 'support.tec@pdhs.lk', updated: new Date('5/30/23')},
@@ -51,9 +53,10 @@ export class DashboardComponent implements OnInit{
   ];
 
   constructor(
-              private es: EmployeeService,
+              //private es: EmployeeService,
               private ms:MohService,
               private cs:ClinicService,
+              private cls:ChildrecordService,
               private mos:MotherService
   ) {
   }
@@ -80,16 +83,20 @@ this.ms.getAllMohsList().subscribe({
       }
     });
 
-    this.es.getAllEmployeesList("").subscribe({
-      next: data=> {
-        this.employeecount = data.length;
-      }
-    });
+    // this.es.getAllEmployeesList("").subscribe({
+    //   next: data=> {
+    //     this.employeecount = data.length;
+    //   }
+    // });
 
     this.mos.getAll("").subscribe({
       next: data=> {
         this.mothercount = data.length;
       }
+    });
+
+    this.cls.getAll("").subscribe({
+      next:data => this.childs = data.length,
     });
 
   }

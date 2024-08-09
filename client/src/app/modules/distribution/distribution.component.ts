@@ -127,7 +127,11 @@ export class DistributionComponent implements OnInit{
     this.loadTable("");
 
     this.cs.getAllList().subscribe({
-      next:data => this.clinics = data,
+      next:data => {
+        this.clinics = data;
+        // @ts-ignore
+        this.clinics.sort((a,b) => a.divisionname.localeCompare(b.divisionname))
+      },
     });
 
     this.ms.getAll("").subscribe({

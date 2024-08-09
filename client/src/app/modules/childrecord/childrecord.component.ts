@@ -143,7 +143,11 @@ export class ChildrecordComponent implements OnInit{
     });
 
     this.cls.getAllList().subscribe({
-      next:data => this.clinics = data,
+      next:data => {
+        this.clinics = data;
+        // @ts-ignore
+        this.clinics.sort((a,b) => a.divisionname.localeCompare(b.divisionname));
+      },
     });
 
     this.hs.getAll().subscribe({
@@ -151,7 +155,11 @@ export class ChildrecordComponent implements OnInit{
     });
 
     this.ms.getAll("").subscribe({
-      next:data => this.mothers = data,
+      next:data => {
+        this.mothers = data;
+        // @ts-ignore
+        this.mothers.sort((a,b) => a.mothername.localeCompare(b.mothername));
+      },
     });
 
     this.bs.getAll().subscribe({

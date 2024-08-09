@@ -378,8 +378,8 @@ export class ProducorderComponent implements OnInit {
     });
   }
 
-  filterEmployee(event:any){
-    let mohid = event.target.value;
+  filterEmployee(){
+    let mohid = this.porderForm.controls['moh'].value;
     this.ms.getMohById(parseInt(mohid)).subscribe({
       next: data => {
         const moh = data;

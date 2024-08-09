@@ -35,10 +35,11 @@ import {
 } from "./core/report/view/countbychildregistration/countbychildregistration.component";
 
 import {MotherregpublicComponent} from "./shared/motherregpublic/motherregpublic.component";
+import {DistributioncountComponent} from "./core/report/view/distributioncount/distributioncount.component";
 
 export const routes: Routes = [
   { path: "login", component: AuthComponent, title: 'Login' },
-  { path: "motherregpublic", component: MotherregpublicComponent, title: 'Mother Reg Public' },
+  { path: "motherregpublic", component: MotherregpublicComponent, title: 'Mother Registration Public' },
   { path: "", redirectTo:"login" ,pathMatch:"full"},
   {
     path: "main",
@@ -72,6 +73,7 @@ export const routes: Routes = [
       {path: "vorderreport", component: CountbyvorderComponent,title: "VOrder Report"},
       {path: "motherreport", component: CountbymotherregistrationComponent,title: "Mother Report"},
       {path: "childreport", component: CountbychildregistrationComponent,title: "Child Report"},
+      {path: "distributionreport", component: DistributioncountComponent,title: "Distribution Report"},
       {path:"**", component:NotfoundpageComponent}
 
     ]

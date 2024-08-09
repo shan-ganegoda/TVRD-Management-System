@@ -283,6 +283,7 @@
               placeholder="Distributed Packet Count"
               class=" peer input input-bordered w-full focus:outline-none"
               formControlName="distributedpacketcount"
+              (change)="getRemaining()"
             />
           </td>
         </tr>

@@ -612,4 +612,17 @@ export class MbireportComponent implements OnInit {
   }
 
 
+  getRemaining() {
+
+    let c = 0;
+    let n = 0;
+    const havepackets = parseInt(this.ReportForm.controls['receivedpacketcount'].value);
+    const distributed = parseInt(this.ReportForm.controls['distributedpacketcount'].value);
+    if(isNaN(havepackets)){ c=0; }else{ c=havepackets; }
+    if(isNaN(distributed)){ n=0; }else{ n=distributed; }
+    if(c<n){this.ReportForm.controls['distributedpacketcount'].setErrors({ invalid: true });}else{
+      const total = c-n;
+      this.ReportForm.controls['remainingpacketscount'].setValue(total);
+    }
+  }
 }

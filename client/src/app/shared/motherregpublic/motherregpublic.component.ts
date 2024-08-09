@@ -181,7 +181,7 @@ export class MotherregpublicComponent implements OnInit{
 
         this.loadQR(this.generateRegNo(), this.motherRegPublicForm.controls['mothername'].value);
 
-        const msg = "Add Mother " + mother.registerno;
+        const msg = "Enroll Mother " + mother.mothername;
 
         this.dialog.open(ConfirmDialogComponent, {data: msg})
           .afterClosed().subscribe(res => {

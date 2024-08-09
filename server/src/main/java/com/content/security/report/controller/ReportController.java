@@ -34,6 +34,8 @@ public class ReportController {
     private final MotherReportService motherReportService;
     private final ChildReportService childReportService;
     private final CountByPdhRepository countByPdhRepository;
+    private final ClinicCountRepository clinicCountRepository;
+    private final DistributionCountRepository distributionCountRepository;
 
     @GetMapping(path = "/countbypdh")
     public List<CountByPdh> getCountByPdh() {
@@ -98,5 +100,20 @@ public class ReportController {
     public List<CountByChildRegistration> getCountByChildRegister(@RequestParam HashMap<String,String> params) {
         return childReportService.getCountByChildRegister(params);
     }
+
+    @GetMapping(path = "/cliniccountbymoh")
+    public List<ClinicCountByMoh> getClinicCountByMoh() {
+        return clinicCountRepository.findClinicCountByMoh();
+    }
+
+    @GetMapping(path = "/distributioncount")
+    public List<DistributionCountByMoh> getDistributionCount() {
+        return distributionCountRepository.findDistributionCountByMoh();
+    }
+
+//    @GetMapping(path = "/distributioncountbymoh")
+//    public List<DistributionCountByMoh> getDistributionCount(@RequestParam HashMap<String,String> params) {
+//        return distributionCountRepository.findDistributionCountByMoh(Integer.parseInt(params.get("id")));
+//    }
 
 }

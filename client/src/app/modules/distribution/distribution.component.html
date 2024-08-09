@@ -171,7 +171,7 @@
               <button class="btn bg-gray-950 text-gray-300 hover:bg-gray-900 mx-2" (click)="addToTable()">Add</button>
             </div>
 
-            <div>
+            <div class="max-h-96 overflow-auto">
               <table class="text-left p-4 table mb-4">
                 <thead>
                 <tr class="text-black bold">
@@ -252,8 +252,8 @@
           <table class="text-left p-4 table">
             <thead>
             <tr class="text-black bold">
-              <th>Clinic</th>
               <th>Mother</th>
+              <th>Clinic</th>
               <th>Last Updated</th>
               <th>Actions</th>
             </tr>
@@ -263,12 +263,13 @@
               @for (dis of data | async; track distributions) {
 
                 <tr>
-                  <td>
-                    {{ dis.clinic.divisionname }}
-                  </td>
 
                   <td>
                     {{ dis.mother.mothername }}
+                  </td>
+
+                  <td>
+                    {{ dis.clinic.divisionname }}
                   </td>
 
                   <td>
