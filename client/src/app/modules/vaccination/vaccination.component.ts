@@ -599,4 +599,10 @@ export class VaccinationComponent implements OnInit {
       }
     });
   }
+
+  getClinic() {
+    const childid = this.vaccinationForm.controls['childrecords'].value;
+    const child = this.childs.find(e => e.id == parseInt(childid));
+    this.vaccinationForm.controls['clinic'].setValue(child?.clinic?.id)
+  }
 }

@@ -257,12 +257,13 @@ export class ChildrecordComponent implements OnInit{
   }
 
   filterClinic(event:any){
-    let motherid = event.target.value;
-
+    let motherid = this.childRecordForm.controls['mother'].value;
+    console.log(motherid)
     const mother = this.mothers.find(e=> e.id == parseInt(motherid));
     if(mother != undefined ){
       const clinicid = mother.clinic?.id;
       this.childRecordForm.controls['clinic'].setValue(clinicid);
+
     }
   }
 
