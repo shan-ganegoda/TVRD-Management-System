@@ -273,6 +273,28 @@ export class ProducorderComponent implements OnInit {
       this.innerForm.disable();
     }
 
+    if(this.porderForm.controls['productorderstatus'].value == 5){
+      this.porderForm.controls['productorderstatus'].disable();
+    }else{
+      this.porderForm.controls['productorderstatus'].enable();
+    }
+
+    if(this.porderForm.controls['productorderstatus'].value == 4){
+      const v4 = this.postatuses.find(e=> e.id == 4 )
+      const v5 = this.postatuses.find(e=> e.id == 5 )
+
+      this.postatuses = [];
+      if (v4 && v5) {
+        this.postatuses.push(v4);
+        this.postatuses.push(v5);
+
+      }else{
+        this.initialize();
+      }
+    }
+
+
+
   }
 
   id = 0;
