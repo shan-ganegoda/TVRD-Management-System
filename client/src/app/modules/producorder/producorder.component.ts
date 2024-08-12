@@ -143,7 +143,7 @@ export class ProducorderComponent implements OnInit {
       }
     });
 
-    this.es.getAllEmployeesList("?designationid=1").subscribe({
+    this.es.getAllEmployeesList("?designationid=1&employeestatusid=1").subscribe({
       next: data => this.employees = data
     });
 
@@ -267,32 +267,43 @@ export class ProducorderComponent implements OnInit {
       this.innerForm.controls[controlName].updateValueAndValidity();
     }
 
+    //disable all field for supplier and enable just status to update
     if(this.authorizationService.hasRole('Supplier')){
       this.porderForm.disable();
       this.porderForm.controls['productorderstatus'].enable();
       this.innerForm.disable();
     }
 
-    if(this.porderForm.controls['productorderstatus'].value == 5){
+    //if status is completed diable the status
+    if(this.productOrder.productorderstatus.id == 5){
       this.porderForm.controls['productorderstatus'].disable();
     }else{
       this.porderForm.controls['productorderstatus'].enable();
     }
 
-    if(this.porderForm.controls['productorderstatus'].value == 4){
-      const v4 = this.postatuses.find(e=> e.id == 4 )
-      const v5 = this.postatuses.find(e=> e.id == 5 )
+    const v1 = this.postatuses.find(e=> e.id == 1 )
+    const v2 = this.postatuses.find(e=> e.id == 2 )
+    const v3 = this.postatuses.find(e=> e.id == 3 )
+    const v4 = this.postatuses.find(e=> e.id == 4 )
+    const v5 = this.postatuses.find(e=> e.id == 5 )
+
+    //if status is in product disable other options
+    if(this.productOrder.productorderstatus.id == 4){
+
 
       this.postatuses = [];
       if (v4 && v5) {
         this.postatuses.push(v4);
         this.postatuses.push(v5);
 
-      }else{
-        this.initialize();
       }
+      //if not show all statuses
+    }else{
+      this.postatuses = [];
+     if(v1&&v2&&v3){
+       this.postatuses.push(v1,v2,v3)
+     }
     }
-
 
 
   }

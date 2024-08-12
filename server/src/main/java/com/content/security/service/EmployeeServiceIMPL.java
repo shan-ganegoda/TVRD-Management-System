@@ -37,6 +37,7 @@ public class EmployeeServiceIMPL implements EmployeeService{
                 String genderid = params.get("genderid");
                 String designationid = params.get("designationid");
                 String fullname = params.get("fullname");
+                String employeestatus = params.get("employeestatusid");
 
                 Stream<EmployeeDTO> estreame = employeeDTOList.stream();
 
@@ -44,6 +45,7 @@ public class EmployeeServiceIMPL implements EmployeeService{
                 if(genderid!=null) estreame = estreame.filter(e-> e.getGender().getId()==Integer.parseInt(genderid));
                 if(number!=null) estreame = estreame.filter(e-> e.getNumber().equals(number));
                 if(fullname!=null) estreame = estreame.filter(e-> e.getFullname().contains(fullname));
+                if(employeestatus!=null) estreame = estreame.filter(e-> e.getEmployeestatus().getId() == Integer.parseInt(employeestatus));
 
                 return estreame.collect(Collectors.toList());
             }
@@ -146,7 +148,7 @@ public class EmployeeServiceIMPL implements EmployeeService{
 
             employeeDTOList = employeeDTOList.stream().map(
                     employeedto -> {
-                        EmployeeDTO e = new EmployeeDTO(employeedto.getId(),employeedto.getFullname(),employeedto.getNumber(),employeedto.getDesignation());
+                        EmployeeDTO e = new EmployeeDTO(employeedto.getId(),employeedto.getFullname(),employeedto.getNumber(),employeedto.getDesignation(),employeedto.getEmployeestatus());
                         return e;
                     }
             ).collect(Collectors.toList());
@@ -155,10 +157,12 @@ public class EmployeeServiceIMPL implements EmployeeService{
                 return employeeDTOList;
             }else{
                 String designationid = params.get("designationid");
+                String employeestatus = params.get("employeestatusid");
 
                 Stream<EmployeeDTO> estreame = employeeDTOList.stream();
 
                 if(designationid!=null) estreame = estreame.filter(e-> e.getDesignation().getId()==Integer.parseInt(designationid));
+                if(employeestatus!=null) estreame = estreame.filter(e-> e.getEmployeestatus().getId() == Integer.parseInt(employeestatus));
 
                 return estreame.collect(Collectors.toList());
             }

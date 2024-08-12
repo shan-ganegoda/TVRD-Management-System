@@ -58,10 +58,11 @@ public class EmployeeDTO {
 
     private Employeestatus employeestatus;
 
-    public EmployeeDTO(Integer id, String fullname, String number,Designation designation) {
+    public EmployeeDTO(Integer id, String fullname, String number,Designation designation, Employeestatus employeestatus) {
         this.id = id;
         this.fullname = fullname;
         this.number = number;
         this.designation = designation;
+        this.employeestatus = employeestatus;
     }
 }
