@@ -15,6 +15,7 @@ import {ReportService} from "../../service/report.service";
 import {NgForOf} from "@angular/common";
 import {RouterLink} from "@angular/router";
 import {Mohcount} from "../../entity/mohcount";
+import {PrintService} from "../../../util/print/print.service";
 
 declare var google: any;
 
@@ -59,7 +60,7 @@ export class CountbymohComponent implements OnInit{
   @ViewChild('piechart', { static: false }) piechart: any;
   @ViewChild('linechart', { static: false }) linechart: any;
 
-  constructor(private rs:ReportService) {
+  constructor(private rs:ReportService,private ps:PrintService) {
   }
 
   ngOnInit() {
@@ -124,7 +125,7 @@ export class CountbymohComponent implements OnInit{
       title: 'Packet Count (Bar Chart)',
       subtitle: 'Count of Packet By MOH',
       bars: 'horizontal',
-      height: 400,
+      height: 350,
       width: 600
     };
 
@@ -161,4 +162,7 @@ export class CountbymohComponent implements OnInit{
     lineChart.draw(lineData, lineOptions);
   }
 
+  downloadAsPDF() {
+    this.ps.downloadAsPDF("report","MohReport");
+  }
 }
