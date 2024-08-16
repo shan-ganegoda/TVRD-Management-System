@@ -146,6 +146,8 @@ export class UserComponent implements OnInit{
 
   }
 
+  admincount:number = 0;
+
   loadTable(query:string){
     this.us.getAllUsers(query).subscribe({
       next:data =>{
@@ -154,6 +156,8 @@ export class UserComponent implements OnInit{
         this.cdr.detectChanges();
         this.dataSource.paginator = this.paginator;
         this.data = this.dataSource.connect();
+
+        this.admincount = data.filter(a=> a.roles[0].id === 1).length;
       }
     });
   }
@@ -437,18 +441,22 @@ export class UserComponent implements OnInit{
     this.dialog.open(ConfirmDialogComponent,{data:operation})
       .afterClosed().subscribe((res:boolean) => {
       if(res){
-        if (user.id) {
-          this.us.deleteUser(user.id).subscribe({
-            next: () => {
-              this.loadTable("");
-              this.tst.handleResult('success'," User Deleted Successfully");
-              this.clearForm();
-            },
+        if(this.admincount == 1){
+          this.tst.handleResult('Failed',"System Need At Least One Admin");
+        }else{
+          if (user.id) {
+            this.us.deleteUser(user.id).subscribe({
+              next: () => {
+                this.loadTable("");
+                this.tst.handleResult('success'," User Deleted Successfully");
+                this.clearForm();
+              },
 
-            error: (err:any) => {
-              this.tst.handleResult('failed',err.error.data.message);
-            }
-          });
+              error: (err:any) => {
+                this.tst.handleResult('Failed',err.error.data.message);
+              }
+            });
+          }
         }
       }
     })
