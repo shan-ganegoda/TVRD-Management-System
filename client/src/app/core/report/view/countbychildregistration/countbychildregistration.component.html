@@ -9,90 +9,101 @@
   </div>
 </div>
 
-<mat-grid-list [cols]="1" rowHeight="12rem">
+<div class="flex justify-center mx-2">
+  <div class="w-full h-32 bg-white mt-4 rounded-md shadow-md border-2 border-[[#1e4263]] overflow-hidden">
 
-  <mat-grid-tile [colspan]="1" [rowspan]="1">
-    <mat-card class="w-full h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Interative Panel</mat-card-title></mat-card-header>
-      <mat-card-content class="overflow-auto h-full">
-        <form [formGroup]="search">
-          <div class="flex flex-row mt-6 w-1/2" >
-            <div class="relative mr-2 w-full">
-              <input
-                type="text"
-                placeholder="Start Date"
-                class="peer input input-bordered w-full focus:outline-none"
-                formControlName="startDate"
-                onfocus="(this.type='date')"
-              />
-              <label class="floating-label">Start Date</label>
-            </div>
-            <div class="relative mr-2 w-full">
-              <input
-                type="text"
-                placeholder="End Date"
-                class="peer input input-bordered w-full focus:outline-none"
-                formControlName="endDate"
-                onfocus="(this.type='date')"
-              />
-              <label class="floating-label">End Date</label>
-            </div>
-            <button class="btn text-white bg-gray-950 hover:bg-gray-900" (click)="handleSearch()">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 13.5V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 9.75V10.5" />
-              </svg>
-              Filter
-            </button>
-            <button class="btn text-white bg-gray-950 hover:bg-gray-900 ml-2" (click)="clearSearch()">
-              Clear
-            </button>
-          </div>
-        </form>
-      </mat-card-content>
-    </mat-card>
-  </mat-grid-tile>
+    <div class="w-full h-[2.5rem] bg-[#1e4263] flex items-center rounded-tl-md rounded-tr-md">
+      <span class="ml-5 text-white text-lg ">Interactive Panel</span>
+    </div>
+    <div class="relative ml-8 mt-4">
+      <form [formGroup]="search">
+                  <div class="flex flex-row mt-6 w-1/2" >
+                    <div class="relative mr-2 w-full">
+                      <input
+                        type="text"
+                        placeholder="Start Date"
+                        class="peer input input-bordered w-full focus:outline-none"
+                        formControlName="startDate"
+                        onfocus="(this.type='date')"
+                      />
+                      <label class="floating-label">Start Date</label>
+                    </div>
+                    <div class="relative mr-2 w-full">
+                      <input
+                        type="text"
+                        placeholder="End Date"
+                        class="peer input input-bordered w-full focus:outline-none"
+                        formControlName="endDate"
+                        onfocus="(this.type='date')"
+                      />
+                      <label class="floating-label">End Date</label>
+                    </div>
+                    <button class="btn text-white bg-gray-950 hover:bg-gray-900" (click)="handleSearch()">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 13.5V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 9.75V10.5" />
+                      </svg>
+                      Filter
+                    </button>
+                    <button class="btn text-white bg-gray-950 hover:bg-gray-900 ml-2" (click)="clearSearch()">
+                      Clear
+                    </button>
+                  </div>
+                </form>
+    </div>
+  </div>
+  <div>
+    <button (click)="downloadAsPDF()" class=" btn btn-outline btn-info absolute top-60 right-4">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+      </svg>
+
+      Print
+    </button>
+  </div>
+</div>
+
+<div id="report" #report class="w-full h-full">
+  <div class="flex justify-center mx-2">
+
+    <div
+      class="w-1/2 h-96 bg-white mt-4 rounded-md shadow-md border-2 border-[[#1e4263]] overflow-hidden flex justify-center">
+
+      <mat-card class="w-full">
+        <mat-card-header><mat-card-title>Table View</mat-card-title></mat-card-header>
+        <mat-card-content class="overflow-auto h-full">
+          <mat-table [dataSource]="data">
+            <!--          @for(column of columns;track columns){}-->
+            <ng-container *ngFor="let column of columns; let i = index;" [matColumnDef]="column">
+              <mat-header-cell *matHeaderCellDef> {{ headers[i] }} </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ element[binders[i]] }} </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+          </mat-table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div
+      class="w-1/2 h-96 bg-white mt-4 ml-2 rounded-md shadow-md border-2 border-[[#1e4263]] overflow-hidden flex justify-center">
+      <div #barchart></div>
+    </div>
+  </div>
+
+  <div class="flex justify-center mx-2">
+
+    <div
+      class="w-1/2 h-96 bg-white mt-4 rounded-md shadow-md border-2 border-[[#1e4263]] overflow-hidden flex justify-center">
+      <div #piechart></div>
+    </div>
+
+    <div
+      class="w-1/2 h-96 bg-white mt-4 ml-2 rounded-md shadow-md border-2 border-[[#1e4263]] overflow-hidden flex justify-center">
+      <div #linechart></div>
+    </div>
+  </div>
+
+</div>
 
 
-  <mat-grid-tile [colspan]="1" [rowspan]="2">
-
-    <mat-card class="w-1/2 h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Table View</mat-card-title></mat-card-header>
-      <mat-card-content class="overflow-auto h-full">
-        <mat-table [dataSource]="data">
-          <!--          @for(column of columns;track columns){}-->
-          <ng-container *ngFor="let column of columns; let i = index;" [matColumnDef]="column">
-            <mat-header-cell *matHeaderCellDef> {{ headers[i] }} </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{ element[binders[i]] }} </mat-cell>
-          </ng-container>
-          <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: columns;"></mat-row>
-        </mat-table>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="w-1/2 h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Bar Chart</mat-card-title></mat-card-header>
-      <mat-card-content class="overflow-auto h-full"><div #barchart></div></mat-card-content>
-    </mat-card>
-  </mat-grid-tile>
-
-
-  <mat-grid-tile [colspan]="1" [rowspan]="2">
-
-    <mat-card class="w-1/2 h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Pie Chat View</mat-card-title></mat-card-header>
-      <mat-card-content class="overflow-auto h-full">
-        <div #piechart></div>
-      </mat-card-content>
-    </mat-card>
-
-
-    <mat-card class="w-1/2 h-full mx-3 mt-3 -mb-3">
-      <mat-card-header><mat-card-title>Line Chart View</mat-card-title></mat-card-header>
-      <mat-card-content class="overflow-auto h-full"><div #linechart></div></mat-card-content>
-    </mat-card>
-
-  </mat-grid-tile>
-
-</mat-grid-list>
 

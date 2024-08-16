@@ -16,6 +16,7 @@ import {RouterLink} from "@angular/router";
 import {CountByMotherRegistration} from "../../entity/countbymotherregistration";
 import {ReportService} from "../../service/report.service";
 import {CountByChildRegistration} from "../../entity/countbychildregistration";
+import {PrintService} from "../../../util/print/print.service";
 
 declare var google: any;
 
@@ -63,7 +64,8 @@ export class CountbychildregistrationComponent implements OnInit{
   @ViewChild('linechart', { static: false }) linechart: any;
 
   constructor(private rs:ReportService,
-              private fb:FormBuilder
+              private fb:FormBuilder,
+              private ps:PrintService
   ) {
 
     this.search = this.fb.group({
@@ -175,6 +177,10 @@ export class CountbychildregistrationComponent implements OnInit{
     const lineChart = new google.visualization.LineChart(this.linechart.nativeElement);
     lineChart.draw(lineData, lineOptions);
 
+  }
+
+  downloadAsPDF() {
+    this.ps.downloadAsPDF("report","ChildReport");
   }
 
 }
