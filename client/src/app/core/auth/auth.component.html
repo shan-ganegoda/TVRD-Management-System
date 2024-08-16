@@ -4,56 +4,80 @@
   <p class=" w-96 text-white font-lexend font-semibold text-3xl">Threeposha and Vaccination Request and Distribution Management System</p>
 </div>
 
-  <mat-card>
-    <mat-card-header>
-      <p class="loginHeader">Sign in to your account</p>
-    </mat-card-header>
-    <mat-card-content>
+  @if (isLogin){
+    <mat-card>
+      <mat-card-header>
+        <p class="loginHeader">Sign in to your account</p>
+      </mat-card-header>
+      <mat-card-content>
 
-      <form [formGroup]="authForm" (ngSubmit)="submitForm()">
+        <form [formGroup]="authForm" (ngSubmit)="submitForm()">
 
-      <fieldset class="textform">
-      <label class="labeltext">Username</label>
-      <input
-        formControlName="email"
-        placeholder="Username"
-        class="textinput"
-        type="text"
-      />
-      </fieldset>
+          <fieldset class="textform">
+            <label class="labeltext">Username</label>
+            <input
+              formControlName="email"
+              placeholder="Username"
+              class="textinput"
+              type="text"
+            />
+          </fieldset>
 
-      <fieldset class="textform">
-        <label class="labeltext">Password</label>
-        <input
-          formControlName="password"
-          placeholder="Password"
-          class="textinput"
-          type="password"
-        />
-      </fieldset>
+          <fieldset class="textform">
+            <label class="labeltext">Password</label>
+            <input
+              formControlName="password"
+              placeholder="Password"
+              class="textinput"
+              type="password"
+            />
+          </fieldset>
 
-      <fieldset class="bar">
-        <div class="remember">
-          <input type="checkbox"> <label>Remember Me</label>
-        </div>
-        <div class="forgot">
-          <label>Forgot Password</label>
-        </div>
-      </fieldset>
+          <fieldset class="bar">
+            <div class="remember">
+              <input type="checkbox"> <label>Remember Me</label>
+            </div>
+            <div class="forgot">
+              <button class="text-[#2563EB]" (click)="isForgetClick()"><label class="cursor-pointer ">Forgot Password</label></button>
+            </div>
+          </fieldset>
 
-      <button type="submit" class="submitbtn">Sign in</button>
+          <button type="submit" class="submitbtn">Sign in</button>
 
-      <div class="register">
-        <a routerLink="../motherregpublic">
-        <button type="submit" class="motherreg">Register Programm As Mother</button>
-        </a>
+          <div class="register">
+            <a routerLink="../motherregpublic">
+              <button type="submit" class="motherreg">Register Programm As Mother</button>
+            </a>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  @if(isForget) {
+    <div class="bg-white p-4 rounded-2xl h-80">
+      <div class="mb-10 mt-5">
+        <p class="loginHeader">Did You Forget Password</p>
+        <span class="font-light">Don't worry we'll fix that</span>
       </div>
-      </form>
+        <form [formGroup]="forgetForm" (ngSubmit)="forgetForms()">
 
-<!--      <div class="imgs">-->
-<!--        <img src="./assets/logo.png" alt="logo" />-->
-<!--      </div>-->
-    </mat-card-content>
-  </mat-card>
+          <fieldset class="textform">
+            <label class="labeltext">Insert Your Email</label>
+            <input
+              formControlName="forgetemail"
+              placeholder="Email"
+              class="textinput"
+              type="text"
+            />
+          </fieldset>
+
+          <button type="submit" class="submitbtn">Submit</button>
+        </form>
+      <div class="flex justify-center mt-10">
+        <label>Go Back To <button class="text-[#2563EB]" (click)="isLoginClick()">Login</button></label>
+      </div>
+    </div>
+  }
 
 </div>

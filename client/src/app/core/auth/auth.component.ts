@@ -1,14 +1,13 @@
-import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatCardModule} from "@angular/material/card";
 import {MatInputModule} from "@angular/material/input";
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {AuthService} from "../service/auth/auth.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {NotificationComponent} from "../../shared/dialog/notification/notification.component";
 import {StorageService} from "../service/auth/storage.service";
 import {ToastService} from "../util/toast/toast.service";
+import {UsersService} from "../service/user/users.service";
 
 // interface AuthForm {
 //   password: FormControl<string>;
@@ -31,11 +30,16 @@ import {ToastService} from "../util/toast/toast.service";
 export class AuthComponent implements OnInit{
 
   authForm: FormGroup;
+  forgetForm: FormGroup;
+
+  isLogin:any;
+  isForget:any;
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly authService: AuthService,
+    private readonly userService: UsersService,
     private readonly formBuilder: FormBuilder,
     private readonly storageService: StorageService,
     private readonly tst:ToastService
@@ -45,14 +49,29 @@ export class AuthComponent implements OnInit{
       email: new FormControl("",  [Validators.required]),
       password: new FormControl("",  [Validators.required]),
     });
+    this.forgetForm = this.formBuilder.group({
+      forgetemail: new FormControl("",  [Validators.required]),
+    });
   }
 
   ngOnInit() {
+    this.isLoginClick();
 
     if(this.storageService.isLoggedIn()){
       //window.alert("User Already Logged In,if you need to log in again please log Out First!");
       this.router.navigateByUrl('/main/home');
     }
+  }
+
+  isLoginClick(){
+    this.isForget = false;
+    this.isLogin = true;
+
+  }
+
+  isForgetClick(){
+    this.isLogin = false;
+    this.isForget = true;
   }
 
   submitForm(): void {
@@ -81,6 +100,27 @@ export class AuthComponent implements OnInit{
       }
 
     }
+
+  forgetForms(){
+    if(this.forgetForm.valid){
+
+      const email = this.forgetForm.getRawValue()
+      // console.log(email);
+
+      this.authService.checkUser(email).subscribe({
+        next:(data:any) => {
+          console.log(data);
+          this.tst.handleResult("success","Check Your MailBox!");
+        },
+        error: (error:any) => {
+          console.log(error);
+          this.tst.handleResult("Failed","User Not Found!");
+        }
+      })
+    }else{
+      this.tst.handleResult("Failed","Invalid Email");
+    }
+  }
 
 
 }

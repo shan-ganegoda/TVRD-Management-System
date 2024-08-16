@@ -6,15 +6,19 @@ import com.content.security.dto.AuthenticationResponse;
 import com.content.security.dto.RegisterRequest;
 import com.content.security.entity.User;
 import com.content.security.service.AuthService;
+import com.content.security.service.UserService;
+import com.content.security.util.StandardResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @CrossOrigin
@@ -25,6 +29,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final CookieProvider cookieProvider;
+    private final UserService userService;
 
 //    @GetMapping
 //    public List<User> getAll(){
@@ -53,5 +58,15 @@ public class AuthController {
             AuthenticationResponse authResponse = authService.refreshToken(refreshCookie.getValue());
             response.addCookie(cookieProvider.createAuthCookie(authResponse.getAccessToken()));
         }
+    }
+
+    @PostMapping(path = "/check")
+    public ResponseEntity<StandardResponse> checkUser(@RequestBody HashMap<String,String> request){
+//        System.out.println(request.get("forgetemail"));
+        String message =  userService.checkUser(request.get("forgetemail"));
+
+        return new ResponseEntity<StandardResponse>(
+                new StandardResponse(200,"Done",message), HttpStatus.OK
+        );
     }
 }

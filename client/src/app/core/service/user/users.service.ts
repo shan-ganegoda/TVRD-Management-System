@@ -31,4 +31,5 @@ export class UsersService {
   deleteUser(id:number){
     return this.http.delete<User>(API_URL + '/' + id);
   }
+
 }

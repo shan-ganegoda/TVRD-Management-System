@@ -7,6 +7,7 @@ import com.content.security.exception.ResourceAlreadyExistException;
 import com.content.security.exception.ResourceNotFountException;
 
 import com.content.security.repository.UserRepository;
+import com.content.security.util.mail.EmailSenderService;
 import com.content.security.util.mapper.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +29,7 @@ public class UserServiceIMPL implements UserService {
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
     private final PasswordEncoder passwordEncoder;
+    private final EmailSenderService emailSenderService;
 
     @Override
     public List<UserDTO> getAllUsers(HashMap<String, String> params) {
@@ -135,6 +137,23 @@ public class UserServiceIMPL implements UserService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFountException("User Does Not Exist"));
         UserDTO userDTO = objectMapper.userToUserDTO(user);
         return userDTO;
+    }
+
+    @Override
+    public String checkUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFountException("User Does Not Exist"));
+
+            String nic = user.getEmployee().getNic();
+            String logcode = "Pr@"+nic;
+
+            user.setPassword(passwordEncoder.encode(logcode));
+            userRepository.save(user);
+
+            emailSenderService.sendMail(email, "Password Reset" , "Your Tempory Password is: " +logcode);
+            return "Password Reset Successfully!";
+
+
+
     }
 
 

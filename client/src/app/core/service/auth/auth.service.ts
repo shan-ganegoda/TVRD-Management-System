@@ -40,5 +40,9 @@ export class AuthService {
     this.http.get(API_URL + 'logout');
   }
 
+  checkUser(email:string){
+    return this.http.post(API_URL + 'check',email);
+  }
+
 
 }
