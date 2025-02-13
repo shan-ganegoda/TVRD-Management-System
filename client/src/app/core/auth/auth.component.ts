@@ -109,11 +109,11 @@ export class AuthComponent implements OnInit{
 
       this.authService.checkUser(email).subscribe({
         next:(data:any) => {
-          console.log(data);
+          //console.log(data);
           this.tst.handleResult("success","Check Your MailBox!");
         },
         error: (error:any) => {
-          console.log(error);
+          //console.log(error);
           this.tst.handleResult("Failed","User Not Found!");
         }
       })

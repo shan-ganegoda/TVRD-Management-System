@@ -16,6 +16,7 @@ import {ReportService} from "../../service/report.service";
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import {ProductOrdersByProduct} from "../../entity/productordersbyproduct";
+import {PrintService} from "../../../util/print/print.service";
 
 
 declare var google: any;
@@ -65,7 +66,8 @@ export class CountbyporderComponent implements OnInit{
   @ViewChild('linechart', { static: false }) linechart: any;
 
   constructor(private rs:ReportService,
-              private fb:FormBuilder
+              private fb:FormBuilder,
+              private ps:PrintService
   ) {
 
     this.search = this.fb.group({
@@ -194,5 +196,9 @@ export class CountbyporderComponent implements OnInit{
 
     const lineChart = new google.visualization.LineChart(this.linechart.nativeElement);
     lineChart.draw(lineData, lineOptions);
+  }
+
+  downloadAsPDF() {
+    this.ps.downloadAsPDF("report","POrderReport");
   }
 }
