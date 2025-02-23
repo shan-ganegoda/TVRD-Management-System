@@ -15,6 +15,7 @@ import {ReportService} from "../../service/report.service";
 import {CountByDesignation} from "../../entity/countByDesignation";
 import {ReactiveFormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
+import {PrintService} from "../../../util/print/print.service";
 
 declare var google: any;
 
@@ -57,7 +58,7 @@ export class EmployeebydesignationComponent implements OnInit{
   @ViewChild('piechart', { static: false }) piechart: any;
   @ViewChild('linechart', { static: false }) linechart: any;
 
-  constructor(private rs:ReportService) {
+  constructor(private rs:ReportService, private ps:PrintService) {
   }
 
   ngOnInit() {
@@ -131,5 +132,9 @@ export class EmployeebydesignationComponent implements OnInit{
 
     const lineChart = new google.visualization.LineChart(this.linechart.nativeElement);
     lineChart.draw(lineData, lineOptions);
+  }
+
+  downloadAsPDF() {
+    this.ps.downloadAsPDF("report","EmployeeReport");
   }
 }
