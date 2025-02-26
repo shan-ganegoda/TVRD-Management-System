@@ -15,6 +15,7 @@ import {RouterLink} from "@angular/router";
 import {ReportService} from "../../service/report.service";
 import {VehicleCountByMoh} from "../../entity/vehiclecountbymoh";
 import {VehicleCountByRdh} from "../../entity/vehiclecountbyrdh";
+import {PrintService} from "../../../util/print/print.service";
 
 declare var google: any;
 
@@ -24,12 +25,8 @@ declare var google: any;
   imports: [
     MatCard,
     MatCardContent,
-    MatCardHeader,
-    MatCardTitle,
     MatCell,
     MatCellDef,
-    MatGridList,
-    MatGridTile,
     MatHeaderCell,
     MatHeaderRow,
     MatHeaderRowDef,
@@ -58,7 +55,7 @@ export class VehiclecountbymohComponent implements OnInit{
   @ViewChild('piechart', { static: false }) piechart: any;
   @ViewChild('linechart', { static: false }) linechart: any;
 
-  constructor(private rs:ReportService) {
+  constructor(private rs:ReportService, private ps:PrintService) {
   }
 
   ngOnInit() {
@@ -158,5 +155,9 @@ export class VehiclecountbymohComponent implements OnInit{
 
     const lineChart = new google.visualization.LineChart(this.linechart.nativeElement);
     lineChart.draw(lineData, lineOptions);
+  }
+
+  downloadAsPDF() {
+    this.ps.downloadAsPDF("report","VehicleReport");
   }
 }
